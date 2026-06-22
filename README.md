@@ -1,1 +1,1 @@
-# nice-a11y-audit-dashboard
+# nice-token-audit-dashboard
