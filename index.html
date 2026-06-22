@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NiCE CXone Accessibility Audit Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; color: #1a1a2e; }
+  
+  header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 20px 32px; display: flex; align-items: center; gap: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
+  .logo { font-size: 28px; font-weight: 800; color: #4361ee; letter-spacing: -1px; }
+  .logo span { color: #7b2d8b; }
+  header h1 { font-size: 18px; font-weight: 500; opacity: 0.9; }
+  .audit-meta { margin-left: auto; font-size: 12px; opacity: 0.6; text-align: right; }
+  
+  .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+  
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .kpi { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-top: 4px solid #4361ee; }
+  .kpi.lyra { border-color: #7b2d8b; }
+  .kpi.acc { border-color: #e67e22; }
+  .kpi.pages { border-color: #2ecc71; }
+  .kpi label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #666; font-weight: 600; }
+  .kpi .val { font-size: 36px; font-weight: 800; margin: 4px 0 2px; }
+  .kpi .sub { font-size: 12px; color: #888; }
+  
+  .section-nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .nav-btn { padding: 8px 16px; border: 2px solid #ddd; border-radius: 20px; background: white; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; color: #444; }
+  .nav-btn:hover { border-color: #4361ee; color: #4361ee; }
+  .nav-btn.active { background: #4361ee; border-color: #4361ee; color: white; }
+  
+  .section-panel { display: none; }
+  .section-panel.active { display: block; }
+  
+  .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+  .section-header h2 { font-size: 22px; font-weight: 700; }
+  .badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  
+  .score-good { color: #27ae60; }
+  .score-ok { color: #e67e22; }
+  .score-bad { color: #e74c3c; }
+  
+  .gauges-row { display: flex; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
+  .gauge-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); flex: 1; min-width: 200px; max-width: 280px; text-align: center; }
+  .gauge-card h4 { font-size: 14px; color: #666; margin-bottom: 8px; font-weight: 600; }
+  .gauge-wrap { position: relative; height: 120px; }
+  .gauge-wrap canvas { width: 200px !important; height: 120px !important; }
+  .gauge-center { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); font-size: 24px; font-weight: 800; white-space: nowrap; }
+  
+  .search-bar { margin-bottom: 16px; }
+  .search-bar input { width: 300px; padding: 10px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; outline: none; transition: border-color 0.2s; }
+  .search-bar input:focus { border-color: #4361ee; }
+  
+  table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); font-size: 13px; }
+  thead { background: #1a1a2e; color: white; }
+  th { padding: 12px 16px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { padding: 11px 16px; border-bottom: 1px solid #f0f0f0; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8f9ff; }
+  
+  .score-pill { display: inline-block; padding: 3px 10px; border-radius: 12px; font-weight: 700; font-size: 13px; }
+  .pill-good { background: #d5f5e3; color: #27ae60; }
+  .pill-ok { background: #fef0cd; color: #e67e22; }
+  .pill-bad { background: #fde8e8; color: #e74c3c; }
+  
+  .issues { color: #888; font-size: 12px; }
+  
+  footer { text-align: center; padding: 24px; color: #aaa; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Ni<span>CE</span></div>
+  <div>
+    <h1>CXone Accessibility Audit Dashboard</h1>
+    <div style="font-size:12px;opacity:0.5;margin-top:2px;">Audited: 2026-06-20 &nbsp;|&nbsp; Design Systems: SOL / LYRA</div>
+  </div>
+  <div class="audit-meta">
+    <div style="font-size:20px;font-weight:700;">142</div>
+    <div>Pages Audited</div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="kpi-row">
+    <div class="kpi">
+      <label>Overall SOL Score</label>
+      <div class="val" style="color:#4361ee">89%</div>
+      <div class="sub">Token Compliance</div>
+    </div>
+    <div class="kpi lyra">
+      <label>Overall LYRA Score</label>
+      <div class="val" style="color:#7b2d8b">96%</div>
+      <div class="sub">Token Compliance</div>
+    </div>
+    <div class="kpi acc">
+      <label>Accessibility Score</label>
+      <div class="val" style="color:#e67e22">61%</div>
+      <div class="sub">Avg across pages</div>
+    </div>
+    <div class="kpi pages">
+      <label>Sections</label>
+      <div class="val" style="color:#2ecc71">12</div>
+      <div class="sub">Product areas</div>
+    </div>
+    <div class="kpi" style="border-color:#e74c3c">
+      <label>Total SOL Issues</label>
+      <div class="val" style="color:#e74c3c;font-size:28px">241,887</div>
+      <div class="sub">Token violations</div>
+    </div>
+    <div class="kpi" style="border-color:#9b59b6">
+      <label>Total LYRA Issues</label>
+      <div class="val" style="color:#9b59b6;font-size:28px">103,279</div>
+      <div class="sub">Token violations</div>
+    </div>
+  </div>
+  
+  <div class="section-nav" id="sectionNav"></div>
+  
+  <div id="panels"></div>
+</div>
+
+<footer>NiCE CXone Suite — Full Token/Accessibility Audit &nbsp;|&nbsp; Audited: 2026-06-20 &nbsp;|&nbsp; Design Systems: SOL / LYRA</footer>
+
+<script>
+const DB = {"sections": ["Admin", "Supervisor", "Agent Integrations", "Workforce Intelligence", "ACD", "Studio", "WFM", "Quality Management", "Coaching", "Interactions Hub", "MyZone", "Actions"], "data": {"Admin": [{"page": "Employees", "sol": 93, "sol_issues": 1305, "lyra": 93, "lyra_issues": 1262, "accessibility": 34, "acc_issues": 14}, {"page": "WEM Skills", "sol": 96, "sol_issues": 1142, "lyra": 98, "lyra_issues": 622, "accessibility": 21, "acc_issues": 19}, {"page": "Groups", "sol": 98, "sol_issues": 263, "lyra": 99, "lyra_issues": 191, "accessibility": 69, "acc_issues": 7}, {"page": "Employee Templatyes", "sol": 98, "sol_issues": 231, "lyra": 99, "lyra_issues": 203, "accessibility": 84, "acc_issues": 4}, {"page": "Teams", "sol": 75, "sol_issues": 5661, "lyra": 75, "lyra_issues": 5731, "accessibility": 59, "acc_issues": 9}, {"page": "Scheduling Unit", "sol": 95, "sol_issues": 792, "lyra": 97, "lyra_issues": 428, "accessibility": 41, "acc_issues": 15}, {"page": "Location Definitions", "sol": 98, "sol_issues": 331, "lyra": 98, "lyra_issues": 328, "accessibility": 59, "acc_issues": 9}, {"page": "Business Data", "sol": 98, "sol_issues": 334, "lyra": 98, "lyra_issues": 335, "accessibility": 84, "acc_issues": 4}, {"page": "Account Settings", "sol": 98, "sol_issues": 356, "lyra": 98, "lyra_issues": 347, "accessibility": 36, "acc_issues": 14}, {"page": "Business Data", "sol": 98, "sol_issues": 334, "lyra": 98, "lyra_issues": 335, "accessibility": 84, "acc_issues": 4}, {"page": "Bulk Upload Portal", "sol": 98, "sol_issues": 347, "lyra": 98, "lyra_issues": 347, "accessibility": 36, "acc_issues": 14}, {"page": "Recording Policies", "sol": 98, "sol_issues": 356, "lyra": 98, "lyra_issues": 347, "accessibility": 36, "acc_issues": 14}, {"page": "Hierachies", "sol": 98, "sol_issues": 282, "lyra": 98, "lyra_issues": 281, "accessibility": 63, "acc_issues": 9}, {"page": "Access Key Manager", "sol": 99, "sol_issues": 151, "lyra": 99, "lyra_issues": 151, "accessibility": 84, "acc_issues": 4}, {"page": "Role and Permissions", "sol": 84, "sol_issues": 5577, "lyra": 84, "lyra_issues": 5564, "accessibility": 84, "acc_issues": 4}, {"page": "Login Authenticator", "sol": 84, "sol_issues": 5535, "lyra": 74, "lyra_issues": 5533, "accessibility": 84, "acc_issues": 4}, {"page": "Views", "sol": 99, "sol_issues": 241, "lyra": 99, "lyra_issues": 238, "accessibility": 84, "acc_issues": 4}, {"page": "Privacy", "sol": 100, "sol_issues": 95, "lyra": 100, "lyra_issues": 94, "accessibility": 84, "acc_issues": 4}, {"page": "Locked Employees", "sol": 99, "sol_issues": 154, "lyra": 99, "lyra_issues": 175, "accessibility": 84, "acc_issues": 4}, {"page": "Search", "sol": 99, "sol_issues": 100, "lyra": 99, "lyra_issues": 100, "accessibility": 63, "acc_issues": 9}, {"page": "Life Cycle Management", "sol": 99, "sol_issues": 117, "lyra": 99, "lyra_issues": 114, "accessibility": 84, "acc_issues": 4}, {"page": "Long-term File Retrieval", "sol": 98, "sol_issues": 259, "lyra": 98, "lyra_issues": 93, "accessibility": 84, "acc_issues": 4}, {"page": "Storage Settings", "sol": 99, "sol_issues": 116, "lyra": 99, "lyra_issues": 116, "accessibility": 79, "acc_issues": 5}, {"page": "File Activity", "sol": 99, "sol_issues": 191, "lyra": 95, "lyra_issues": 975, "accessibility": 84, "acc_issues": 4}, {"page": "Multi Region Storage", "sol": 99, "sol_issues": 164, "lyra": 99, "lyra_issues": 164, "accessibility": 76, "acc_issues": 6}], "Supervisor": [{"page": "Live Monitoring", "sol": 96, "sol_issues": 738, "lyra": 97, "lyra_issues": 427, "accessibility": 3, "acc_issues": 21}, {"page": "Evaluation Tasks", "sol": 98, "sol_issues": 285, "lyra": 99, "lyra_issues": 76, "accessibility": 68, "acc_issues": 8}, {"page": "Quality Performance", "sol": 99, "sol_issues": 112, "lyra": 99, "lyra_issues": 112, "accessibility": 84, "acc_issues": 4}, {"page": "Reporting", "sol": 97, "sol_issues": 464, "lyra": 97, "lyra_issues": 451, "accessibility": 84, "acc_issues": 4}, {"page": "Interactions Search", "sol": 99, "sol_issues": 187, "lyra": 99, "lyra_issues": 184, "accessibility": 74, "acc_issues": 6}, {"page": "Settings", "sol": 99, "sol_issues": 113, "lyra": 99, "lyra_issues": 113, "accessibility": 78, "acc_issues": 6}], "Agent Integrations": [{"page": "Configurations", "sol": 95, "sol_issues": 674, "lyra": 97, "lyra_issues": 421, "accessibility": 84, "acc_issues": 4}], "Workforce Intelligence": [{"page": "Notification Settings", "sol": 99, "sol_issues": 249, "lyra": 98, "lyra_issues": 341, "accessibility": 42, "acc_issues": 12}, {"page": "Data Points", "sol": 99, "sol_issues": 249, "lyra": 99, "lyra_issues": 147, "accessibility": 55, "acc_issues": 9}, {"page": "Rules", "sol": 99, "sol_issues": 263, "lyra": 99, "lyra_issues": 263, "accessibility": 55, "acc_issues": 9}, {"page": "Pending Rule Actions", "sol": 99, "sol_issues": 148, "lyra": 99, "lyra_issues": 108, "accessibility": 75, "acc_issues": 5}], "ACD": [{"page": "ACD Users", "sol": 94, "sol_issues": 1273, "lyra": 94, "lyra_issues": 1312, "accessibility": 40, "acc_issues": 12}, {"page": "ACD Skills", "sol": 95, "sol_issues": 1184, "lyra": 87, "lyra_issues": 3446, "accessibility": 0, "acc_issues": 165}, {"page": "Routing Attributes", "sol": 99, "sol_issues": 265, "lyra": 99, "lyra_issues": 265, "accessibility": 55, "acc_issues": 9}, {"page": "Campaign", "sol": 97, "sol_issues": 686, "lyra": 98, "lyra_issues": 442, "accessibility": 85, "acc_issues": 5}, {"page": "Dispositions", "sol": 97, "sol_issues": 605, "lyra": 98, "lyra_issues": 406, "accessibility": 85, "acc_issues": 5}, {"page": "Points of Contact", "sol": 99, "sol_issues": 289, "lyra": 96, "lyra_issues": 945, "accessibility": 55, "acc_issues": 9}, {"page": "SMS Branding", "sol": 96, "sol_issues": 822, "lyra": 99, "lyra_issues": 202, "accessibility": 60, "acc_issues": 8}, {"page": "SMS Registrations", "sol": 99, "sol_issues": 118, "lyra": 96, "lyra_issues": 756, "accessibility": 70, "acc_issues": 8}, {"page": "Scripts", "sol": 98, "sol_issues": 407, "lyra": 98, "lyra_issues": 407, "accessibility": 0, "acc_issues": 39}, {"page": "Scripts Schedules", "sol": 99, "sol_issues": 121, "lyra": 96, "lyra_issues": 771, "accessibility": 65, "acc_issues": 7}, {"page": "Hours of Operation", "sol": 96, "sol_issues": 855, "lyra": 96, "lyra_issues": 855, "accessibility": 60, "acc_issues": 8}, {"page": "Workflow Data", "sol": 96, "sol_issues": 128, "lyra": 96, "lyra_issues": 771, "accessibility": 65, "acc_issues": 7}, {"page": "Chat Profiles", "sol": 99, "sol_issues": 128, "lyra": 96, "lyra_issues": 771, "accessibility": 65, "acc_issues": 7}, {"page": "Tags", "sol": 97, "sol_issues": 618, "lyra": 98, "lyra_issues": 412, "accessibility": 85, "acc_issues": 5}, {"page": "Email Domains", "sol": 95, "sol_issues": 1007, "lyra": 95, "lyra_issues": 1040, "accessibility": 14, "acc_issues": 18}, {"page": "Skill Control", "sol": 93, "sol_issues": 1686, "lyra": 95, "lyra_issues": 1251, "accessibility": 85, "acc_issues": 5}, {"page": "Calling", "sol": 96, "sol_issues": 838, "lyra": 99, "lyra_issues": 196, "accessibility": 50, "acc_issues": 10}, {"page": "Call Suppression", "sol": 96, "sol_issues": 838, "lyra": 99, "lyra_issues": 196, "accessibility": 50, "acc_issues": 10}, {"page": "DNC", "sol": 99, "sol_issues": 235, "lyra": 96, "lyra_issues": 895, "accessibility": 50, "acc_issues": 10}, {"page": "Custom Data Definitions", "sol": 96, "sol_issues": 873, "lyra": 99, "lyra_issues": 277, "accessibility": 22, "acc_issues": 16}, {"page": "Process Queue", "sol": 96, "sol_issues": 838, "lyra": 99, "lyra_issues": 196, "accessibility": 50, "acc_issues": 10}, {"page": "Unavailable Codes", "sol": 97, "sol_issues": 691, "lyra": 98, "lyra_issues": 466, "accessibility": 85, "acc_issues": 5}, {"page": "Stations", "sol": 96, "sol_issues": 758, "lyra": 97, "lyra_issues": 542, "accessibility": 85, "acc_issues": 5}, {"page": "Station Profiles", "sol": 96, "sol_issues": 758, "lyra": 98, "lyra_issues": 339, "accessibility": 85, "acc_issues": 5}, {"page": "Address Books", "sol": 99, "sol_issues": 247, "lyra": 99, "lyra_issues": 247, "accessibility": 60, "acc_issues": 8}, {"page": "Quick Replies", "sol": 99, "sol_issues": 272, "lyra": 96, "lyra_issues": 920, "accessibility": 45, "acc_issues": 11}, {"page": "Agent Patterns", "sol": 96, "sol_issues": 898, "lyra": 96, "lyra_issues": 932, "accessibility": 17, "acc_issues": 17}, {"page": "Locations", "sol": 97, "sol_issues": 526, "lyra": 98, "lyra_issues": 350, "accessibility": 85, "acc_issues": 5}, {"page": "Business Units", "sol": 92, "sol_issues": 1980, "lyra": 89, "lyra_issues": 2859, "accessibility": 0, "acc_issues": 65}, {"page": "DB Connectors", "sol": 100, "sol_issues": 80, "lyra": 96, "lyra_issues": 721, "accessibility": 90, "acc_issues": 2}, {"page": "Agent Messaging", "sol": 97, "sol_issues": 507, "lyra": 98, "lyra_issues": 431, "accessibility": 85, "acc_issues": 5}, {"page": "Agent Issues", "sol": 95, "sol_issues": 969, "lyra": 98, "lyra_issues": 447, "accessibility": 10, "acc_issues": 18}, {"page": "Browser ACD Files", "sol": 98, "sol_issues": 475, "lyra": 95, "lyra_issues": 1164, "accessibility": 0, "acc_issues": 26}, {"page": "SLA", "sol": 38, "sol_issues": 9101, "lyra": 98, "lyra_issues": 226, "accessibility": 40, "acc_issues": 12}, {"page": "Hours of Operation", "sol": 39, "sol_issues": 10890, "lyra": 84, "lyra_issues": 2888, "accessibility": 35, "acc_issues": 13}, {"page": "Customer Fields", "sol": 35, "sol_issues": 9566, "lyra": 98, "lyra_issues": 226, "accessibility": 65, "acc_issues": 7}, {"page": "Routing Attributes", "sol": 35, "sol_issues": 9630, "lyra": 35, "lyra_issues": 9630, "accessibility": 45, "acc_issues": 11}, {"page": "Routing Queues", "sol": 35, "sol_issues": 9722, "lyra": 98, "lyra_issues": 301, "accessibility": 55, "acc_issues": 9}, {"page": "Points of Contact Digital", "sol": 34, "sol_issues": 10106, "lyra": 96, "lyra_issues": 627, "accessibility": 35, "acc_issues": 13}, {"page": "Bring Your Own Channel", "sol": 35, "sol_issues": 9483, "lyra": 99, "lyra_issues": 169, "accessibility": 5, "acc_issues": 7}, {"page": "Roles", "sol": 38, "sol_issues": 9131, "lyra": 98, "lyra_issues": 256, "accessibility": 65, "acc_issues": 7}, {"page": "Tags", "sol": 35, "sol_issues": 9727, "lyra": 98, "lyra_issues": 368, "accessibility": 65, "acc_issues": 7}, {"page": "Quick Responses", "sol": 35, "sol_issues": 9487, "lyra": 99, "lyra_issues": 176, "accessibility": 65, "acc_issues": 7}, {"page": "Forms", "sol": 35, "sol_issues": 9553, "lyra": 98, "lyra_issues": 232, "accessibility": 65, "acc_issues": 7}, {"page": "Satisfaction Surveys", "sol": 35, "sol_issues": 9947, "lyra": 98, "lyra_issues": 488, "accessibility": 0, "acc_issues": 37}, {"page": "Automation Triggers", "sol": 35, "sol_issues": 9447, "lyra": 99, "lyra_issues": 148, "accessibility": 65, "acc_issues": 7}, {"page": "Automation Schedulers", "sol": 35, "sol_issues": 9447, "lyra": 99, "lyra_issues": 148, "accessibility": 65, "acc_issues": 7}, {"page": "Automation Jobs", "sol": 35, "sol_issues": 9447, "lyra": 99, "lyra_issues": 148, "accessibility": 65, "acc_issues": 7}, {"page": "Engagement Rules", "sol": 35, "sol_issues": 9487, "lyra": 99, "lyra_issues": 172, "accessibility": 65, "acc_issues": 7}, {"page": "Engagement Actions", "sol": 35, "sol_issues": 9487, "lyra": 99, "lyra_issues": 172, "accessibility": 65, "acc_issues": 7}], "Studio": [{"page": "Scripts", "sol": 45, "sol_issues": 3750, "lyra": 43, "lyra_issues": 3732, "accessibility": 65, "acc_issues": 7}, {"page": "Development Workflows", "sol": 91, "sol_issues": 127, "lyra": 88, "lyra_issues": 167, "accessibility": 87, "acc_issues": 3}, {"page": "Prompts", "sol": 85, "sol_issues": 257, "lyra": 85, "lyra_issues": 256, "accessibility": 65, "acc_issues": 7}, {"page": "Grammars", "sol": 87, "sol_issues": 171, "lyra": 88, "lyra_issues": 173, "accessibility": 65, "acc_issues": 7}], "WFM": [{"page": "Schedule Manager", "sol": 89, "sol_issues": 2061, "lyra": 88, "lyra_issues": 2146, "accessibility": 42, "acc_issues": 14}, {"page": "Real Time Adherence", "sol": 97, "sol_issues": 524, "lyra": 97, "lyra_issues": 469, "accessibility": 84, "acc_issues": 4}, {"page": "Intraday Manager", "sol": 98, "sol_issues": 253, "lyra": 84, "lyra_issues": 5832, "accessibility": 79, "acc_issues": 5}, {"page": "Generate Forecast", "sol": 98, "sol_issues": 324, "lyra": 97, "lyra_issues": 400, "accessibility": 68, "acc_issues": 8}, {"page": "Skill Allocation Rules", "sol": 98, "sol_issues": 285, "lyra": 98, "lyra_issues": 374, "accessibility": 84, "acc_issues": 4}, {"page": "Forecasting Profiles", "sol": 98, "sol_issues": 255, "lyra": 98, "lyra_issues": 344, "accessibility": 84, "acc_issues": 4}, {"page": "ACD Historical Data", "sol": 98, "sol_issues": 272, "lyra": 98, "lyra_issues": 362, "accessibility": 84, "acc_issues": 4}, {"page": "Special Days", "sol": 94, "sol_issues": 884, "lyra": 94, "lyra_issues": 960, "accessibility": 84, "acc_issues": 4}, {"page": "Generate Schedule", "sol": 94, "sol_issues": 856, "lyra": 95, "lyra_issues": 711, "accessibility": 84, "acc_issues": 4}, {"page": "Import Schedule", "sol": 96, "sol_issues": 637, "lyra": 96, "lyra_issues": 530, "accessibility": 84, "acc_issues": 4}, {"page": "Bidding Manager", "sol": 94, "sol_issues": 846, "lyra": 95, "lyra_issues": 703, "accessibility": 84, "acc_issues": 4}, {"page": "Import Staffing Plan", "sol": 95, "sol_issues": 800, "lyra": 96, "lyra_issues": 666, "accessibility": 84, "acc_issues": 4}, {"page": "Rules", "sol": 98, "sol_issues": 290, "lyra": 98, "lyra_issues": 377, "accessibility": 69, "acc_issues": 7}, {"page": "Plans", "sol": 98, "sol_issues": 332, "lyra": 97, "lyra_issues": 419, "accessibility": 74, "acc_issues": 6}, {"page": "Manage Requests", "sol": 98, "sol_issues": 320, "lyra": 98, "lyra_issues": 293, "accessibility": 84, "acc_issues": 4}, {"page": "Approval Rules", "sol": 96, "sol_issues": 600, "lyra": 96, "lyra_issues": 670, "accessibility": 84, "acc_issues": 4}, {"page": "Rules", "sol": 96, "sol_issues": 596, "lyra": 96, "lyra_issues": 679, "accessibility": 79, "acc_issues": 5}, {"page": "Summary", "sol": 95, "sol_issues": 737, "lyra": 95, "lyra_issues": 819, "accessibility": 79, "acc_issues": 5}, {"page": "Activity Codes", "sol": 95, "sol_issues": 802, "lyra": 95, "lyra_issues": 802, "accessibility": 0, "acc_issues": 57}, {"page": "Adherence Category", "sol": 97, "sol_issues": 472, "lyra": 96, "lyra_issues": 561, "accessibility": 28, "acc_issues": 18}, {"page": "ACD Mapping", "sol": 94, "sol_issues": 1145, "lyra": 93, "lyra_issues": 1227, "accessibility": 0, "acc_issues": 89}, {"page": "Distribution Rules", "sol": 98, "sol_issues": 314, "lyra": 97, "lyra_issues": 399, "accessibility": 71, "acc_issues": 7}, {"page": "Daily Rules", "sol": 98, "sol_issues": 334, "lyra": 97, "lyra_issues": 417, "accessibility": 58, "acc_issues": 10}, {"page": "Weekly Rules", "sol": 97, "sol_issues": 443, "lyra": 97, "lyra_issues": 526, "accessibility": 18, "acc_issues": 20}, {"page": "Agent Configuration", "sol": 92, "sol_issues": 1640, "lyra": 92, "lyra_issues": 1726, "accessibility": 0, "acc_issues": 67}, {"page": "Rotation Rules", "sol": 98, "sol_issues": 296, "lyra": 98, "lyra_issues": 378, "accessibility": 0, "acc_issues": 66}, {"page": "Bidding Templates", "sol": 98, "sol_issues": 296, "lyra": 97, "lyra_issues": 378, "accessibility": 79, "acc_issues": 5}, {"page": "Shift Trading", "sol": 99, "sol_issues": 192, "lyra": 98, "lyra_issues": 263, "accessibility": 84, "acc_issues": 4}, {"page": "Seat Limits", "sol": 99, "sol_issues": 163, "lyra": 98, "lyra_issues": 255, "accessibility": 84, "acc_issues": 4}], "Quality Management": [{"page": "Manage Forms", "sol": 94, "sol_issues": 901, "lyra": 96, "lyra_issues": 522, "accessibility": 31, "acc_issues": 17}, {"page": "Quality Planner", "sol": 99, "sol_issues": 71, "lyra": 99, "lyra_issues": 66, "accessibility": 79, "acc_issues": 5}, {"page": "Category Manager", "sol": 99, "sol_issues": 92, "lyra": 99, "lyra_issues": 90, "accessibility": 79, "acc_issues": 5}, {"page": "QM Score Metric", "sol": 99, "sol_issues": 87, "lyra": 99, "lyra_issues": 81, "accessibility": 84, "acc_issues": 4}], "Coaching": [{"page": "Coaching Manager", "sol": 95, "sol_issues": 937, "lyra": 95, "lyra_issues": 981, "accessibility": 0, "acc_issues": 25}, {"page": "Focus Area", "sol": 98, "sol_issues": 318, "lyra": 98, "lyra_issues": 319, "accessibility": 76, "acc_issues": 6}, {"page": "Behavior", "sol": 97, "sol_issues": 425, "lyra": 97, "lyra_issues": 425, "accessibility": 44, "acc_issues": 12}], "Interactions Hub": [{"page": "Interactions Search", "sol": 99, "sol_issues": 176, "lyra": 99, "lyra_issues": 177, "accessibility": 74, "acc_issues": 6}], "MyZone": [{"page": "My Profile", "sol": 99, "sol_issues": 146, "lyra": 99, "lyra_issues": 172, "accessibility": 68, "acc_issues": 8}, {"page": "My Schedule", "sol": 99, "sol_issues": 172, "lyra": 99, "lyra_issues": 264, "accessibility": 81, "acc_issues": 5}, {"page": "Schedule Requests", "sol": 99, "sol_issues": 152, "lyra": 99, "lyra_issues": 417, "accessibility": 48, "acc_issues": 12}, {"page": "Evaluation Tasks", "sol": 99, "sol_issues": 396, "lyra": 100, "lyra_issues": 124, "accessibility": 68, "acc_issues": 8}, {"page": "Evaluations", "sol": 100, "sol_issues": 101, "lyra": 100, "lyra_issues": 115, "accessibility": 84, "acc_issues": 4}, {"page": "Evaluator Assignments", "sol": 100, "sol_issues": 107, "lyra": 99, "lyra_issues": 135, "accessibility": 68, "acc_issues": 8}, {"page": "Quality Performance", "sol": 99, "sol_issues": 134, "lyra": 99, "lyra_issues": 159, "accessibility": 84, "acc_issues": 4}, {"page": "Shift Bidding", "sol": 96, "sol_issues": 553, "lyra": 97, "lyra_issues": 382, "accessibility": 84, "acc_issues": 4}, {"page": "Calibrations", "sol": 99, "sol_issues": 91, "lyra": 99, "lyra_issues": 115, "accessibility": 84, "acc_issues": 4}, {"page": "Recent Interactions", "sol": 98, "sol_issues": 231, "lyra": 98, "lyra_issues": 254, "accessibility": 84, "acc_issues": 4}, {"page": "Self Assessments", "sol": 95, "sol_issues": 894, "lyra": 95, "lyra_issues": 950, "accessibility": 79, "acc_issues": 5}, {"page": "Coaching Sessions", "sol": 96, "sol_issues": 691, "lyra": 95, "lyra_issues": 801, "accessibility": 68, "acc_issues": 8}], "Actions": [{"page": "Actions", "sol": 99, "sol_issues": 127, "lyra": 99, "lyra_issues": 131, "accessibility": 48, "acc_issues": 12}, {"page": "Observability Dashboard", "sol": 99, "sol_issues": 112, "lyra": 99, "lyra_issues": 113, "accessibility": 33, "acc_issues": 15}, {"page": "Settings", "sol": 99, "sol_issues": 150, "lyra": 99, "lyra_issues": 150, "accessibility": 33, "acc_issues": 15}]}, "avgs": {"Admin": {"sol": 96, "lyra": 96, "acc": 67, "pages": 25}, "Supervisor": {"sol": 98, "lyra": 98, "acc": 65, "pages": 6}, "Agent Integrations": {"sol": 95, "lyra": 97, "acc": 84, "pages": 1}, "Workforce Intelligence": {"sol": 99, "lyra": 99, "acc": 57, "pages": 4}, "ACD": {"sol": 76, "lyra": 96, "acc": 52, "pages": 50}, "Studio": {"sol": 77, "lyra": 76, "acc": 70, "pages": 4}, "WFM": {"sol": 96, "lyra": 96, "acc": 63, "pages": 29}, "Quality Management": {"sol": 98, "lyra": 98, "acc": 68, "pages": 4}, "Coaching": {"sol": 97, "lyra": 97, "acc": 40, "pages": 3}, "Interactions Hub": {"sol": 99, "lyra": 99, "acc": 74, "pages": 1}, "MyZone": {"sol": 98, "lyra": 98, "acc": 75, "pages": 12}, "Actions": {"sol": 99, "lyra": 99, "acc": 38, "pages": 3}}};
+
+function scoreClass(v) {
+  if (v === null || v === undefined) return '';
+  if (v >= 85) return 'pill-good';
+  if (v >= 70) return 'pill-ok';
+  return 'pill-bad';
+}
+
+function scorePill(v) {
+  if (v === null || v === undefined) return '<span style="color:#aaa">—</span>';
+  return `<span class="score-pill ${scoreClass(v)}">${v}%</span>`;
+}
+
+function buildGauge(canvasId, value, color) {
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  const pct = (value || 0) / 100;
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      datasets: [{
+        data: [pct, 1 - pct],
+        backgroundColor: [color, '#f0f0f0'],
+        borderWidth: 0,
+        circumference: 180,
+        rotation: 270
+      }]
+    },
+    options: {
+      responsive: false,
+      cutout: '70%',
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      animation: { duration: 600 }
+    }
+  });
+}
+
+function buildSection(sec, idx) {
+  const pages = DB.data[sec];
+  const avg = DB.avgs[sec];
+  const solAvg = avg.sol;
+  const lyraAvg = avg.lyra;
+  const accAvg = avg.acc;
+  
+  const gId = `g_${idx}`;
+  const lId = `l_${idx}`;
+  const aId = `a_${idx}`;
+  
+  let rows = pages.map((p,i) => `
+    <tr class="page-row">
+      <td>${p.page}</td>
+      <td>${scorePill(p.sol)}</td>
+      <td class="issues">${p.sol_issues ? p.sol_issues.toLocaleString() : '—'}</td>
+      <td>${scorePill(p.lyra)}</td>
+      <td class="issues">${p.lyra_issues ? p.lyra_issues.toLocaleString() : '—'}</td>
+      <td>${scorePill(p.accessibility)}</td>
+      <td class="issues">${p.acc_issues ? p.acc_issues.toLocaleString() : '—'}</td>
+    </tr>`).join('');
+  
+  const panel = document.createElement('div');
+  panel.className = 'section-panel' + (idx === 0 ? ' active' : '');
+  panel.id = `panel_${idx}`;
+  panel.innerHTML = `
+    <div class="section-header">
+      <h2>${sec}</h2>
+      <span class="badge" style="background:#e8f4fd;color:#2980b9">${pages.length} pages</span>
+      ${solAvg !== null ? `<span class="badge" style="background:#e8ecff;color:#4361ee">SOL ${solAvg}%</span>` : ''}
+      ${lyraAvg !== null ? `<span class="badge" style="background:#f3e8ff;color:#7b2d8b">LYRA ${lyraAvg}%</span>` : ''}
+    </div>
+    <div class="gauges-row">
+      <div class="gauge-card">
+        <h4 style="color:#4361ee">SOL Score</h4>
+        <div class="gauge-wrap"><canvas id="${gId}" width="200" height="120"></canvas>
+        <div class="gauge-center" style="color:#4361ee">${solAvg !== null ? solAvg + '%' : '—'}</div></div>
+      </div>
+      <div class="gauge-card">
+        <h4 style="color:#7b2d8b">LYRA Score</h4>
+        <div class="gauge-wrap"><canvas id="${lId}" width="200" height="120"></canvas>
+        <div class="gauge-center" style="color:#7b2d8b">${lyraAvg !== null ? lyraAvg + '%' : '—'}</div></div>
+      </div>
+      <div class="gauge-card">
+        <h4 style="color:#e67e22">Accessibility</h4>
+        <div class="gauge-wrap"><canvas id="${aId}" width="200" height="120"></canvas>
+        <div class="gauge-center" style="color:#e67e22">${accAvg !== null ? accAvg + '%' : '—'}</div></div>
+      </div>
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Search pages..." oninput="filterRows(this, ${idx})">
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Page</th>
+          <th>SOL Score</th>
+          <th>SOL Issues</th>
+          <th>LYRA Score</th>
+          <th>LYRA Issues</th>
+          <th>Accessibility</th>
+          <th>A11y Issues</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+  
+  document.getElementById('panels').appendChild(panel);
+  
+  setTimeout(() => {
+    if (solAvg !== null) buildGauge(gId, solAvg, '#4361ee');
+    if (lyraAvg !== null) buildGauge(lId, lyraAvg, '#7b2d8b');
+    if (accAvg !== null) buildGauge(aId, accAvg, '#e67e22');
+  }, 50);
+}
+
+function filterRows(input, idx) {
+  const q = input.value.toLowerCase();
+  document.querySelectorAll(`#panel_${idx} .page-row`).forEach(tr => {
+    tr.style.display = tr.cells[0].textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+// Build nav and panels
+DB.sections.forEach((sec, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'nav-btn' + (i === 0 ? ' active' : '');
+  btn.textContent = sec;
+  btn.onclick = () => {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(`panel_${i}`).classList.add('active');
+  };
+  document.getElementById('sectionNav').appendChild(btn);
+  buildSection(sec, i);
+});
+</script>
+</body>
+</html>
