@@ -1329,5 +1329,152 @@
     });
   </script>
 
+  <!-- ACCESS GATE -->
+  <style>
+    #access-gate {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #21212B;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Be Vietnam Pro', -apple-system, sans-serif;
+    }
+    #access-gate.unlocked {
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .gate-card {
+      width: 100%; max-width: 420px; margin: 24px;
+      background: #2f2f3d;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 48px 40px 40px;
+      text-align: center;
+    }
+    .gate-lock {
+      width: 64px; height: 64px; border-radius: 18px;
+      background: linear-gradient(135deg, #6100FF, #B98FFF);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin: 0 auto 24px;
+      box-shadow: 0 8px 32px rgba(97,0,255,0.35);
+    }
+    .gate-title {
+      font-size: 22px; font-weight: 800; color: #fff;
+      letter-spacing: -0.3px; margin-bottom: 8px;
+    }
+    .gate-subtitle {
+      font-size: 14px; color: rgba(255,255,255,0.5);
+      line-height: 1.6; margin-bottom: 32px;
+    }
+    .gate-input-wrap { position: relative; margin-bottom: 12px; }
+    #gate-input {
+      width: 100%; padding: 14px 48px 14px 18px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      color: #fff; font-size: 16px; font-family: inherit;
+      outline: none; letter-spacing: 2px; text-align: center;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    #gate-input:focus { border-color: #6100FF; }
+    #gate-input.error { border-color: #FF5B8A; animation: shake 0.35s ease; }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-6px); }
+      40%      { transform: translateX(6px); }
+      60%      { transform: translateX(-4px); }
+      80%      { transform: translateX(4px); }
+    }
+    .gate-error {
+      font-size: 12px; color: #FF5B8A; margin-bottom: 12px;
+      min-height: 18px; transition: opacity 0.2s;
+    }
+    #gate-btn {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, #6100FF, #B98FFF);
+      border: none; border-radius: 12px;
+      color: #fff; font-size: 15px; font-weight: 700;
+      font-family: inherit; cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      margin-bottom: 28px;
+    }
+    #gate-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    #gate-btn:active { transform: translateY(0); }
+    .gate-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+      margin-bottom: 24px;
+    }
+    .gate-cta {
+      font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.6;
+    }
+    .gate-cta strong { color: rgba(255,255,255,0.75); font-weight: 600; }
+    .gate-teams-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      margin-top: 12px; padding: 9px 18px;
+      background: rgba(97,0,255,0.12);
+      border: 1px solid rgba(97,0,255,0.3);
+      border-radius: 100px; text-decoration: none;
+      color: #B98FFF; font-size: 12px; font-weight: 600;
+      font-family: inherit; cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .gate-teams-btn:hover {
+      background: rgba(97,0,255,0.22);
+      border-color: rgba(185,143,255,0.5);
+    }
+  </style>
+
+  <div id="access-gate">
+    <div class="gate-card">
+      <div class="gate-lock">🔒</div>
+      <div class="gate-title">Access Required</div>
+      <div class="gate-subtitle">This page is restricted. Enter the access code to view the NiCE Designer product roadmap.</div>
+      <div class="gate-input-wrap">
+        <input id="gate-input" type="password" placeholder="Enter code" autocomplete="off" />
+      </div>
+      <div class="gate-error" id="gate-error"></div>
+      <button id="gate-btn" onclick="checkCode()">Unlock</button>
+      <div class="gate-divider"></div>
+      <div class="gate-cta">
+        Don't have the code?<br>
+        <strong>Reach out to Erick Mathews on Teams</strong> to request access.
+        <br>
+        <a class="gate-teams-btn" href="https://teams.microsoft.com/l/chat/0/0?users=erick.mathews@nice.com" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H8a2 2 0 00-2 2v2H4a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-2h2a2 2 0 002-2V4a2 2 0 00-2-2zM4 20V8h12v12H4zm16-4h-2V8a2 2 0 00-2-2H8V4h12v12z" fill="currentColor"/></svg>
+          Message on Teams
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      if (sessionStorage.getItem('nice-roadmap-access') === '1') {
+        document.getElementById('access-gate').style.display = 'none';
+      }
+    })();
+
+    document.getElementById('gate-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') checkCode();
+    });
+
+    function checkCode() {
+      const val = document.getElementById('gate-input').value.trim().toLowerCase();
+      const input = document.getElementById('gate-input');
+      const errEl = document.getElementById('gate-error');
+      if (val === 'dex') {
+        sessionStorage.setItem('nice-roadmap-access', '1');
+        const gate = document.getElementById('access-gate');
+        gate.classList.add('unlocked');
+        setTimeout(() => gate.style.display = 'none', 420);
+      } else {
+        input.classList.add('error');
+        errEl.textContent = 'Incorrect code. Contact Erick Mathews on Teams for access.';
+        setTimeout(() => input.classList.remove('error'), 400);
+        input.value = '';
+      }
+    }
+  </script>
+
 </body>
 </html>
