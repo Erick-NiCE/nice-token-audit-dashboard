@@ -698,6 +698,51 @@
     /* ========================================================
        FOOTER NOTE
     ======================================================== */
+    /* ---- SUPERPOWERS CALLOUT ---- */
+    .sp-callout {
+      max-width: 1100px; margin: 0 auto 40px; padding: 0 48px;
+    }
+    .sp-callout-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+      background: linear-gradient(135deg, rgba(97,0,255,0.12), rgba(54,148,252,0.08));
+      border: 1px solid rgba(97,0,255,0.25); border-radius: 20px; padding: 40px;
+    }
+    .sp-callout-badge {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: #B98FFF; background: rgba(97,0,255,0.15);
+      border: 1px solid rgba(185,143,255,0.3);
+      padding: 4px 12px; border-radius: 100px; margin-bottom: 14px;
+    }
+    .sp-callout-title { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+    .sp-callout-desc { font-size: 13.5px; color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 20px; }
+    .sp-req-pill {
+      background: rgba(97,0,255,0.2); color: #B98FFF;
+      border: 1px solid rgba(185,143,255,0.25);
+      padding: 2px 8px; border-radius: 100px; font-size: 12px; white-space: nowrap;
+    }
+    .sp-callout-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .sp-ctag {
+      font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 100px;
+      background: rgba(97,0,255,0.12); color: rgba(185,143,255,0.85);
+      border: 1px solid rgba(185,143,255,0.15);
+    }
+    .sp-callout-right { display: flex; flex-direction: column; gap: 14px; }
+    .sp-callout-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px; padding: 18px;
+    }
+    .sp-callout-card-icon { font-size: 18px; margin-bottom: 8px; }
+    .sp-callout-card-label { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .sp-callout-card-text { font-size: 12.5px; color: rgba(255,255,255,0.55); line-height: 1.65; }
+    .sp-callout-card-text a { color: #3694FC; text-decoration: none; }
+    .sp-callout-card-text a:hover { text-decoration: underline; }
+    .sp-callout-card-text code { background: rgba(255,255,255,0.08); padding: 1px 5px; border-radius: 4px; font-size: 11px; }
+    @media (max-width: 768px) {
+      .sp-callout { padding: 0 20px; }
+      .sp-callout-inner { grid-template-columns: 1fr; padding: 24px; }
+    }
+
     .footer-note {
       margin: 0 60px 60px;
       max-width: 1180px;
@@ -1308,6 +1353,37 @@
     </div>
   </section>
 
+  <!-- SUPERPOWERS CALLOUT -->
+  <section class="sp-callout reveal">
+    <div class="sp-callout-inner">
+      <div class="sp-callout-left">
+        <div class="sp-callout-badge">⚡ Superpowers</div>
+        <h3 class="sp-callout-title">Some tools require a connection</h3>
+        <p class="sp-callout-desc">Certain roadmap items only work when NiCE Designer is connected to Claude via the local MCP server. These are marked <span class="sp-req-pill">Requires Superpowers</span> — they orchestrate both the Figma plugin and Chrome extension simultaneously, enabling workflows that neither tool can do alone.</p>
+        <div class="sp-callout-tags">
+          <span class="sp-ctag">Figma-to-page parity checks</span>
+          <span class="sp-ctag">Artboard-to-page push</span>
+          <span class="sp-ctag">All 9 Claude skills</span>
+          <span class="sp-ctag">Multi-step AI workflows</span>
+          <span class="sp-ctag">Storybook live integration</span>
+          <span class="sp-ctag">Cross-client context</span>
+        </div>
+      </div>
+      <div class="sp-callout-right">
+        <div class="sp-callout-card">
+          <div class="sp-callout-card-icon">🔌</div>
+          <div class="sp-callout-card-label">What is Superpowers?</div>
+          <div class="sp-callout-card-text">The MCP server runs locally at <code>127.0.0.1:7331</code> and connects Claude Desktop to both the Figma plugin and Chrome extension at the same time. When connected, Claude can read selections, run audits, apply conversions, and diff pages — all from a single prompt.</div>
+        </div>
+        <div class="sp-callout-card">
+          <div class="sp-callout-card-icon">📖</div>
+          <div class="sp-callout-card-label">How to get started</div>
+          <div class="sp-callout-card-text">See the <a href="install-guide.html">Install Guide</a> — Steps 3 and 4 cover the MCP server and Claude Desktop config. Takes about 5 minutes once the plugin and extension are already installed.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <div class="footer-note reveal">
     <strong>Architecture note:</strong> All tools share the same MCP server and token definitions in <code>src/tokens.ts</code>. Each tool is self-contained but draws from a common layer. The MCP server doubles as the Storybook live checker from Phase 1 onward. Gate icons: 📄 Docs, 🎬 Video, 🧪 Testing, 👁 UX Review, 🔧 Dev Review, 🏗 DS Alignment, 📊 Dashboard. These appear only where applicable per tool.
   </div>
@@ -1474,6 +1550,155 @@
         input.value = '';
       }
     }
+  </script>
+
+
+  <!-- NICE POLISH EFFECTS -->
+  <style>
+    /* Positional hover: tilt + spotlight on interactive cards */
+    .tilt-ready {
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s ease;
+    }
+    .tilt-ready::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(255,255,255,0.09) 0%, transparent 70%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      z-index: 1;
+    }
+    .tilt-ready:hover::after { opacity: 1; }
+
+    /* Magnetic buttons */
+    .nav-cta, .btn-primary, .cta-btn, .roadmap-link {
+      transition: transform 0.15s ease, background 0.25s ease, box-shadow 0.25s ease !important;
+    }
+
+    /* Cursor ambient glow */
+    #nice-cursor-glow {
+      position: fixed;
+      pointer-events: none;
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        rgba(54,148,252,0.055) 0%,
+        rgba(97,0,255,0.025) 40%,
+        transparent 70%);
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      transition: left 0.08s linear, top 0.08s linear, opacity 0.5s ease;
+      opacity: 0;
+      mix-blend-mode: screen;
+    }
+
+    /* Improved reveal: slide up instead of just fade */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.55s cubic-bezier(0.23,1,0.32,1),
+                  transform 0.55s cubic-bezier(0.23,1,0.32,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+
+  <script>
+  (function() {
+    // Cursor ambient glow
+    var glow = document.createElement('div');
+    glow.id = 'nice-cursor-glow';
+    document.body.appendChild(glow);
+    var glowX = window.innerWidth / 2, glowY = window.innerHeight / 2;
+    document.addEventListener('mousemove', function(e) {
+      glowX = e.clientX; glowY = e.clientY;
+      glow.style.left = glowX + 'px';
+      glow.style.top = glowY + 'px';
+      glow.style.opacity = '1';
+    });
+    document.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
+
+    // Apply tilt + spotlight to cards
+    var SELECTORS = [
+      '.tool-card', '.skill-card', '.phase-block', '.case-card',
+      '.pillar', '.step-card', '.score-card', '.sp-card',
+      '.sp-callout-card', '.stat-card', '.doc-card', '.dl-card',
+      '.faq-item', '.checklist-item', '.tool-mini', '.gate-card',
+      '.score-band', '.audit-cat', '.workflow-card', '.case-scenario'
+    ].join(', ');
+
+    document.querySelectorAll(SELECTORS).forEach(function(card) {
+      card.classList.add('tilt-ready');
+
+      card.addEventListener('mousemove', function(e) {
+        var r = card.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width;
+        var y = (e.clientY - r.top) / r.height;
+        // Spotlight CSS vars
+        card.style.setProperty('--mx', (x * 100) + '%');
+        card.style.setProperty('--my', (y * 100) + '%');
+        // 3D tilt (gentle, max 7deg)
+        var tx = (y - 0.5) * -8;
+        var ty = (x - 0.5) * 8;
+        card.style.transform = 'perspective(900px) rotateX(' + tx + 'deg) rotateY(' + ty + 'deg) translateZ(3px)';
+        card.style.transition = 'transform 0.07s ease';
+        // Glow border hint
+        card.style.boxShadow = '0 8px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(54,148,252,0.18)';
+      });
+
+      card.addEventListener('mouseleave', function() {
+        card.style.transform = '';
+        card.style.transition = 'transform 0.45s cubic-bezier(0.23,1,0.32,1)';
+        card.style.boxShadow = '';
+        card.style.setProperty('--mx', '50%');
+        card.style.setProperty('--my', '50%');
+      });
+    });
+
+    // Magnetic effect on primary action buttons
+    document.querySelectorAll('.nav-cta, .btn-primary, .cta-btn').forEach(function(btn) {
+      btn.addEventListener('mousemove', function(e) {
+        var r = btn.getBoundingClientRect();
+        var dx = (e.clientX - r.left - r.width / 2) * 0.28;
+        var dy = (e.clientY - r.top - r.height / 2) * 0.28;
+        btn.style.transform = 'translate(' + dx + 'px, ' + dy + 'px) scale(1.04)';
+        btn.style.transition = 'transform 0.12s ease';
+      });
+      btn.addEventListener('mouseleave', function() {
+        btn.style.transform = '';
+        btn.style.transition = 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)';
+      });
+    });
+
+    // Improved scroll reveal - re-run after any existing observers
+    var ro = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var delay = parseInt(entry.target.dataset.polishDelay || 0);
+          setTimeout(function() {
+            entry.target.classList.add('visible');
+          }, delay);
+          ro.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -24px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(function(el, i) {
+      // Stagger siblings in same parent
+      el.dataset.polishDelay = (i % 6) * 55;
+      ro.observe(el);
+    });
+  })();
   </script>
 
 </body>
