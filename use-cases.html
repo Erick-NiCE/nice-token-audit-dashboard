@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Use Cases - NiCE Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #21212B;
+      --card: #2f2f3d;
+      --border: rgba(255,255,255,0.08);
+      --text: #fff;
+      --secondary: rgba(255,255,255,0.58);
+      --blue: #3694FC;
+      --indigo: #6100FF;
+      --emerald: #00E2A0;
+      --teal: #36EAD0;
+      --coral: #FF5B8A;
+      --lyra: #B98FFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      background: rgba(33,33,43,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav-logo {
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    .logo-nice { color: var(--blue); }
+    .logo-designer { color: var(--text); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-link {
+      color: var(--secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+    .nav-link.active { color: var(--text); border-bottom-color: var(--blue); }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.25rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    .nav-toggle:hover { background: rgba(255,255,255,0.08); }
+
+    @media (max-width: 768px) {
+      .site-nav { padding: 0 20px; }
+      .nav-toggle { display: block; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: rgba(33,33,43,0.98);
+        backdrop-filter: blur(16px);
+        flex-direction: column;
+        padding: 12px 20px 20px;
+        border-bottom: 1px solid var(--border);
+        gap: 2px;
+      }
+      .nav-links.open { display: flex; }
+      .nav-link { width: 100%; padding: 10px 12px; }
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(to bottom, #2a0d1a, var(--bg));
+      padding: 100px 32px 80px;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.15rem);
+      color: var(--secondary);
+      max-width: 700px;
+      margin: 0 auto;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    /* CATEGORY SECTION */
+    .category-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 72px 32px 0;
+    }
+
+    .category-section:last-of-type { padding-bottom: 80px; }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .category-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      background: var(--cat-color-bg, rgba(54,148,252,0.12));
+      color: var(--cat-color, var(--blue));
+      border: 1px solid var(--cat-color-border, rgba(54,148,252,0.25));
+    }
+
+    .category-title-wrap {}
+
+    .category-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cat-color, var(--blue));
+      margin-bottom: 4px;
+    }
+
+    .category-title {
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .category-rule {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      margin-left: 8px;
+    }
+
+    /* SCENARIO CARDS GRID */
+    .scenarios-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .scenario-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+    }
+
+    .scenario-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--cat-color, var(--blue));
+      opacity: 0.75;
+    }
+
+    .scenario-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+      border-color: rgba(255,255,255,0.13);
+    }
+
+    .scenario-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .scenario-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+      background: var(--cat-color-bg, rgba(54,148,252,0.1));
+      border: 1px solid var(--cat-color-border, rgba(54,148,252,0.18));
+    }
+
+    .scenario-title-block { flex: 1; min-width: 0; }
+
+    .scenario-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .target-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .target-badge.figma {
+      background: rgba(185,143,255,0.1);
+      color: var(--lyra);
+      border-color: rgba(185,143,255,0.2);
+    }
+    .target-badge.chrome {
+      background: rgba(54,148,252,0.1);
+      color: var(--blue);
+      border-color: rgba(54,148,252,0.2);
+    }
+    .target-badge.both {
+      background: rgba(255,91,138,0.1);
+      color: var(--coral);
+      border-color: rgba(255,91,138,0.2);
+    }
+
+    .scenario-when {
+      font-size: 0.82rem;
+      color: var(--secondary);
+      line-height: 1.6;
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+
+    .scenario-steps {
+      list-style: none;
+      margin-bottom: 18px;
+    }
+
+    .scenario-steps li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 0.84rem;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.6;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .scenario-steps li:last-child { border-bottom: none; }
+
+    .step-num {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.62rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: var(--cat-color, var(--blue));
+    }
+
+    .scenario-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: var(--secondary);
+    }
+
+    .tag.skill-tag {
+      background: rgba(185,143,255,0.1);
+      color: var(--lyra);
+      border-color: rgba(185,143,255,0.18);
+    }
+
+    .tag.tool-tag {
+      background: rgba(54,234,208,0.08);
+      color: var(--teal);
+      border-color: rgba(54,234,208,0.18);
+    }
+
+    /* QUICK REFERENCE TABLE */
+    .table-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 32px;
+    }
+
+    .table-section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 12px;
+    }
+
+    .table-section-title {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .table-section-sub {
+      font-size: 0.9rem;
+      color: var(--secondary);
+      margin-bottom: 36px;
+    }
+
+    .ref-table-wrap {
+      overflow-x: auto;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      background: var(--card);
+    }
+
+    .ref-table th {
+      text-align: left;
+      padding: 14px 18px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--secondary);
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      white-space: nowrap;
+    }
+
+    .ref-table td {
+      padding: 13px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .ref-table tr:last-child td { border-bottom: none; }
+
+    .ref-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .ref-table td:first-child {
+      font-weight: 600;
+      color: var(--text);
+      min-width: 180px;
+    }
+
+    .ref-table td:nth-child(2) { min-width: 100px; }
+    .ref-table td:nth-child(3) { min-width: 150px; }
+    .ref-table td:nth-child(4) { min-width: 200px; }
+
+    .tbl-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .tbl-badge.figma { background: rgba(185,143,255,0.12); color: var(--lyra); }
+    .tbl-badge.chrome { background: rgba(54,148,252,0.12); color: var(--blue); }
+    .tbl-badge.both { background: rgba(255,91,138,0.1); color: var(--coral); }
+
+    .tbl-skill {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.72rem;
+      color: var(--lyra);
+      background: rgba(185,143,255,0.08);
+      padding: 1px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin: 1px 2px 1px 0;
+    }
+
+    .tbl-tool {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.72rem;
+      color: var(--teal);
+      background: rgba(54,234,208,0.07);
+      padding: 1px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin: 1px 2px 1px 0;
+    }
+
+    /* DIVIDER */
+    .section-divider {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+    .section-divider hr {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* FOOTER */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 32px;
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .footer-tagline {
+      font-size: 0.84rem;
+      color: var(--secondary);
+      margin-bottom: 24px;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .footer-link {
+      color: var(--secondary);
+      text-decoration: none;
+      font-size: 0.82rem;
+      padding: 5px 10px;
+      border-radius: 5px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .footer-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+
+    .footer-sep {
+      color: rgba(255,255,255,0.15);
+      font-size: 0.75rem;
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* BOTH-CLIENTS NOTE */
+    .both-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: rgba(255,91,138,0.07);
+      border: 1px solid rgba(255,91,138,0.18);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 28px;
+      font-size: 0.83rem;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.65;
+    }
+
+    .both-note-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .category-section { padding: 52px 20px 0; }
+      .table-section { padding: 60px 20px; }
+      .hero { padding: 72px 20px 60px; }
+      .section-divider { padding: 0 20px; }
+      .scenarios-grid { grid-template-columns: 1fr; }
+      .category-header { flex-wrap: wrap; }
+      .category-rule { display: none; }
+      .site-footer { padding: 40px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="site-nav">
+  <a href="./resources.html" class="nav-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></a>
+  <div class="nav-links" id="navLinks">
+    <a href="./resources.html" class="nav-link">Overview</a>
+    <a href="./install-guide.html" class="nav-link">Install Guide</a>
+    <a href="./claude-skills.html" class="nav-link">Claude Skills</a>
+    <a href="./use-cases.html" class="nav-link active">Use Cases</a>
+    <a href="./how-scores.html" class="nav-link">Scoring</a>
+    <a href="./index.html" class="nav-link">Dashboard</a>
+    <a href="./roadmap.html" class="nav-link">Roadmap</a>
+  </div>
+  <button class="nav-toggle" aria-label="Menu" id="navToggle">&#9776;</button>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <p class="hero-eyebrow">Workflows</p>
+  <h1 class="hero-title">Use Cases</h1>
+  <p class="hero-subtitle">Everything NiCE Designer can do, organized by job to be done. From auditing a Figma frame to pushing a design live, each scenario tells you which tools to use and in what order.</p>
+</header>
+
+<!-- CATEGORY 1: AUDITING -->
+<section class="category-section" style="--cat-color: var(--blue); --cat-color-bg: rgba(54,148,252,0.1); --cat-color-border: rgba(54,148,252,0.2);">
+  <div class="category-header reveal">
+    <div class="category-number">1</div>
+    <div class="category-title-wrap">
+      <div class="category-eyebrow">Read-only</div>
+      <h2 class="category-title">Auditing &mdash; Is this compliant?</h2>
+    </div>
+    <div class="category-rule"></div>
+  </div>
+
+  <div class="scenarios-grid">
+
+    <!-- 1a -->
+    <article class="scenario-card reveal">
+      <div class="scenario-top">
+        <div class="scenario-icon">&#128269;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">Full compliance audit on a Figma frame</h3>
+          <span class="target-badge figma">&#10022; Figma</span>
+        </div>
+      </div>
+      <p class="scenario-when">When you want to know if a frame meets SOL or Lyra standards before handoff.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num">1</span><span>Select the target frame in Figma.</span></li>
+        <li><span class="step-num">2</span><span>Open the plugin and click the Audit tab, or ask Claude to run a full audit.</span></li>
+        <li><span class="step-num">3</span><span>Review separate scores for Colors, Text, Spacing, Radius, Components, and two a11y scores.</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag tool-tag">run_full_audit</span>
+      </div>
+    </article>
+
+    <!-- 1b -->
+    <article class="scenario-card reveal">
+      <div class="scenario-top">
+        <div class="scenario-icon">&#127760;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">Full compliance audit on a live web page</h3>
+          <span class="target-badge chrome">&#9675; Chrome</span>
+        </div>
+      </div>
+      <p class="scenario-when">When you want to know if a shipped page matches the design system.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num">1</span><span>Open the Chrome extension on the target page.</span></li>
+        <li><span class="step-num">2</span><span>Click the Audit tab, or ask Claude to run a full audit against the Chrome target.</span></li>
+        <li><span class="step-num">3</span><span>Review the real-time scores and issue list for the rendered page.</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag tool-tag">run_full_audit</span>
+        <span class="tag">target: chrome</span>
+      </div>
+    </article>
+
+    <!-- 1c -->
+    <article class="scenario-card reveal">
+      <div class="scenario-top">
+        <div class="scenario-icon">&#127919;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">Single-dimension audit</h3>
+          <span class="target-badge both">&#9650; Figma or Chrome</span>
+        </div>
+      </div>
+      <p class="scenario-when">When you only care about one aspect, for example after fixing all colors and wanting to verify only colors.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num">1</span><span>In the plugin, switch to the per-tab audit: Colors, Text, Spacing, Radius, or Components.</span></li>
+        <li><span class="step-num">2</span><span>Or ask Claude to run a specific audit tool for just that dimension.</span></li>
+        <li><span class="step-num">3</span><span>Review focused results without noise from other categories.</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag tool-tag">audit_colors</span>
+        <span class="tag tool-tag">audit_text_styles</span>
+        <span class="tag tool-tag">audit_spacing</span>
+        <span class="tag tool-tag">audit_radius</span>
+        <span class="tag tool-tag">audit_components</span>
+      </div>
+    </article>
+
+    <!-- 1d -->
+    <article class="scenario-card reveal">
+      <div class="scenario-top">
+        <div class="scenario-icon">&#9888;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">Accessibility triage</h3>
+          <span class="target-badge both">&#9650; Figma or Chrome</span>
+        </div>
+      </div>
+      <p class="scenario-when">When you have a long a11y issue list and need to know where to start.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num">1</span><span>Load the a11y-triage skill in Claude.</span></li>
+        <li><span class="step-num">2</span><span>Ask Claude to audit and triage accessibility issues.</span></li>
+        <li><span class="step-num">3</span><span>Review the output: issues grouped by severity x reach with a prioritized action list.</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag skill-tag">a11y-triage</span>
+        <span class="tag tool-tag">audit_accessibility</span>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<div class="section-divider" style="margin-top: 72px;"><hr /></div>
+
+<!-- CATEGORY 2: CONVERTING -->
+<section class="category-section" style="--cat-color: var(--emerald); --cat-color-bg: rgba(0,226,160,0.08); --cat-color-border: rgba(0,226,160,0.2);">
+  <div class="category-header reveal">
+    <div class="category-number" style="background: rgba(0,226,160,0.1); color: var(--emerald); border-color: rgba(0,226,160,0.22);">2</div>
+    <div class="category-title-wrap">
+      <div class="category-eyebrow" style="color: var(--emerald);">Write operations</div>
+      <h2 class="category-title">Converting &mdash; Make it compliant</h2>
+    </div>
+    <div class="category-rule"></div>
+  </div>
+
+  <div class="scenarios-grid">
+
+    <!-- 2a -->
+    <article class="scenario-card reveal" style="--cat-color: var(--emerald); --cat-color-bg: rgba(0,226,160,0.08); --cat-color-border: rgba(0,226,160,0.18);">
+      <div class="scenario-top">
+        <div class="scenario-icon" style="background: rgba(0,226,160,0.08); border-color: rgba(0,226,160,0.18);">&#127981;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">Convert a whole Figma frame to Lyra tokens</h3>
+          <span class="target-badge figma">&#10022; Figma</span>
+        </div>
+      </div>
+      <p class="scenario-when">When you have a frame built with raw values or SOL tokens and need it in Lyra.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num" style="color: var(--emerald);">1</span><span>Load the lyra-visual-patterns skill first to set expectations.</span></li>
+        <li><span class="step-num" style="color: var(--emerald);">2</span><span>Ask Claude to migrate, or use the Convert tab in the plugin.</span></li>
+        <li><span class="step-num" style="color: var(--emerald);">3</span><span>Choose a mode: tokens-only (safe, swaps tokens and preserves layout) or full (also normalizes layout, components, and a11y).</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag skill-tag">lyra-visual-patterns</span>
+        <span class="tag tool-tag">migrate_to_lyra</span>
+      </div>
+    </article>
+
+    <!-- 2b -->
+    <article class="scenario-card reveal" style="--cat-color: var(--emerald); --cat-color-bg: rgba(0,226,160,0.08); --cat-color-border: rgba(0,226,160,0.18);">
+      <div class="scenario-top">
+        <div class="scenario-icon" style="background: rgba(0,226,160,0.08); border-color: rgba(0,226,160,0.18);">&#127759;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">Convert a live web page to Lyra tokens</h3>
+          <span class="target-badge chrome">&#9675; Chrome</span>
+        </div>
+      </div>
+      <p class="scenario-when">When you want to re-theme a shipped page to use Lyra CSS variables.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num" style="color: var(--emerald);">1</span><span>Open the Chrome extension on the target page.</span></li>
+        <li><span class="step-num" style="color: var(--emerald);">2</span><span>Ask Claude to convert the page to Lyra, or use the Convert tab in the extension.</span></li>
+        <li><span class="step-num" style="color: var(--emerald);">3</span><span>Review the token substitutions applied as CSS variable overrides.</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag tool-tag">convert_page_to_lyra</span>
+      </div>
+    </article>
+
+    <!-- 2c -->
+    <article class="scenario-card reveal" style="--cat-color: var(--emerald); --cat-color-bg: rgba(0,226,160,0.08); --cat-color-border: rgba(0,226,160,0.18);">
+      <div class="scenario-top">
+        <div class="scenario-icon" style="background: rgba(0,226,160,0.08); border-color: rgba(0,226,160,0.18);">&#128295;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">Surgical per-element fixes</h3>
+          <span class="target-badge both">&#9650; Figma or Chrome</span>
+        </div>
+      </div>
+      <p class="scenario-when">When you want to fix individual issues rather than convert everything at once.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num" style="color: var(--emerald);">1</span><span>In the plugin issue list, click Replace on specific rows, or ask Claude to fix a single property.</span></li>
+        <li><span class="step-num" style="color: var(--emerald);">2</span><span>Each fix is logged in the edit history and can be undone per step (since v10).</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag tool-tag">convert_colors</span>
+        <span class="tag tool-tag">fix_spacing</span>
+        <span class="tag tool-tag">fix_radius</span>
+        <span class="tag tool-tag">convert_text_styles</span>
+      </div>
+    </article>
+
+    <!-- 2d -->
+    <article class="scenario-card reveal" style="--cat-color: var(--emerald); --cat-color-bg: rgba(0,226,160,0.08); --cat-color-border: rgba(0,226,160,0.18);">
+      <div class="scenario-top">
+        <div class="scenario-icon" style="background: rgba(0,226,160,0.08); border-color: rgba(0,226,160,0.18);">&#128260;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">SOL to Lyra swap</h3>
+          <span class="target-badge figma">&#10022; Figma</span>
+        </div>
+      </div>
+      <p class="scenario-when">When a frame was built in SOL and needs a Lyra version, or vice versa.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num" style="color: var(--emerald);">1</span><span>Ask Claude to generate both system variants side by side, or convert the existing frame.</span></li>
+        <li><span class="step-num" style="color: var(--emerald);">2</span><span>Review the generated variants and choose the one that matches your target system.</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag tool-tag">generate_multi_system</span>
+        <span class="tag tool-tag">convert_mode</span>
+      </div>
+    </article>
+
+    <!-- 2e -->
+    <article class="scenario-card reveal" style="--cat-color: var(--emerald); --cat-color-bg: rgba(0,226,160,0.08); --cat-color-border: rgba(0,226,160,0.18);">
+      <div class="scenario-top">
+        <div class="scenario-icon" style="background: rgba(0,226,160,0.08); border-color: rgba(0,226,160,0.18);">&#8617;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">Undo a conversion</h3>
+          <span class="target-badge both">&#9650; Figma or Chrome</span>
+        </div>
+      </div>
+      <p class="scenario-when">When a conversion didn't look right and you want to step back.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num" style="color: var(--emerald);">1</span><span>Use the edit history panel in the plugin (undo/redo), or ask Claude to undo.</span></li>
+        <li><span class="step-num" style="color: var(--emerald);">2</span><span>Each step is individually revertible, so you can roll back just the last change.</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag tool-tag">undo_last_conversion</span>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<div class="section-divider" style="margin-top: 72px;"><hr /></div>
+
+<!-- CATEGORY 3: HANDOFF -->
+<section class="category-section" style="--cat-color: var(--teal); --cat-color-bg: rgba(54,234,208,0.08); --cat-color-border: rgba(54,234,208,0.2);">
+  <div class="category-header reveal">
+    <div class="category-number" style="background: rgba(54,234,208,0.1); color: var(--teal); border-color: rgba(54,234,208,0.22);">3</div>
+    <div class="category-title-wrap">
+      <div class="category-eyebrow" style="color: var(--teal);">Export and specs</div>
+      <h2 class="category-title">Design-to-code handoff</h2>
+    </div>
+    <div class="category-rule"></div>
+  </div>
+
+  <div class="scenarios-grid">
+
+    <!-- 3a -->
+    <article class="scenario-card reveal" style="--cat-color: var(--teal); --cat-color-bg: rgba(54,234,208,0.08); --cat-color-border: rgba(54,234,208,0.18);">
+      <div class="scenario-top">
+        <div class="scenario-icon" style="background: rgba(54,234,208,0.08); border-color: rgba(54,234,208,0.18);">&#128196;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">Export a Figma node as production CSS</h3>
+          <span class="target-badge figma">&#10022; Figma</span>
+        </div>
+      </div>
+      <p class="scenario-when">When engineering needs the exact CSS for a component with design tokens substituted in for raw values.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num" style="color: var(--teal);">1</span><span>Select the node in Figma.</span></li>
+        <li><span class="step-num" style="color: var(--teal);">2</span><span>Load the figma-element-css skill, then ask Claude to export CSS.</span></li>
+        <li><span class="step-num" style="color: var(--teal);">3</span><span>Receive production-ready CSS with Lyra token variables in place of raw values.</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag skill-tag">figma-element-css</span>
+        <span class="tag tool-tag">extract_all_css</span>
+        <span class="tag tool-tag">extract_token_css</span>
+      </div>
+    </article>
+
+    <!-- 3b -->
+    <article class="scenario-card reveal" style="--cat-color: var(--teal); --cat-color-bg: rgba(54,234,208,0.08); --cat-color-border: rgba(54,234,208,0.18);">
+      <div class="scenario-top">
+        <div class="scenario-icon" style="background: rgba(54,234,208,0.08); border-color: rgba(54,234,208,0.18);">&#128202;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">Get a developer spec sheet for a browser element</h3>
+          <span class="target-badge chrome">&#9675; Chrome</span>
+        </div>
+      </div>
+      <p class="scenario-when">When engineering inspects a live element and needs all its design properties in one place.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num" style="color: var(--teal);">1</span><span>In Chrome, inspect the element via the extension.</span></li>
+        <li><span class="step-num" style="color: var(--teal);">2</span><span>Load the browser-element-specs skill, then ask Claude for specs.</span></li>
+        <li><span class="step-num" style="color: var(--teal);">3</span><span>Receive a spec sheet covering spacing, type, colors, tokens, and interaction states.</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag skill-tag">browser-element-specs</span>
+        <span class="tag tool-tag">extract_dev_details</span>
+      </div>
+    </article>
+
+    <!-- 3c -->
+    <article class="scenario-card reveal" style="--cat-color: var(--teal); --cat-color-bg: rgba(54,234,208,0.08); --cat-color-border: rgba(54,234,208,0.18);">
+      <div class="scenario-top">
+        <div class="scenario-icon" style="background: rgba(54,234,208,0.08); border-color: rgba(54,234,208,0.18);">&#128084;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">Export the full token set</h3>
+          <span class="target-badge both">&#9650; Figma or Chrome</span>
+        </div>
+      </div>
+      <p class="scenario-when">When you need a token export for SOL or Lyra, for example to feed into a style dictionary pipeline.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num" style="color: var(--teal);">1</span><span>Ask Claude to export tokens, specifying the target system (SOL or Lyra).</span></li>
+        <li><span class="step-num" style="color: var(--teal);">2</span><span>Receive a structured token export ready for downstream tooling.</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag tool-tag">export_design_tokens</span>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<div class="section-divider" style="margin-top: 72px;"><hr /></div>
+
+<!-- CATEGORY 4: PARITY -->
+<section class="category-section" style="--cat-color: var(--coral); --cat-color-bg: rgba(255,91,138,0.08); --cat-color-border: rgba(255,91,138,0.2);">
+  <div class="category-header reveal">
+    <div class="category-number" style="background: rgba(255,91,138,0.1); color: var(--coral); border-color: rgba(255,91,138,0.22);">4</div>
+    <div class="category-title-wrap">
+      <div class="category-eyebrow" style="color: var(--coral);">Both clients required</div>
+      <h2 class="category-title">Figma vs. live page parity</h2>
+    </div>
+    <div class="category-rule"></div>
+  </div>
+
+  <div class="both-note reveal">
+    <span class="both-note-icon">&#128279;</span>
+    <span>These workflows require both the Figma plugin and the Chrome extension to be connected to the MCP server simultaneously. Start the MCP server first (<code style="font-family: monospace; font-size: 0.8rem; background: rgba(255,255,255,0.07); padding: 1px 5px; border-radius: 3px;">cd packages/mcp-server &amp;&amp; node src/index.js</code>), then open both clients.</span>
+  </div>
+
+  <div class="scenarios-grid">
+
+    <!-- 4a -->
+    <article class="scenario-card reveal" style="--cat-color: var(--coral); --cat-color-bg: rgba(255,91,138,0.08); --cat-color-border: rgba(255,91,138,0.18);">
+      <div class="scenario-top">
+        <div class="scenario-icon" style="background: rgba(255,91,138,0.08); border-color: rgba(255,91,138,0.18);">&#128270;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">Diff a Figma artboard against the live page</h3>
+          <span class="target-badge both">&#9650; Both (required)</span>
+        </div>
+      </div>
+      <p class="scenario-when">When you suspect the implementation doesn't match the design and need a concrete diff.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num" style="color: var(--coral);">1</span><span>Open both the Figma plugin and the Chrome extension and connect both to MCP.</span></li>
+        <li><span class="step-num" style="color: var(--coral);">2</span><span>Load the figma-chrome-parity skill.</span></li>
+        <li><span class="step-num" style="color: var(--coral);">3</span><span>Ask Claude to compare. Receive a side-by-side mismatch report for colors, type, spacing, and layout.</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag skill-tag">figma-chrome-parity</span>
+      </div>
+    </article>
+
+    <!-- 4b -->
+    <article class="scenario-card reveal" style="--cat-color: var(--coral); --cat-color-bg: rgba(255,91,138,0.08); --cat-color-border: rgba(255,91,138,0.18);">
+      <div class="scenario-top">
+        <div class="scenario-icon" style="background: rgba(255,91,138,0.08); border-color: rgba(255,91,138,0.18);">&#128396;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">Push Figma styling onto the live page</h3>
+          <span class="target-badge both">&#9650; Both (required)</span>
+        </div>
+      </div>
+      <p class="scenario-when">When you want to preview what the page would look like if it matched the design exactly.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num" style="color: var(--coral);">1</span><span>Connect both clients to MCP and select the source frame in Figma.</span></li>
+        <li><span class="step-num" style="color: var(--coral);">2</span><span>Load the artboard-to-page skill.</span></li>
+        <li><span class="step-num" style="color: var(--coral);">3</span><span>Ask Claude to apply. CSS overrides matching the Figma frame are applied to the live page instantly.</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag skill-tag">artboard-to-page</span>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<div class="section-divider" style="margin-top: 72px;"><hr /></div>
+
+<!-- CATEGORY 5: CHROME POLISH -->
+<section class="category-section" style="--cat-color: var(--lyra); --cat-color-bg: rgba(97,0,255,0.1); --cat-color-border: rgba(97,0,255,0.22);">
+  <div class="category-header reveal">
+    <div class="category-number" style="background: rgba(185,143,255,0.12); color: var(--lyra); border-color: rgba(185,143,255,0.25);">5</div>
+    <div class="category-title-wrap">
+      <div class="category-eyebrow" style="color: var(--lyra);">QA and maintenance</div>
+      <h2 class="category-title">Chrome page polish and QA</h2>
+    </div>
+    <div class="category-rule"></div>
+  </div>
+
+  <div class="scenarios-grid">
+
+    <!-- 5a -->
+    <article class="scenario-card reveal" style="--cat-color: var(--lyra); --cat-color-bg: rgba(185,143,255,0.08); --cat-color-border: rgba(185,143,255,0.18);">
+      <div class="scenario-top">
+        <div class="scenario-icon" style="background: rgba(185,143,255,0.08); border-color: rgba(185,143,255,0.18);">&#127765;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">Dark mode parity check</h3>
+          <span class="target-badge chrome">&#9675; Chrome only</span>
+        </div>
+      </div>
+      <p class="scenario-when">When you need to verify the page works correctly in dark mode before shipping.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num" style="color: var(--lyra);">1</span><span>Load the dark-mode-parity skill.</span></li>
+        <li><span class="step-num" style="color: var(--lyra);">2</span><span>Ask Claude to check dark mode on the current page.</span></li>
+        <li><span class="step-num" style="color: var(--lyra);">3</span><span>Receive a report of which elements don't adapt correctly and what token changes are needed.</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag skill-tag">dark-mode-parity</span>
+      </div>
+    </article>
+
+    <!-- 5b -->
+    <article class="scenario-card reveal" style="--cat-color: var(--lyra); --cat-color-bg: rgba(185,143,255,0.08); --cat-color-border: rgba(185,143,255,0.18);">
+      <div class="scenario-top">
+        <div class="scenario-icon" style="background: rgba(185,143,255,0.08); border-color: rgba(185,143,255,0.18);">&#128064;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">Toggle visual overlays for QA</h3>
+          <span class="target-badge chrome">&#9675; Chrome</span>
+        </div>
+      </div>
+      <p class="scenario-when">When you want visual debugging during a QA pass without leaving the browser.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num" style="color: var(--lyra);">1</span><span>Open the Chrome extension's QA panel, or ask Claude to toggle a specific overlay.</span></li>
+        <li><span class="step-num" style="color: var(--lyra);">2</span><span>Choose from: scrollbar overlay, hover overlay, tap-target highlighting, or colorblind simulation.</span></li>
+        <li><span class="step-num" style="color: var(--lyra);">3</span><span>Toggle off overlays when your QA pass is complete.</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag tool-tag">a11y_overlay</span>
+        <span class="tag tool-tag">polish_page</span>
+      </div>
+    </article>
+
+    <!-- 5c -->
+    <article class="scenario-card reveal" style="--cat-color: var(--lyra); --cat-color-bg: rgba(185,143,255,0.08); --cat-color-border: rgba(185,143,255,0.18);">
+      <div class="scenario-top">
+        <div class="scenario-icon" style="background: rgba(185,143,255,0.08); border-color: rgba(185,143,255,0.18);">&#128081;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">Find recurring values worth tokenizing</h3>
+          <span class="target-badge both">&#9650; Figma or Chrome</span>
+        </div>
+      </div>
+      <p class="scenario-when">When you're maintaining the design system and want to clean up custom values that should be tokens.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num" style="color: var(--lyra);">1</span><span>Load the token-candidates skill.</span></li>
+        <li><span class="step-num" style="color: var(--lyra);">2</span><span>Ask Claude to find recurring non-token values.</span></li>
+        <li><span class="step-num" style="color: var(--lyra);">3</span><span>Receive values grouped by frequency with suggested token names for each.</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag skill-tag">token-candidates</span>
+        <span class="tag tool-tag">export_design_tokens</span>
+      </div>
+    </article>
+
+    <!-- 5d -->
+    <article class="scenario-card reveal" style="--cat-color: var(--lyra); --cat-color-bg: rgba(185,143,255,0.08); --cat-color-border: rgba(185,143,255,0.18);">
+      <div class="scenario-top">
+        <div class="scenario-icon" style="background: rgba(185,143,255,0.08); border-color: rgba(185,143,255,0.18);">&#9989;</div>
+        <div class="scenario-title-block">
+          <h3 class="scenario-title">After auto-fixing: what's left to do manually</h3>
+          <span class="target-badge both">&#9650; Figma or Chrome</span>
+        </div>
+      </div>
+      <p class="scenario-when">When you've run all the fix tools and want to know what still requires human judgment.</p>
+      <ol class="scenario-steps" role="list">
+        <li><span class="step-num" style="color: var(--lyra);">1</span><span>Load the manual-fixes-checklist skill after running your automated fixes.</span></li>
+        <li><span class="step-num" style="color: var(--lyra);">2</span><span>Ask Claude to generate the checklist.</span></li>
+        <li><span class="step-num" style="color: var(--lyra);">3</span><span>Receive a human-readable checklist of issues that automation can't safely resolve.</span></li>
+      </ol>
+      <div class="scenario-tags">
+        <span class="tag skill-tag">manual-fixes-checklist</span>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- QUICK REFERENCE TABLE -->
+<section class="table-section">
+  <div class="reveal">
+    <p class="table-section-label">Quick Reference</p>
+    <h2 class="table-section-title">Common workflows at a glance</h2>
+    <p class="table-section-sub">The most frequently used scenarios, their required targets, and which skill or tool to reach for first.</p>
+  </div>
+
+  <div class="ref-table-wrap reveal">
+    <table class="ref-table">
+      <thead>
+        <tr>
+          <th>Use Case</th>
+          <th>Target</th>
+          <th>Skill</th>
+          <th>Key Tool(s)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Full compliance audit (Figma)</td>
+          <td><span class="tbl-badge figma">Figma</span></td>
+          <td>&mdash;</td>
+          <td><span class="tbl-tool">run_full_audit</span></td>
+        </tr>
+        <tr>
+          <td>Full compliance audit (live page)</td>
+          <td><span class="tbl-badge chrome">Chrome</span></td>
+          <td>&mdash;</td>
+          <td><span class="tbl-tool">run_full_audit</span></td>
+        </tr>
+        <tr>
+          <td>Accessibility triage</td>
+          <td><span class="tbl-badge both">Both</span></td>
+          <td><span class="tbl-skill">a11y-triage</span></td>
+          <td><span class="tbl-tool">audit_accessibility</span></td>
+        </tr>
+        <tr>
+          <td>Convert Figma frame to Lyra</td>
+          <td><span class="tbl-badge figma">Figma</span></td>
+          <td><span class="tbl-skill">lyra-visual-patterns</span></td>
+          <td><span class="tbl-tool">migrate_to_lyra</span></td>
+        </tr>
+        <tr>
+          <td>Re-theme a live page to Lyra</td>
+          <td><span class="tbl-badge chrome">Chrome</span></td>
+          <td>&mdash;</td>
+          <td><span class="tbl-tool">convert_page_to_lyra</span></td>
+        </tr>
+        <tr>
+          <td>Export component CSS with tokens</td>
+          <td><span class="tbl-badge figma">Figma</span></td>
+          <td><span class="tbl-skill">figma-element-css</span></td>
+          <td><span class="tbl-tool">extract_token_css</span></td>
+        </tr>
+        <tr>
+          <td>Dev spec sheet for browser element</td>
+          <td><span class="tbl-badge chrome">Chrome</span></td>
+          <td><span class="tbl-skill">browser-element-specs</span></td>
+          <td><span class="tbl-tool">extract_dev_details</span></td>
+        </tr>
+        <tr>
+          <td>Diff Figma against live page</td>
+          <td><span class="tbl-badge both">Both</span></td>
+          <td><span class="tbl-skill">figma-chrome-parity</span></td>
+          <td>&mdash;</td>
+        </tr>
+        <tr>
+          <td>Push Figma styling to live page</td>
+          <td><span class="tbl-badge both">Both</span></td>
+          <td><span class="tbl-skill">artboard-to-page</span></td>
+          <td>&mdash;</td>
+        </tr>
+        <tr>
+          <td>Dark mode parity check</td>
+          <td><span class="tbl-badge chrome">Chrome</span></td>
+          <td><span class="tbl-skill">dark-mode-parity</span></td>
+          <td>&mdash;</td>
+        </tr>
+        <tr>
+          <td>Find values to promote to tokens</td>
+          <td><span class="tbl-badge both">Both</span></td>
+          <td><span class="tbl-skill">token-candidates</span></td>
+          <td><span class="tbl-tool">export_design_tokens</span></td>
+        </tr>
+        <tr>
+          <td>Manual fixes checklist post-automation</td>
+          <td><span class="tbl-badge both">Both</span></td>
+          <td><span class="tbl-skill">manual-fixes-checklist</span></td>
+          <td>&mdash;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p class="footer-brand"><span style="color: var(--blue); font-weight: 800;">NiCE</span> Designer</p>
+  <p class="footer-tagline">Built by the UX Platform team at NICE</p>
+  <nav class="footer-links" aria-label="Footer navigation">
+    <a href="./resources.html" class="footer-link">Overview</a>
+    <span class="footer-sep" aria-hidden="true">&#183;</span>
+    <a href="./install-guide.html" class="footer-link">Install Guide</a>
+    <span class="footer-sep" aria-hidden="true">&#183;</span>
+    <a href="./claude-skills.html" class="footer-link">Claude Skills</a>
+    <span class="footer-sep" aria-hidden="true">&#183;</span>
+    <a href="./use-cases.html" class="footer-link">Use Cases</a>
+    <span class="footer-sep" aria-hidden="true">&#183;</span>
+    <a href="./how-scores.html" class="footer-link">Scoring</a>
+    <span class="footer-sep" aria-hidden="true">&#183;</span>
+    <a href="./index.html" class="footer-link">Dashboard</a>
+    <span class="footer-sep" aria-hidden="true">&#183;</span>
+    <a href="./roadmap.html" class="footer-link">Roadmap</a>
+  </nav>
+</footer>
+
+<script>
+  (function () {
+    var toggle = document.getElementById('navToggle');
+    var links = document.getElementById('navLinks');
+    toggle.addEventListener('click', function () {
+      var open = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+      reveals.forEach(function (el) { observer.observe(el); });
+    } else {
+      reveals.forEach(function (el) { el.classList.add('visible'); });
+    }
+  })();
+</script>
+</body>
+</html>

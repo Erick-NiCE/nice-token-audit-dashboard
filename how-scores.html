@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How Scores Work - NiCE Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #21212B;
+      --card: #2f2f3d;
+      --border: rgba(255,255,255,0.08);
+      --text: #fff;
+      --text-secondary: rgba(255,255,255,0.58);
+      --blue: #3694FC;
+      --indigo: #6100FF;
+      --emerald: #00E2A0;
+      --teal: #36EAD0;
+      --coral: #FF5B8A;
+      --lyra: #B98FFF;
+      --amber: #f59e0b;
+      --nav-h: 60px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: var(--nav-h);
+      background: rgba(33,33,43,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 32px;
+    }
+
+    .nav-logo {
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .logo-nice { color: var(--blue); }
+    .logo-designer { color: var(--text); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+    .nav-link.active {
+      color: var(--text);
+      border-bottom: 2px solid var(--blue);
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.25rem;
+      cursor: pointer;
+      padding: 8px;
+      margin-left: auto;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(to bottom, #0a2a1a, var(--bg));
+      padding: 100px 24px 80px;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--emerald);
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2vw, 1.125rem);
+      color: var(--text-secondary);
+      max-width: 640px;
+      margin: 0 auto;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    /* LAYOUT */
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section {
+      padding: 72px 0;
+    }
+
+    .section + .section {
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.4rem, 3vw, 1.875rem);
+      font-weight: 800;
+      margin-bottom: 16px;
+      line-height: 1.25;
+    }
+
+    .section-body {
+      color: var(--text-secondary);
+      font-size: 0.975rem;
+      line-height: 1.75;
+    }
+
+    .section-body + .section-body {
+      margin-top: 12px;
+    }
+
+    /* OVERVIEW GRID */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .score-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 20px;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .score-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+    }
+
+    .score-card-icon {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+    }
+
+    .score-card-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .score-card-desc {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* FORMULA BOX */
+    .formula-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-top: 32px;
+    }
+
+    .formula-equation {
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      padding: 20px 24px;
+      font-family: 'Be Vietnam Pro', monospace;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--blue);
+      text-align: center;
+      margin: 20px 0;
+      letter-spacing: 0.02em;
+    }
+
+    .formula-example {
+      background: rgba(54,148,252,0.08);
+      border: 1px solid rgba(54,148,252,0.2);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-top: 16px;
+    }
+
+    .formula-example-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+
+    .formula-example p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .formula-example strong {
+      color: var(--text);
+    }
+
+    .formula-note {
+      margin-top: 16px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* CATEGORY CARDS */
+    .category-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 32px;
+    }
+
+    .category-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 28px 24px;
+      border-left: 4px solid transparent;
+      transition: box-shadow 0.2s;
+    }
+    .category-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .category-card.color-blue   { border-left-color: var(--blue); }
+    .category-card.color-teal   { border-left-color: var(--teal); }
+    .category-card.color-lyra   { border-left-color: var(--lyra); }
+    .category-card.color-coral  { border-left-color: var(--coral); }
+    .category-card.color-emerald{ border-left-color: var(--emerald); }
+    .category-card.color-amber  { border-left-color: var(--amber); }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .category-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .category-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .category-version {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.08);
+      color: var(--text-secondary);
+      margin-left: auto;
+    }
+
+    .category-row {
+      margin-bottom: 10px;
+    }
+
+    .category-row-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .category-row-text {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    .category-row-text strong {
+      color: var(--text);
+    }
+
+    /* THRESHOLD TABLE */
+    .threshold-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 28px;
+      font-size: 0.9rem;
+    }
+
+    .threshold-table th {
+      text-align: left;
+      padding: 10px 16px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .threshold-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: var(--text-secondary);
+      vertical-align: middle;
+    }
+
+    .threshold-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .threshold-table td:first-child {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .pill-bad   { background: rgba(255,91,138,0.15); color: var(--coral); }
+    .pill-ok    { background: rgba(245,158,11,0.15); color: var(--amber); }
+    .pill-good  { background: rgba(0,226,160,0.15);  color: var(--emerald); }
+    .pill-great { background: rgba(0,226,160,0.15);  color: var(--emerald); }
+
+    .gauge-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .gauge-bar-wrap {
+      flex: 1;
+      height: 6px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .gauge-bar {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.6s ease;
+    }
+
+    /* TIPS SECTION */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-top: 32px;
+    }
+
+    .tip-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 20px;
+      transition: transform 0.2s;
+    }
+    .tip-card:hover { transform: translateY(-2px); }
+
+    .tip-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(54,148,252,0.12);
+      border: 1px solid rgba(54,148,252,0.25);
+      color: var(--blue);
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .tip-text {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* WHAT COUNTS AS FIX */
+    .fix-list {
+      list-style: none;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .fix-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .fix-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(0,226,160,0.12);
+      color: var(--emerald);
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      font-weight: 700;
+    }
+
+    /* SNOOZE */
+    .snooze-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      margin-top: 32px;
+    }
+
+    .snooze-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .snooze-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: rgba(185,143,255,0.15);
+      color: var(--lyra);
+      letter-spacing: 0.06em;
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.08s; }
+    .reveal-delay-2 { transition-delay: 0.16s; }
+    .reveal-delay-3 { transition-delay: 0.24s; }
+
+    /* FOOTER */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 24px;
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .footer-brand .logo-nice { color: var(--blue); }
+
+    .footer-tagline {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .footer-link {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 0.83rem;
+      padding: 4px 12px;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .footer-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+
+    /* DIVIDER */
+    .content-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 28px 0;
+    }
+
+    /* INLINE BADGE */
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 1px 7px;
+      border-radius: 10px;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+    .badge-blue   { background: rgba(54,148,252,0.15); color: var(--blue); }
+    .badge-emerald{ background: rgba(0,226,160,0.15);  color: var(--emerald); }
+    .badge-lyra   { background: rgba(185,143,255,0.15);color: var(--lyra); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: var(--nav-h);
+        left: 0;
+        right: 0;
+        background: rgba(33,33,43,0.98);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        padding: 16px;
+        gap: 4px;
+        z-index: 99;
+      }
+      .nav-toggle { display: flex; }
+      .hero { padding: 72px 20px 56px; }
+      .section { padding: 52px 0; }
+      .formula-box { padding: 20px; }
+      .category-card { padding: 22px 18px 18px; }
+      .threshold-table { font-size: 0.82rem; }
+      .threshold-table th, .threshold-table td { padding: 10px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="site-nav">
+    <a href="./resources.html" class="nav-logo">
+      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="./resources.html" class="nav-link">Overview</a>
+      <a href="./install-guide.html" class="nav-link">Install Guide</a>
+      <a href="./claude-skills.html" class="nav-link">Claude Skills</a>
+      <a href="./use-cases.html" class="nav-link">Use Cases</a>
+      <a href="./how-scores.html" class="nav-link active">Scoring</a>
+      <a href="./index.html" class="nav-link">Dashboard</a>
+      <a href="./roadmap.html" class="nav-link">Roadmap</a>
+    </div>
+    <button class="nav-toggle" aria-label="Menu" id="navToggle">&#9776;</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow reveal">SCORING METHODOLOGY</div>
+    <h1 class="hero-title reveal reveal-delay-1">How Scores Are Measured</h1>
+    <p class="hero-subtitle reveal reveal-delay-2">NiCE Designer calculates separate compliance scores for SOL tokens, Lyra tokens, and accessibility. Here's exactly how each number is computed and what it means.</p>
+  </section>
+
+  <!-- OVERVIEW -->
+  <section class="section">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Overview</p>
+        <h2 class="section-title">Four Independent Scores</h2>
+        <p class="section-body">NiCE Designer runs four independent audits and produces four scores. Each one is a percentage from 0 to 100 and they are entirely independent of each other. A frame can be 100% SOL compliant and 0% Lyra compliant at the same time -- that is expected and correct behavior.</p>
+      </div>
+
+      <div class="overview-grid">
+        <div class="score-card reveal reveal-delay-1">
+          <div class="score-card-icon" style="color:var(--blue)">◈</div>
+          <div class="score-card-name" style="color:var(--blue)">SOL Compliance</div>
+          <div class="score-card-desc">How well the selection uses SOL design tokens across all five categories.</div>
+        </div>
+        <div class="score-card reveal reveal-delay-2">
+          <div class="score-card-icon" style="color:var(--lyra)">◈</div>
+          <div class="score-card-name" style="color:var(--lyra)">Lyra Compliance</div>
+          <div class="score-card-desc">How well the selection uses Lyra design tokens across all five categories.</div>
+        </div>
+        <div class="score-card reveal reveal-delay-1">
+          <div class="score-card-icon" style="color:var(--amber)">◈</div>
+          <div class="score-card-name" style="color:var(--amber)">Min Accessibility</div>
+          <div class="score-card-desc">Passes minimum WCAG AA requirements: contrast, sizing, and focus visibility.</div>
+        </div>
+        <div class="score-card reveal reveal-delay-2">
+          <div class="score-card-icon" style="color:var(--coral)">◈</div>
+          <div class="score-card-name" style="color:var(--coral)">Full Accessibility</div>
+          <div class="score-card-desc">Fully meets WCAG AA across all criteria including ARIA, headings, and tap targets.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMULA -->
+  <section class="section">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">The Formula</p>
+        <h2 class="section-title">How the Number Is Calculated</h2>
+        <p class="section-body">Every audit category uses the same formula. The tool inspects every relevant property in the selection, counts how many have an issue, and divides the clean count by the total.</p>
+      </div>
+
+      <div class="formula-box reveal reveal-delay-1">
+        <div class="formula-equation">
+          Score = ((total &minus; issues) / total) &times; 100
+        </div>
+        <div class="formula-example">
+          <div class="formula-example-label">Example</div>
+          <p><strong>"15/147 Colors"</strong> means 15 color properties have issues out of 147 total inspected.<br />
+          Score = ((147 &minus; 15) / 147) &times; 100 = 89.8%, shown as <strong>90%</strong>.</p>
+        </div>
+        <p class="formula-note">
+          <span class="badge badge-blue">Since v9</span> each category uses its own denominator, not a global total. A file with many more spacing properties than color properties will not have its color score affected by that imbalance.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FIVE CATEGORIES -->
+  <section class="section">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Audit Categories</p>
+        <h2 class="section-title">The Five Compliance Categories</h2>
+        <p class="section-body">SOL and Lyra compliance are each measured across five dimensions. Each dimension has its own score that rolls up into the overall compliance percentage.</p>
+      </div>
+
+      <div class="category-list">
+
+        <!-- COLORS -->
+        <div class="category-card color-blue reveal">
+          <div class="category-header">
+            <div class="category-dot" style="background:var(--blue)"></div>
+            <div class="category-title">Colors</div>
+            <span class="category-version">v10: semantic roles</span>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">What's checked</div>
+            <div class="category-row-text">Every fill, stroke, and background color on every node in the selection.</div>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">What counts as an issue</div>
+            <div class="category-row-text">
+              A <strong>raw hex value</strong> where a design token should be used; a <strong>token from the wrong system</strong> (e.g. a Lyra token present in SOL mode); a token that <strong>semantically mismatches its role</strong> (a text color token applied as a background).
+            </div>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">Semantic matching (v10)</div>
+            <div class="category-row-text">The token lookup considers the role of the property (text, background, border, icon) to flag semantic mismatches more accurately and suggest correct alternatives.</div>
+          </div>
+        </div>
+
+        <!-- TEXT STYLES -->
+        <div class="category-card color-teal reveal">
+          <div class="category-header">
+            <div class="category-dot" style="background:var(--teal)"></div>
+            <div class="category-title">Text Styles</div>
+            <span class="category-version">v9: family-aware</span>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">What's checked</div>
+            <div class="category-row-text">Font family, font size, font weight, and line height for every text node in the selection.</div>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">What counts as an issue</div>
+            <div class="category-row-text">
+              A <strong>font family not in the active design system</strong>; a <strong>font size or weight</strong> not matching any token; a wrong-system font (Inter flagged in SOL mode gets a role-equivalent suggestion).
+            </div>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">Family-aware matching (v9)</div>
+            <div class="category-row-text">Family, size, and weight are all considered together. A family not in the current system at all is flagged as wrong-system rather than just out-of-range.</div>
+          </div>
+        </div>
+
+        <!-- SPACING -->
+        <div class="category-card color-lyra reveal">
+          <div class="category-header">
+            <div class="category-dot" style="background:var(--lyra)"></div>
+            <div class="category-title">Spacing</div>
+            <span class="category-version">auto-binding detection</span>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">What's checked</div>
+            <div class="category-row-text">Padding, gap, and margin-equivalent properties. In Figma: horizontal padding, vertical padding, item spacing, and counter-axis spacing.</div>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">What counts as an issue</div>
+            <div class="category-row-text">
+              A <strong>numeric value that doesn't match any spacing token</strong>; an <strong>unbound variable</strong> where the value matches a token (a missed binding still counts as an issue).
+            </div>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">Auto-binding detection</div>
+            <div class="category-row-text">The audit identifies values that match a known token but aren't bound to the variable. This surfaces easy wins for the conversion tool.</div>
+          </div>
+        </div>
+
+        <!-- RADIUS -->
+        <div class="category-card color-coral reveal">
+          <div class="category-header">
+            <div class="category-dot" style="background:var(--coral)"></div>
+            <div class="category-title">Radius</div>
+            <span class="category-version">v9: corner binding fix</span>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">What's checked</div>
+            <div class="category-row-text">Corner radius properties on frames and components -- all four corners individually plus the unified radius value.</div>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">What counts as an issue</div>
+            <div class="category-row-text">
+              A <strong>raw numeric radius</strong> not matching any radius token; a unified radius not bound to a variable (Figma requires binding all four individual corners, not just <code style="font-size:0.82em;background:rgba(255,255,255,0.07);padding:1px 5px;border-radius:4px;">cornerRadius</code> itself).
+            </div>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">v9 fix</div>
+            <div class="category-row-text">Radius variable binding was corrected in v9 to bind all four corner properties individually, matching Figma's variable resolution behavior.</div>
+          </div>
+        </div>
+
+        <!-- COMPONENTS -->
+        <div class="category-card color-emerald reveal">
+          <div class="category-header">
+            <div class="category-dot" style="background:var(--emerald)"></div>
+            <div class="category-title">Components</div>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">What's checked</div>
+            <div class="category-row-text">Whether component instances on the canvas are sourced from the active design system library (SOL or Lyra).</div>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">What counts as an issue</div>
+            <div class="category-row-text">
+              A <strong>detached component</strong> (no longer linked to any library); a component from the <strong>wrong library</strong>; or a component that doesn't exist at all in the SOL or Lyra system.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ACCESSIBILITY SCORES -->
+  <section class="section">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Accessibility</p>
+        <h2 class="section-title">The Two Accessibility Scores</h2>
+        <p class="section-body">Accessibility is measured separately from token compliance and uses the number of audited nodes as the denominator -- so scores are comparable across frames of different sizes.</p>
+      </div>
+
+      <div class="category-list" style="margin-top:32px">
+
+        <div class="category-card color-amber reveal">
+          <div class="category-header">
+            <div class="category-dot" style="background:var(--amber)"></div>
+            <div class="category-title">Min Accessibility</div>
+            <span class="category-version">WCAG AA baseline</span>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">What's covered</div>
+            <div class="category-row-text">
+              <strong>Color contrast ratios</strong> (WCAG AA: 4.5:1 for normal text, 3:1 for large text and UI components); <strong>text sizing minimums</strong>; <strong>interactive element focus visibility</strong>.
+            </div>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">To score 100%</div>
+            <div class="category-row-text">A frame must pass every min-a11y check with zero issues. Any single contrast failure or missing focus indicator brings the score below 100%.</div>
+          </div>
+        </div>
+
+        <div class="category-card color-coral reveal">
+          <div class="category-header">
+            <div class="category-dot" style="background:var(--coral)"></div>
+            <div class="category-title">Full Accessibility</div>
+            <span class="category-version">WCAG AA complete</span>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">What's covered</div>
+            <div class="category-row-text">
+              Everything in Min Accessibility, plus: <strong>missing alt text</strong> on images; <strong>missing ARIA labels</strong> on interactive elements; <strong>heading hierarchy</strong>; <strong>keyboard navigation order</strong>; <strong>touch target sizing</strong> (44x44px minimum).
+            </div>
+          </div>
+          <div class="category-row">
+            <div class="category-row-label">To score 100%</div>
+            <div class="category-row-text">A frame must have zero issues across all full-a11y criteria. The score divides issue count by the total nodes audited.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD THRESHOLDS -->
+  <section class="section">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Dashboard</p>
+        <h2 class="section-title">Reading the Compliance Dashboard</h2>
+        <p class="section-body">On the dashboard (index.html), each page row shows a gauge chart for each score. Score pills on the page list use the same color thresholds. Here's what each band means and when to act.</p>
+      </div>
+
+      <div class="reveal reveal-delay-1" style="margin-top:32px;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;">
+        <table class="threshold-table">
+          <thead>
+            <tr>
+              <th>Range</th>
+              <th>Label</th>
+              <th>Color</th>
+              <th>Visual</th>
+              <th>What it means</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0 - 49%</td>
+              <td><span class="pill pill-bad">Needs work</span></td>
+              <td style="color:var(--coral)">Coral</td>
+              <td>
+                <div class="gauge-row">
+                  <div class="gauge-bar-wrap"><div class="gauge-bar" style="width:30%;background:var(--coral)"></div></div>
+                </div>
+              </td>
+              <td>Significant issues. Conversion recommended before handoff.</td>
+            </tr>
+            <tr>
+              <td>50 - 74%</td>
+              <td><span class="pill pill-ok">Partial</span></td>
+              <td style="color:var(--amber)">Amber</td>
+              <td>
+                <div class="gauge-row">
+                  <div class="gauge-bar-wrap"><div class="gauge-bar" style="width:62%;background:var(--amber)"></div></div>
+                </div>
+              </td>
+              <td>Partially compliant. Many issues remain.</td>
+            </tr>
+            <tr>
+              <td>75 - 89%</td>
+              <td><span class="pill pill-good">Mostly OK</span></td>
+              <td style="color:#a3e635">Yellow-green</td>
+              <td>
+                <div class="gauge-row">
+                  <div class="gauge-bar-wrap"><div class="gauge-bar" style="width:82%;background:#a3e635"></div></div>
+                </div>
+              </td>
+              <td>Mostly compliant. Minor issues left to address.</td>
+            </tr>
+            <tr>
+              <td>90 - 100%</td>
+              <td><span class="pill pill-good">Compliant</span></td>
+              <td style="color:var(--emerald)">Emerald</td>
+              <td>
+                <div class="gauge-row">
+                  <div class="gauge-bar-wrap"><div class="gauge-bar" style="width:95%;background:var(--emerald)"></div></div>
+                </div>
+              </td>
+              <td>Compliant. Ready for handoff or production.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="reveal reveal-delay-2" style="margin-top:20px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;">
+        <p style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">
+          <strong style="color:var(--text)">Pill classes used in the dashboard:</strong>
+          <span class="pill pill-bad" style="margin:0 6px">pill-bad</span> Coral (#FF5B8A) &nbsp;&bull;&nbsp;
+          <span class="pill pill-ok" style="margin:0 6px">pill-ok</span> Amber (#f59e0b) &nbsp;&bull;&nbsp;
+          <span class="pill pill-good" style="margin:0 6px">pill-good</span> Emerald (#00E2A0)
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT COUNTS AS A FIX -->
+  <section class="section">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Fixes</p>
+        <h2 class="section-title">What Counts as a Fix</h2>
+        <p class="section-body">A fix is any change that moves a property from an issue state to a compliant state. The plugin logs each fix in the edit history (since v10) and allows undo per step.</p>
+      </div>
+
+      <ul class="fix-list reveal reveal-delay-1">
+        <li>
+          <div class="fix-icon">&#10003;</div>
+          <span>Binding a raw color value to the correct design token in the active system.</span>
+        </li>
+        <li>
+          <div class="fix-icon">&#10003;</div>
+          <span>Swapping a wrong-system token for the correct-system equivalent (e.g. a SOL color token replaced with its Lyra counterpart).</span>
+        </li>
+        <li>
+          <div class="fix-icon">&#10003;</div>
+          <span>Binding an unbound spacing or radius value to the matching token variable.</span>
+        </li>
+        <li>
+          <div class="fix-icon">&#10003;</div>
+          <span>Converting a detached component back to a live library instance from the active system.</span>
+        </li>
+        <li>
+          <div class="fix-icon">&#10003;</div>
+          <span>Adding a missing ARIA label, alt text attribute, or fixing a color contrast ratio below threshold.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SNOOZED ITEMS -->
+  <section class="section">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Snoozing</p>
+        <h2 class="section-title">Snoozed Items and Score Calculation</h2>
+        <p class="section-body">Since v10, Apply All automatically snoozes fixed items so they disappear from the issue list. Snoozed items are excluded from the score calculation entirely, so the displayed score always reflects only the remaining open issues.</p>
+      </div>
+
+      <div class="snooze-box reveal reveal-delay-1">
+        <div class="snooze-header">
+          <span class="snooze-badge">Since v10</span>
+          <span style="font-size:0.9rem;font-weight:600;">Auto-snooze behavior</span>
+        </div>
+        <p style="font-size:0.875rem;color:var(--text-secondary);line-height:1.7;">
+          When a fix is applied via the plugin, the affected issue is snoozed automatically. The denominator in the score formula adjusts to exclude snoozed properties, so your score always reflects what's actually still open. You can toggle auto-snooze in plugin settings, and manually un-snooze any item to bring it back into scope.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIPS -->
+  <section class="section">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Tips</p>
+        <h2 class="section-title">Getting the Most from Scores</h2>
+      </div>
+
+      <div class="tips-grid">
+        <div class="tip-card reveal reveal-delay-1">
+          <div class="tip-number">1</div>
+          <p class="tip-text">Run the audit before and after conversion to verify your score improved. The before/after delta is the clearest signal that the conversion worked correctly.</p>
+        </div>
+        <div class="tip-card reveal reveal-delay-2">
+          <div class="tip-number">2</div>
+          <p class="tip-text">A score of 75%+ means most issues are minor. Focus on Components and Colors first -- they have the biggest visual impact and are the most visible in design reviews.</p>
+        </div>
+        <div class="tip-card reveal reveal-delay-3">
+          <div class="tip-number">3</div>
+          <p class="tip-text">Use the <strong style="color:var(--text)">manual-fixes-checklist</strong> skill after running automated fixes to see what the automation couldn't handle and what still needs a human decision.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
+    </div>
+    <p class="footer-tagline">Built by the UX Platform team at NICE</p>
+    <nav class="footer-links">
+      <a href="./resources.html" class="footer-link">Overview</a>
+      <a href="./install-guide.html" class="footer-link">Install Guide</a>
+      <a href="./claude-skills.html" class="footer-link">Claude Skills</a>
+      <a href="./use-cases.html" class="footer-link">Use Cases</a>
+      <a href="./how-scores.html" class="footer-link">Scoring</a>
+      <a href="./index.html" class="footer-link">Dashboard</a>
+      <a href="./roadmap.html" class="footer-link">Roadmap</a>
+    </nav>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      links.classList.toggle('open');
+    });
+
+    // Close mobile nav on link click
+    links.querySelectorAll('.nav-link').forEach(function(link) {
+      link.addEventListener('click', function() {
+        links.classList.remove('open');
+      });
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    reveals.forEach(function(el) {
+      observer.observe(el);
+    });
+
+    // Animate gauge bars on scroll
+    const gaugeBars = document.querySelectorAll('.gauge-bar');
+    const gaugeObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var bar = entry.target;
+          var target = bar.style.width;
+          bar.style.width = '0%';
+          setTimeout(function() {
+            bar.style.width = target;
+          }, 100);
+          gaugeObserver.unobserve(bar);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    gaugeBars.forEach(function(bar) {
+      gaugeObserver.observe(bar);
+    });
+  </script>
+
+</body>
+</html>

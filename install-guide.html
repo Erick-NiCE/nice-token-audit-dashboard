@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Install Guide - NiCE Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #21212B;
+      --card: #2f2f3d;
+      --border: rgba(255,255,255,0.08);
+      --text: #fff;
+      --secondary: rgba(255,255,255,0.58);
+      --muted: rgba(255,255,255,0.28);
+      --blue: #3694FC;
+      --electric: #025AFB;
+      --indigo: #6100FF;
+      --emerald: #00E2A0;
+      --teal: #36EAD0;
+      --coral: #FF5B8A;
+      --lyra: #B98FFF;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ---- NAV ---- */
+    .site-nav {
+      height: 60px;
+      background: rgba(33,33,43,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 32px;
+    }
+
+    .nav-logo {
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .logo-nice {
+      color: var(--blue);
+    }
+
+    .logo-designer {
+      color: var(--text);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .nav-links::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--secondary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 6px;
+      white-space: nowrap;
+      transition: color 0.2s;
+      border-bottom: 2px solid transparent;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+    }
+
+    .nav-link.active {
+      color: var(--text);
+      border-bottom: 2px solid var(--blue);
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.25rem;
+      cursor: pointer;
+      padding: 6px;
+      margin-left: auto;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: rgba(33,33,43,0.98);
+        flex-direction: column;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--border);
+        gap: 0;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-link {
+        padding: 10px 24px;
+        border-radius: 0;
+        border-bottom: none !important;
+        width: 100%;
+      }
+
+      .nav-toggle {
+        display: block;
+      }
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      background: linear-gradient(to bottom, #2a1a5e, #21212B);
+      padding: 96px 24px 80px;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--emerald);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.125rem;
+      color: var(--secondary);
+      max-width: 640px;
+      margin: 0 auto;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    /* ---- MAIN LAYOUT ---- */
+    .main-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    /* ---- STEPS ---- */
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 0 32px;
+    }
+
+    .step-sidebar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .step-number-badge {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--electric), var(--indigo));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 4px rgba(2,90,251,0.18);
+    }
+
+    .step-line {
+      width: 2px;
+      flex: 1;
+      background: linear-gradient(to bottom, rgba(2,90,251,0.4), rgba(2,90,251,0.04));
+      margin-top: 12px;
+      min-height: 40px;
+    }
+
+    .step:last-child .step-line {
+      display: none;
+    }
+
+    .step-body {
+      padding-bottom: 16px;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+      padding-top: 10px;
+    }
+
+    .step-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .step-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .step-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+    }
+
+    .step-section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .step-section {
+      margin-bottom: 24px;
+    }
+
+    .step-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .step-section p {
+      color: var(--secondary);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+    }
+
+    .step-section p + p {
+      margin-top: 8px;
+    }
+
+    .step-link {
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(54,148,252,0.3);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .step-link:hover {
+      color: #fff;
+      border-color: #fff;
+    }
+
+    .numbered-list {
+      list-style: none;
+      counter-reset: ol-counter;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .numbered-list li {
+      counter-increment: ol-counter;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      color: var(--secondary);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    .numbered-list li::before {
+      content: counter(ol-counter);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(54,148,252,0.15);
+      color: var(--blue);
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    code, .inline-code {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.85em;
+      background: rgba(255,255,255,0.08);
+      color: var(--teal);
+      padding: 2px 7px;
+      border-radius: 5px;
+      white-space: nowrap;
+    }
+
+    .code-block {
+      background: #1a1a26;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.875rem;
+      color: var(--teal);
+      overflow-x: auto;
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+
+    .code-block .code-comment {
+      color: var(--muted);
+    }
+
+    .code-block .code-key {
+      color: var(--lyra);
+    }
+
+    .code-block .code-str {
+      color: var(--emerald);
+    }
+
+    .note-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: rgba(54,148,252,0.07);
+      border: 1px solid rgba(54,148,252,0.2);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-top: 16px;
+    }
+
+    .note-box-icon {
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .note-box p {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.6;
+    }
+
+    .tip-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: rgba(0,226,160,0.06);
+      border: 1px solid rgba(0,226,160,0.2);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-top: 16px;
+    }
+
+    .tip-box p {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.6;
+    }
+
+    .pill-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+      vertical-align: middle;
+    }
+
+    .pill-optional {
+      background: rgba(185,143,255,0.14);
+      color: var(--lyra);
+    }
+
+    /* ---- VERIFY CHECKLIST ---- */
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      color: var(--secondary);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    .check-circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,226,160,0.4);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .check-circle::after {
+      content: '';
+      width: 8px;
+      height: 5px;
+      border-left: 2px solid var(--emerald);
+      border-bottom: 2px solid var(--emerald);
+      transform: rotate(-45deg) translateY(-1px);
+    }
+
+    /* ---- SECTION DIVIDER ---- */
+    .section-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 64px 0;
+    }
+
+    /* ---- TROUBLESHOOTING ---- */
+    .section-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 40px;
+    }
+
+    .trouble-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 640px) {
+      .trouble-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .trouble-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 26px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .trouble-card:hover {
+      border-color: rgba(255,91,138,0.3);
+      transform: translateY(-2px);
+    }
+
+    .trouble-card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .trouble-icon {
+      font-size: 1.1rem;
+    }
+
+    .trouble-card-body {
+      font-size: 0.875rem;
+      color: var(--secondary);
+      line-height: 1.65;
+    }
+
+    /* ---- FOOTER ---- */
+    .site-footer {
+      background: rgba(0,0,0,0.3);
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-size: 0.875rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .footer-link {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.8125rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover {
+      color: var(--text);
+    }
+
+    /* ---- REVEAL ANIMATION ---- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---- RESPONSIVE STEP ---- */
+    @media (max-width: 600px) {
+      .step {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .step-sidebar {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .step-line {
+        display: none;
+      }
+
+      .step-number-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
+
+      .step-card {
+        padding: 20px;
+      }
+
+      .hero {
+        padding: 64px 20px 56px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="site-nav">
+    <a href="./resources.html" class="nav-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="./resources.html" class="nav-link">Overview</a>
+      <a href="./install-guide.html" class="nav-link active">Install Guide</a>
+      <a href="./claude-skills.html" class="nav-link">Claude Skills</a>
+      <a href="./use-cases.html" class="nav-link">Use Cases</a>
+      <a href="./how-scores.html" class="nav-link">Scoring</a>
+      <a href="./index.html" class="nav-link">Dashboard</a>
+      <a href="./roadmap.html" class="nav-link">Roadmap</a>
+    </div>
+    <button class="nav-toggle" aria-label="Menu" id="navToggle">&#9776;</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="reveal">
+      <span class="hero-eyebrow">GETTING STARTED</span>
+      <h1 class="hero-title">Install Guide</h1>
+      <p class="hero-subtitle">Get NiCE Designer running in three steps: the Figma plugin, the Chrome extension, and the local MCP server.</p>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <div class="steps-list">
+
+      <!-- STEP 1: Figma Plugin -->
+      <div class="step reveal">
+        <div class="step-sidebar">
+          <div class="step-number-badge">1</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-header">
+            <span class="step-icon">🎨</span>
+            <h2 class="step-title">Install the Figma Plugin</h2>
+          </div>
+          <div class="step-card">
+            <div class="step-section">
+              <div class="step-section-label">How to install</div>
+              <p>Open Figma, right-click the canvas (or open the main menu) and go to <strong>Plugins</strong>. Search for <strong>"NiCE Designer"</strong> and click Install.</p>
+              <p>Or open the plugin directly on the Figma Community page:</p>
+              <p><a href="https://www.figma.com/community/plugin/1623361730572479462" class="step-link" target="_blank" rel="noopener">figma.com/community/plugin/1623361730572479462</a></p>
+            </div>
+
+            <div class="step-section">
+              <div class="step-section-label">How to use it</div>
+              <p>With a frame or layer selected, right-click and go to <strong>Plugins &gt; NiCE Designer</strong>. Alternatively, open the Resources panel in Figma (<code>Shift+I</code>), switch to the Plugins tab, and search for NiCE Designer.</p>
+            </div>
+
+            <div class="step-section">
+              <div class="step-section-label">Notes</div>
+              <p>The plugin runs entirely inside Figma. No backend or server is required for standalone audit and convert workflows. Connect to the MCP server to enable Claude integration and cross-client features.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Chrome Extension -->
+      <div class="step reveal">
+        <div class="step-sidebar">
+          <div class="step-number-badge">2</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-header">
+            <span class="step-icon">🌐</span>
+            <h2 class="step-title">Install the Chrome Extension</h2>
+          </div>
+          <div class="step-card">
+            <div class="step-section">
+              <div class="step-section-label">Prerequisites</div>
+              <p>Chrome or Edge (Chromium-based) with Developer Mode enabled in <code>chrome://extensions</code>.</p>
+            </div>
+
+            <div class="step-section">
+              <div class="step-section-label">How to install</div>
+              <ol class="numbered-list">
+                <li>Download the latest release from <a href="./resources.html#download" class="step-link">the resources hub</a></li>
+                <li>Unzip the downloaded package to a location you'll keep it</li>
+                <li>Go to <code>chrome://extensions</code> and enable <strong>Developer Mode</strong> (toggle in the top-right corner)</li>
+                <li>Click <strong>"Load unpacked"</strong> and select the <code>chrome/</code> folder from the unzipped package</li>
+                <li>The NiCE Designer icon appears in your Chrome toolbar</li>
+              </ol>
+            </div>
+
+            <div class="step-section">
+              <div class="step-section-label">How to use it</div>
+              <p>Navigate to any web page and click the NiCE Designer icon in the toolbar. The inspection panel opens alongside the page. For a dedicated second-monitor view, click the pop-out icon in the extension settings panel.</p>
+            </div>
+
+            <div class="note-box">
+              <span class="note-box-icon">ℹ️</span>
+              <p>The extension persists per window. No reset is needed when switching tabs or navigating to a different page.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: MCP Server -->
+      <div class="step reveal">
+        <div class="step-sidebar">
+          <div class="step-number-badge">3</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-header">
+            <span class="step-icon">🤖</span>
+            <h2 class="step-title">Start the MCP Server</h2>
+          </div>
+          <div class="step-card">
+            <div class="step-section">
+              <div class="step-section-label">What it does</div>
+              <p>The MCP server is a local WebSocket hub running on port <code>7331</code> that connects Claude to both the Figma plugin and Chrome extension. Without it, Claude skills and MCP tools won't work. The Figma plugin and Chrome extension still function fully as standalone tools without the server.</p>
+            </div>
+
+            <div class="step-section">
+              <div class="step-section-label">Prerequisites</div>
+              <p>Node.js 18 or higher installed on your machine.</p>
+            </div>
+
+            <div class="step-section">
+              <div class="step-section-label">How to start</div>
+              <ol class="numbered-list">
+                <li>The MCP server is included in the same downloaded package as the Chrome extension</li>
+                <li>Navigate to the <code>packages/mcp-server/</code> folder</li>
+                <li>On first run, install dependencies: <code>npm install</code></li>
+                <li>Start the server: <code>node src/index.js</code></li>
+                <li>The server starts on <code>ws://127.0.0.1:7331</code></li>
+                <li>Open Claude Desktop or any MCP-compatible client and connect to <code>ws://127.0.0.1:7331</code></li>
+              </ol>
+            </div>
+
+            <div class="step-section">
+              <div class="step-section-label">Custom port</div>
+              <p>Set the <code>NICE_MCP_WS_PORT</code> environment variable before starting to use a different port:</p>
+              <div class="code-block">NICE_MCP_WS_PORT=8080 node src/index.js</div>
+            </div>
+
+            <div class="tip-box">
+              <span class="note-box-icon">💡</span>
+              <p>Run <code>npm install</code> first on a fresh install to pull in <code>ws</code> and other dependencies.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4: Connect Claude (optional) -->
+      <div class="step reveal">
+        <div class="step-sidebar">
+          <div class="step-number-badge">4</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-header">
+            <span class="step-icon">🔌</span>
+            <h2 class="step-title">Connect Claude Desktop <span class="pill-tag pill-optional">Optional</span></h2>
+          </div>
+          <div class="step-card">
+            <div class="step-section">
+              <div class="step-section-label">Add to Claude Desktop config</div>
+              <p>Add the MCP server entry to your Claude Desktop configuration file at <code>claude_desktop_config.json</code>:</p>
+              <div class="code-block"><span class="code-comment">// claude_desktop_config.json</span>
+{
+  <span class="code-key">"mcpServers"</span>: {
+    <span class="code-key">"nice-designer"</span>: {
+      <span class="code-key">"command"</span>: <span class="code-str">"node"</span>,
+      <span class="code-key">"args"</span>: [<span class="code-str">"/path/to/nice-designer/packages/mcp-server/src/index.js"</span>]
+    }
+  }
+}</div>
+              <p style="margin-top:12px;">Use an <strong>absolute path</strong> to the <code>index.js</code> file. Relative paths will not work.</p>
+            </div>
+
+            <div class="step-section">
+              <div class="step-section-label">After saving</div>
+              <p>Restart Claude Desktop. You should see <strong>"nice-designer"</strong> appear as a connected MCP server in the interface.</p>
+            </div>
+
+            <div class="step-section">
+              <div class="step-section-label">Best practice</div>
+              <p>Load a skill before using MCP tools for the best results. For example, tell Claude: <em>"Load the lyra-visual-patterns skill"</em> before starting a Lyra conversion workflow.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 5: Verify -->
+      <div class="step reveal">
+        <div class="step-sidebar">
+          <div class="step-number-badge">5</div>
+          <!-- no line on last step -->
+        </div>
+        <div class="step-body">
+          <div class="step-header">
+            <span class="step-icon">✅</span>
+            <h2 class="step-title">Verify Everything Is Working</h2>
+          </div>
+          <div class="step-card">
+            <div class="step-section">
+              <div class="step-section-label">Quick checks</div>
+              <div class="checklist">
+                <div class="checklist-item">
+                  <div class="check-circle"></div>
+                  <span>Open the Figma plugin on a frame - the audit panel should appear with color, type, and spacing scores</span>
+                </div>
+                <div class="checklist-item">
+                  <div class="check-circle"></div>
+                  <span>Open the Chrome extension on a web page - the toolbar should appear with inspection controls</span>
+                </div>
+                <div class="checklist-item">
+                  <div class="check-circle"></div>
+                  <span>Start the MCP server, open Claude Desktop, and check the MCP server indicator shows "nice-designer" as connected</span>
+                </div>
+                <div class="checklist-item">
+                  <div class="check-circle"></div>
+                  <span>Ask Claude: <em>"Call list_targets"</em> - it should respond listing which clients are currently connected (Figma, Chrome, or both)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="section-divider reveal"></div>
+
+    <!-- TROUBLESHOOTING -->
+    <section class="reveal">
+      <div class="section-eyebrow">Troubleshooting</div>
+      <h2 class="section-title">Common Issues</h2>
+
+      <div class="trouble-grid">
+
+        <div class="trouble-card">
+          <div class="trouble-card-title">
+            <span class="trouble-icon">🎨</span>
+            Plugin won't open
+          </div>
+          <div class="trouble-card-body">
+            Make sure you installed from the Figma Community (not a local unpacked version). Check that the plugin isn't in your organization's blocked plugin list - contact your Figma admin if unsure.
+          </div>
+        </div>
+
+        <div class="trouble-card">
+          <div class="trouble-card-title">
+            <span class="trouble-icon">🌐</span>
+            Chrome extension not loading
+          </div>
+          <div class="trouble-card-body">
+            Verify that Developer Mode is enabled in <code>chrome://extensions</code>. If the extension still won't load, try removing it and re-loading the unpacked folder. Make sure you're selecting the <code>chrome/</code> subfolder, not the root of the zip.
+          </div>
+        </div>
+
+        <div class="trouble-card">
+          <div class="trouble-card-title">
+            <span class="trouble-icon">🔌</span>
+            MCP server not connecting
+          </div>
+          <div class="trouble-card-body">
+            Check that port <code>7331</code> is not already in use by another process. Use <code>NICE_MCP_WS_PORT=7332 node src/index.js</code> to run on a different port. Make sure the path in <code>claude_desktop_config.json</code> is an absolute path, not relative.
+          </div>
+        </div>
+
+        <div class="trouble-card">
+          <div class="trouble-card-title">
+            <span class="trouble-icon">🤖</span>
+            Claude can't see any targets
+          </div>
+          <div class="trouble-card-body">
+            Both the Figma plugin and Chrome extension must be open and connected to the MCP server at the same time. Call <code>list_targets</code> first - it will tell you exactly which clients are currently registered. If the list is empty, check the connections in each client.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-brand">NiCE Designer - Built by the UX Platform team at NICE</div>
+    <nav class="footer-links">
+      <a href="./resources.html" class="footer-link">Overview</a>
+      <a href="./install-guide.html" class="footer-link">Install Guide</a>
+      <a href="./claude-skills.html" class="footer-link">Claude Skills</a>
+      <a href="./use-cases.html" class="footer-link">Use Cases</a>
+      <a href="./how-scores.html" class="footer-link">Scoring</a>
+      <a href="./index.html" class="footer-link">Dashboard</a>
+      <a href="./roadmap.html" class="footer-link">Roadmap</a>
+    </nav>
+  </footer>
+
+  <script>
+    // Nav toggle for mobile
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    // Close nav when a link is clicked on mobile
+    navLinks.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+      });
+    });
+
+    // Scroll reveal via IntersectionObserver
+    const revealEls = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.08,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

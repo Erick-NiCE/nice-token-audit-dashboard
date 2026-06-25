@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude Skills - NiCE Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #21212B;
+      --card: #2f2f3d;
+      --border: rgba(255,255,255,0.08);
+      --text: #fff;
+      --secondary: rgba(255,255,255,0.58);
+      --blue: #3694FC;
+      --indigo: #6100FF;
+      --emerald: #00E2A0;
+      --teal: #36EAD0;
+      --coral: #FF5B8A;
+      --lyra: #B98FFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ---- NAV ---- */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      background: rgba(33,33,43,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav-logo {
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    .logo-nice { color: var(--blue); }
+    .logo-designer { color: var(--text); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-link {
+      color: var(--secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+    .nav-link.active { color: var(--text); border-bottom-color: var(--blue); }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.25rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    .nav-toggle:hover { background: rgba(255,255,255,0.08); }
+
+    @media (max-width: 768px) {
+      .site-nav { padding: 0 20px; }
+      .nav-toggle { display: block; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: rgba(33,33,43,0.98);
+        backdrop-filter: blur(16px);
+        flex-direction: column;
+        padding: 12px 20px 20px;
+        border-bottom: 1px solid var(--border);
+        gap: 2px;
+      }
+      .nav-links.open { display: flex; }
+      .nav-link { width: 100%; padding: 10px 12px; }
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      background: linear-gradient(to bottom, #1a0d40, var(--bg));
+      padding: 100px 32px 80px;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--lyra);
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.15rem);
+      color: var(--secondary);
+      max-width: 680px;
+      margin: 0 auto;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    /* ---- SECTIONS ---- */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 32px;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .section-body {
+      color: var(--secondary);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      max-width: 720px;
+    }
+
+    .section-body + .section-body { margin-top: 12px; }
+
+    /* ---- INTRO CARD ---- */
+    .intro-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-top: 40px;
+    }
+
+    .intro-card p {
+      color: var(--secondary);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+    .intro-card p:last-child { margin-bottom: 0; }
+
+    .intro-card code {
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+      font-size: 0.82rem;
+      background: rgba(54,148,252,0.12);
+      color: var(--blue);
+      border: 1px solid rgba(54,148,252,0.2);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .intro-highlight {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: rgba(185,143,255,0.08);
+      border: 1px solid rgba(185,143,255,0.18);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-top: 20px;
+    }
+
+    .intro-highlight-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+
+    .intro-highlight-text {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.7;
+    }
+
+    /* ---- SKILLS GRID ---- */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+      margin-top: 48px;
+    }
+
+    .skill-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--skill-color, var(--blue));
+      opacity: 0.7;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+      border-color: rgba(255,255,255,0.14);
+    }
+
+    .skill-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .skill-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      background: rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+
+    .skill-name {
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--skill-color, var(--blue));
+      letter-spacing: -0.01em;
+    }
+
+    .skill-target-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.07);
+      color: var(--secondary);
+      border: 1px solid var(--border);
+      margin-top: 4px;
+    }
+
+    .skill-description {
+      font-size: 0.875rem;
+      color: var(--secondary);
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    .skill-triggers {
+      margin-bottom: 18px;
+    }
+
+    .skill-triggers-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 8px;
+    }
+
+    .trigger-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .trigger-pill {
+      font-size: 0.75rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 10px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.3;
+    }
+
+    .skill-tools {
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+
+    .skill-tools-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 8px;
+    }
+
+    .tools-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .tool-tag {
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+      font-size: 0.7rem;
+      background: rgba(54,148,252,0.1);
+      color: rgba(54,148,252,0.85);
+      border: 1px solid rgba(54,148,252,0.15);
+      border-radius: 4px;
+      padding: 2px 7px;
+    }
+
+    .tool-tag.context-setter {
+      background: rgba(185,143,255,0.1);
+      color: rgba(185,143,255,0.85);
+      border-color: rgba(185,143,255,0.15);
+    }
+
+    /* ---- MCP TOOLS TABLE SECTION ---- */
+    .tools-section {
+      background: rgba(0,0,0,0.2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tools-groups {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .tools-group-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+    }
+
+    .tools-group-name {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tools-group-name.audit { color: var(--blue); }
+    .tools-group-name.conversion { color: var(--emerald); }
+    .tools-group-name.handoff { color: var(--teal); }
+    .tools-group-name.introspection { color: var(--lyra); }
+    .tools-group-name.polish { color: var(--coral); }
+    .tools-group-name.escape { color: rgba(255,255,255,0.5); }
+
+    .tools-group-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .mcp-tool-tag {
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+      font-size: 0.72rem;
+      padding: 4px 9px;
+      border-radius: 5px;
+      line-height: 1.4;
+    }
+
+    .mcp-tool-tag.audit {
+      background: rgba(54,148,252,0.1);
+      color: rgba(54,148,252,0.9);
+      border: 1px solid rgba(54,148,252,0.15);
+    }
+    .mcp-tool-tag.conversion {
+      background: rgba(0,226,160,0.1);
+      color: rgba(0,226,160,0.9);
+      border: 1px solid rgba(0,226,160,0.15);
+    }
+    .mcp-tool-tag.handoff {
+      background: rgba(54,234,208,0.1);
+      color: rgba(54,234,208,0.9);
+      border: 1px solid rgba(54,234,208,0.15);
+    }
+    .mcp-tool-tag.introspection {
+      background: rgba(185,143,255,0.1);
+      color: rgba(185,143,255,0.9);
+      border: 1px solid rgba(185,143,255,0.15);
+    }
+    .mcp-tool-tag.polish {
+      background: rgba(255,91,138,0.1);
+      color: rgba(255,91,138,0.9);
+      border: 1px solid rgba(255,91,138,0.15);
+    }
+    .mcp-tool-tag.escape {
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .tools-note {
+      margin-top: 24px;
+      padding: 16px 20px;
+      background: rgba(54,148,252,0.06);
+      border: 1px solid rgba(54,148,252,0.15);
+      border-radius: 10px;
+      font-size: 0.875rem;
+      color: var(--secondary);
+      line-height: 1.7;
+    }
+
+    .tools-note code {
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+      font-size: 0.8rem;
+      background: rgba(54,148,252,0.12);
+      color: var(--blue);
+      border: 1px solid rgba(54,148,252,0.2);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* ---- TIPS SECTION ---- */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .tip-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 22px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .tip-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .tip-body {
+      font-size: 0.875rem;
+      color: var(--secondary);
+      line-height: 1.7;
+    }
+
+    .tip-body strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .tip-body code {
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+      font-size: 0.78rem;
+      background: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.8);
+      border: 1px solid var(--border);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    /* ---- DIVIDER ---- */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* ---- FOOTER ---- */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 32px;
+      text-align: center;
+    }
+
+    .footer-inner { max-width: 1100px; margin: 0 auto; }
+
+    .footer-brand {
+      font-weight: 800;
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .footer-tagline {
+      font-size: 0.85rem;
+      color: var(--secondary);
+      margin-bottom: 28px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .footer-link {
+      color: var(--secondary);
+      text-decoration: none;
+      font-size: 0.82rem;
+      padding: 5px 12px;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .footer-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.25);
+    }
+
+    /* ---- SCROLL REVEAL ---- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 640px) {
+      .hero { padding: 72px 20px 60px; }
+      .section { padding: 60px 20px; }
+      .tools-section .section { padding: 60px 20px; }
+      footer { padding: 40px 20px; }
+      .site-nav { padding: 0 16px; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .tips-grid { grid-template-columns: 1fr; }
+      .tools-groups { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="site-nav">
+    <a href="./resources.html" class="nav-logo">
+      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="./resources.html" class="nav-link">Overview</a>
+      <a href="./install-guide.html" class="nav-link">Install Guide</a>
+      <a href="./claude-skills.html" class="nav-link active">Claude Skills</a>
+      <a href="./use-cases.html" class="nav-link">Use Cases</a>
+      <a href="./how-scores.html" class="nav-link">Scoring</a>
+      <a href="./index.html" class="nav-link">Dashboard</a>
+      <a href="./roadmap.html" class="nav-link">Roadmap</a>
+    </div>
+    <button class="nav-toggle" aria-label="Menu" id="navToggle">&#9776;</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow">AI SKILLS</p>
+    <h1 class="hero-title">Claude Skills</h1>
+    <p class="hero-subtitle">Nine skills ship with NiCE Designer. Each one loads specialized context into Claude for a specific workflow - from triaging accessibility issues to converting a full Figma frame to Lyra tokens.</p>
+  </section>
+
+  <!-- INTRO -->
+  <div class="section reveal">
+    <p class="section-label">What is a skill?</p>
+    <h2 class="section-title">Skills make Claude an expert tool operator</h2>
+    <p class="section-body">NiCE Designer ships 9 Claude skills. A skill is a context file (SKILL.md) that tells Claude exactly how to use the MCP tools for a specific job. You load a skill by saying "load the [skill-name] skill" in Claude chat, then Claude uses the right MCP tools in the right order.</p>
+    <div class="intro-card">
+      <p>Each skill pre-loads Claude with the correct tool sequence, common pitfalls, expected outputs, and quality checks for a particular workflow. Without a skill, Claude knows the tools exist but has to figure out the right approach on its own. With a skill loaded, it already has a playbook.</p>
+      <p>Skills are stored in the <code>skills/</code> directory of the plugin. Each skill has a <code>SKILL.md</code> file. The same 9 skills are bundled into the packaged Chrome build at <code>builds/chrome/skills/</code>.</p>
+      <div class="intro-highlight">
+        <div class="intro-highlight-icon">&#9888;&#65039;</div>
+        <div class="intro-highlight-text">
+          Always call <code>list_targets</code> first to check which clients are connected (Figma, Chrome, or both). Some skills require both clients to be connected at the same time. Calling the wrong target silently does nothing.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- SKILLS GRID -->
+  <div class="section">
+    <p class="section-label">All 9 skills</p>
+    <h2 class="section-title">Skills reference</h2>
+    <p class="section-body">Each skill below shows the trigger phrases that load it, the target client(s) it works with, and the key MCP tools it orchestrates.</p>
+
+    <div class="skills-grid">
+
+      <!-- 1: a11y-triage -->
+      <div class="skill-card reveal" style="--skill-color: var(--lyra);">
+        <div class="skill-header">
+          <div class="skill-icon">&#127919;</div>
+          <div>
+            <div class="skill-name">a11y-triage</div>
+            <div class="skill-target-badge">&#9679; Figma or Chrome</div>
+          </div>
+        </div>
+        <div class="skill-triggers">
+          <div class="skill-triggers-label">Say something like</div>
+          <div class="trigger-list">
+            <span class="trigger-pill">"triage accessibility issues"</span>
+            <span class="trigger-pill">"which a11y issues matter most"</span>
+            <span class="trigger-pill">"where do I start with a11y"</span>
+          </div>
+        </div>
+        <p class="skill-description">Groups audit_accessibility results by severity x reach and produces a prioritized action list instead of a raw issue dump. Helps you focus on fixes with the highest user impact first.</p>
+        <div class="skill-tools">
+          <div class="skill-tools-label">Key MCP tools</div>
+          <div class="tools-list">
+            <span class="tool-tag">audit_accessibility</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2: artboard-to-page -->
+      <div class="skill-card reveal" style="--skill-color: var(--blue);">
+        <div class="skill-header">
+          <div class="skill-icon">&#128444;&#65039;</div>
+          <div>
+            <div class="skill-name">artboard-to-page</div>
+            <div class="skill-target-badge">&#9679; Both clients required</div>
+          </div>
+        </div>
+        <div class="skill-triggers">
+          <div class="skill-triggers-label">Say something like</div>
+          <div class="trigger-list">
+            <span class="trigger-pill">"apply this Figma frame to the live page"</span>
+            <span class="trigger-pill">"push artboard styles to Chrome"</span>
+          </div>
+        </div>
+        <p class="skill-description">Takes a selected Figma artboard and applies its styling as CSS overrides onto the live Chrome page. Requires both Figma and Chrome clients to be connected at the same time.</p>
+        <div class="skill-tools">
+          <div class="skill-tools-label">Key MCP tools</div>
+          <div class="tools-list">
+            <span class="tool-tag">get_selection_info</span>
+            <span class="tool-tag">extract_all_css</span>
+            <span class="tool-tag">polish_page</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3: browser-element-specs -->
+      <div class="skill-card reveal" style="--skill-color: var(--teal);">
+        <div class="skill-header">
+          <div class="skill-icon">&#128269;</div>
+          <div>
+            <div class="skill-name">browser-element-specs</div>
+            <div class="skill-target-badge">&#9679; Chrome only</div>
+          </div>
+        </div>
+        <div class="skill-triggers">
+          <div class="skill-triggers-label">Say something like</div>
+          <div class="trigger-list">
+            <span class="trigger-pill">"get specs for this element"</span>
+            <span class="trigger-pill">"design specs for the inspected element"</span>
+            <span class="trigger-pill">"what are the CSS values for this"</span>
+          </div>
+        </div>
+        <p class="skill-description">Generates a full developer spec sheet for an inspected Chrome extension element - spacing, type, colors, tokens, and interaction states. Ideal for handing off browser-side measurements to engineering.</p>
+        <div class="skill-tools">
+          <div class="skill-tools-label">Key MCP tools</div>
+          <div class="tools-list">
+            <span class="tool-tag">extract_dev_details</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4: dark-mode-parity -->
+      <div class="skill-card reveal" style="--skill-color: var(--indigo);">
+        <div class="skill-header">
+          <div class="skill-icon">&#127769;</div>
+          <div>
+            <div class="skill-name">dark-mode-parity</div>
+            <div class="skill-target-badge">&#9679; Chrome only</div>
+          </div>
+        </div>
+        <div class="skill-triggers">
+          <div class="skill-triggers-label">Say something like</div>
+          <div class="trigger-list">
+            <span class="trigger-pill">"check dark mode"</span>
+            <span class="trigger-pill">"does this work in dark mode"</span>
+            <span class="trigger-pill">"dark mode parity"</span>
+          </div>
+        </div>
+        <p class="skill-description">Tests whether the live page has a working dark mode, identifies which elements do not adapt, and reports what token changes are needed to achieve proper dark mode parity.</p>
+        <div class="skill-tools">
+          <div class="skill-tools-label">Key MCP tools</div>
+          <div class="tools-list">
+            <span class="tool-tag">convert_mode</span>
+            <span class="tool-tag">a11y_overlay</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5: figma-chrome-parity -->
+      <div class="skill-card reveal" style="--skill-color: var(--coral);">
+        <div class="skill-header">
+          <div class="skill-icon">&#9878;&#65039;</div>
+          <div>
+            <div class="skill-name">figma-chrome-parity</div>
+            <div class="skill-target-badge">&#9679; Both clients required</div>
+          </div>
+        </div>
+        <div class="skill-triggers">
+          <div class="skill-triggers-label">Say something like</div>
+          <div class="trigger-list">
+            <span class="trigger-pill">"diff Figma against the live page"</span>
+            <span class="trigger-pill">"compare the design to the implementation"</span>
+            <span class="trigger-pill">"figma-chrome parity"</span>
+          </div>
+        </div>
+        <p class="skill-description">Visually and structurally diffs a selected Figma artboard against the live implementing page. Reports mismatches in color, type, spacing, and layout. Requires both clients connected.</p>
+        <div class="skill-tools">
+          <div class="skill-tools-label">Key MCP tools</div>
+          <div class="tools-list">
+            <span class="tool-tag">get_selection_info</span>
+            <span class="tool-tag">extract_all_css</span>
+            <span class="tool-tag">audit_colors</span>
+            <span class="tool-tag">audit_text_styles</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6: figma-element-css -->
+      <div class="skill-card reveal" style="--skill-color: var(--blue);">
+        <div class="skill-header">
+          <div class="skill-icon">&#127912;</div>
+          <div>
+            <div class="skill-name">figma-element-css</div>
+            <div class="skill-target-badge">&#9679; Figma only</div>
+          </div>
+        </div>
+        <div class="skill-triggers">
+          <div class="skill-triggers-label">Say something like</div>
+          <div class="trigger-list">
+            <span class="trigger-pill">"get CSS for this node"</span>
+            <span class="trigger-pill">"export CSS for the selected element"</span>
+            <span class="trigger-pill">"what's the CSS for this"</span>
+          </div>
+        </div>
+        <p class="skill-description">Exports production-ready CSS for the selected Figma node with Lyra design tokens substituted in for raw values. Gives developers clean, token-referenced CSS they can drop directly into code.</p>
+        <div class="skill-tools">
+          <div class="skill-tools-label">Key MCP tools</div>
+          <div class="tools-list">
+            <span class="tool-tag">extract_all_css</span>
+            <span class="tool-tag">extract_token_css</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7: lyra-visual-patterns -->
+      <div class="skill-card reveal" style="--skill-color: var(--lyra);">
+        <div class="skill-header">
+          <div class="skill-icon">&#10024;</div>
+          <div>
+            <div class="skill-name">lyra-visual-patterns</div>
+            <div class="skill-target-badge">&#9679; Figma or Chrome</div>
+          </div>
+        </div>
+        <div class="skill-triggers">
+          <div class="skill-triggers-label">Load BEFORE Lyra conversion</div>
+          <div class="trigger-list">
+            <span class="trigger-pill">"load lyra-visual-patterns skill"</span>
+            <span class="trigger-pill">"convert to Lyra"</span>
+            <span class="trigger-pill">"migrate to Lyra"</span>
+          </div>
+        </div>
+        <p class="skill-description">Sets Claude's expectations for what a correct Lyra conversion looks like - token naming conventions, visual patterns, and common pitfalls. Always load this skill before running migrate_to_lyra or convert_page_to_lyra.</p>
+        <div class="skill-tools">
+          <div class="skill-tools-label">Key MCP tools</div>
+          <div class="tools-list">
+            <span class="tool-tag context-setter">context-setter (used before migration tools)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8: manual-fixes-checklist -->
+      <div class="skill-card reveal" style="--skill-color: var(--emerald);">
+        <div class="skill-header">
+          <div class="skill-icon">&#128203;</div>
+          <div>
+            <div class="skill-name">manual-fixes-checklist</div>
+            <div class="skill-target-badge">&#9679; Figma or Chrome</div>
+          </div>
+        </div>
+        <div class="skill-triggers">
+          <div class="skill-triggers-label">Say something like</div>
+          <div class="trigger-list">
+            <span class="trigger-pill">"what can't be auto-fixed"</span>
+            <span class="trigger-pill">"what's left to do manually"</span>
+            <span class="trigger-pill">"what do I still need to fix by hand"</span>
+          </div>
+        </div>
+        <p class="skill-description">After running auto-fix tools, generates a checklist of issues that require human judgment - things the automation cannot handle safely. Helps you know exactly what still needs attention.</p>
+        <div class="skill-tools">
+          <div class="skill-tools-label">Key MCP tools</div>
+          <div class="tools-list">
+            <span class="tool-tag">run_full_audit</span>
+            <span class="tool-tag">lyra_compliance_report</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9: token-candidates -->
+      <div class="skill-card reveal" style="--skill-color: var(--teal);">
+        <div class="skill-header">
+          <div class="skill-icon">&#127991;</div>
+          <div>
+            <div class="skill-name">token-candidates</div>
+            <div class="skill-target-badge">&#9679; Figma or Chrome</div>
+          </div>
+        </div>
+        <div class="skill-triggers">
+          <div class="skill-triggers-label">Say something like</div>
+          <div class="trigger-list">
+            <span class="trigger-pill">"which values should become tokens"</span>
+            <span class="trigger-pill">"what should be promoted to Lyra tokens"</span>
+            <span class="trigger-pill">"token candidates"</span>
+          </div>
+        </div>
+        <p class="skill-description">Scans the selection or page for recurring non-token values - custom hex colors, arbitrary spacing values - that appear enough times to be worth promoting to design tokens. Great for design system maintenance.</p>
+        <div class="skill-tools">
+          <div class="skill-tools-label">Key MCP tools</div>
+          <div class="tools-list">
+            <span class="tool-tag">export_design_tokens</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- MCP TOOLS REFERENCE -->
+  <div class="tools-section">
+    <div class="section reveal">
+      <p class="section-label">MCP server</p>
+      <h2 class="section-title">35 MCP tools by group</h2>
+      <p class="section-body">NiCE Designer exposes 35 MCP tools via the local WebSocket server running at <code style="font-family: 'SF Mono','Fira Code',monospace; font-size: 0.82rem; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">127.0.0.1:7331</code>. All tools accept <code style="font-family: 'SF Mono','Fira Code',monospace; font-size: 0.82rem; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">target: "figma" | "chrome" | "auto"</code>.</p>
+
+      <div class="tools-groups">
+
+        <div class="tools-group-card reveal">
+          <div class="tools-group-name audit">Audit (read-only)</div>
+          <div class="tools-group-list">
+            <span class="mcp-tool-tag audit">run_full_audit</span>
+            <span class="mcp-tool-tag audit">audit_colors</span>
+            <span class="mcp-tool-tag audit">audit_text_styles</span>
+            <span class="mcp-tool-tag audit">audit_spacing</span>
+            <span class="mcp-tool-tag audit">audit_radius</span>
+            <span class="mcp-tool-tag audit">audit_components</span>
+            <span class="mcp-tool-tag audit">audit_accessibility</span>
+            <span class="mcp-tool-tag audit">lyra_compliance_report</span>
+          </div>
+        </div>
+
+        <div class="tools-group-card reveal">
+          <div class="tools-group-name conversion">Conversion</div>
+          <div class="tools-group-list">
+            <span class="mcp-tool-tag conversion">convert_colors</span>
+            <span class="mcp-tool-tag conversion">convert_text_styles</span>
+            <span class="mcp-tool-tag conversion">fix_spacing</span>
+            <span class="mcp-tool-tag conversion">fix_radius</span>
+            <span class="mcp-tool-tag conversion">convert_component</span>
+            <span class="mcp-tool-tag conversion">fix_accessibility</span>
+            <span class="mcp-tool-tag conversion">convert_mode</span>
+            <span class="mcp-tool-tag conversion">convert_page_to_lyra</span>
+            <span class="mcp-tool-tag conversion">migrate_to_lyra</span>
+            <span class="mcp-tool-tag conversion">generate_multi_system</span>
+            <span class="mcp-tool-tag conversion">undo_last_conversion</span>
+          </div>
+        </div>
+
+        <div class="tools-group-card reveal">
+          <div class="tools-group-name handoff">Dev handoff</div>
+          <div class="tools-group-list">
+            <span class="mcp-tool-tag handoff">extract_dev_details</span>
+            <span class="mcp-tool-tag handoff">extract_all_css</span>
+            <span class="mcp-tool-tag handoff">extract_token_css</span>
+          </div>
+        </div>
+
+        <div class="tools-group-card reveal">
+          <div class="tools-group-name introspection">Introspection</div>
+          <div class="tools-group-list">
+            <span class="mcp-tool-tag introspection">list_targets</span>
+            <span class="mcp-tool-tag introspection">get_selection_info</span>
+            <span class="mcp-tool-tag introspection">check_libraries</span>
+            <span class="mcp-tool-tag introspection">export_design_tokens</span>
+            <span class="mcp-tool-tag introspection">get_diagnostics</span>
+          </div>
+        </div>
+
+        <div class="tools-group-card reveal">
+          <div class="tools-group-name polish">Chrome polish</div>
+          <div class="tools-group-list">
+            <span class="mcp-tool-tag polish">polish_page</span>
+            <span class="mcp-tool-tag polish">a11y_overlay</span>
+          </div>
+        </div>
+
+        <div class="tools-group-card reveal">
+          <div class="tools-group-name escape">Escape hatch</div>
+          <div class="tools-group-list">
+            <span class="mcp-tool-tag escape">call_plugin</span>
+          </div>
+          <p style="font-size: 0.78rem; color: var(--secondary); margin-top: 12px; line-height: 1.6;">Sends any raw UIMessage directly to the plugin. Use when no higher-level tool fits the job.</p>
+        </div>
+
+      </div>
+
+      <div class="tools-note">
+        Start the MCP server with: <code>cd packages/mcp-server &amp;&amp; node src/index.js</code> &mdash; or override the port with the <code>NICE_MCP_WS_PORT</code> environment variable (default: 7331).
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- TIPS -->
+  <div class="section">
+    <p class="section-label">Tips</p>
+    <h2 class="section-title">Before you run a skill</h2>
+    <p class="section-body">A few things to know that will save you time and prevent silent failures.</p>
+
+    <div class="tips-grid">
+
+      <div class="tip-card reveal">
+        <div class="tip-icon">&#128268;</div>
+        <div class="tip-body">
+          <strong>Always call list_targets first.</strong> Check which clients are connected before running any skill. Targeting Figma when only Chrome is connected does nothing and returns no error.
+        </div>
+      </div>
+
+      <div class="tip-card reveal">
+        <div class="tip-icon">&#128101;</div>
+        <div class="tip-body">
+          <strong>Two clients required for:</strong> <code>artboard-to-page</code> and <code>figma-chrome-parity</code>. Both the Figma plugin and Chrome extension must be active and connected before running these skills.
+        </div>
+      </div>
+
+      <div class="tip-card reveal">
+        <div class="tip-icon">&#127760;</div>
+        <div class="tip-body">
+          <strong>Chrome-only skill:</strong> <code>dark-mode-parity</code> only works against a live page. There is no Figma equivalent. Run it with the Chrome extension active.
+        </div>
+      </div>
+
+      <div class="tip-card reveal">
+        <div class="tip-icon">&#127981;</div>
+        <div class="tip-body">
+          <strong>Figma-only skill:</strong> <code>figma-element-css</code> requires a node selected inside Figma. It cannot be run against Chrome page elements.
+        </div>
+      </div>
+
+      <div class="tip-card reveal">
+        <div class="tip-icon">&#10024;</div>
+        <div class="tip-body">
+          <strong>Always load lyra-visual-patterns before any Lyra conversion.</strong> This sets Claude's expectations for token naming and visual patterns. Skipping it leads to inconsistent migration results.
+        </div>
+      </div>
+
+      <div class="tip-card reveal">
+        <div class="tip-icon">&#128274;</div>
+        <div class="tip-body">
+          <strong>Audit tools are safe anytime.</strong> All audit and introspection tools are read-only - they never modify your design. Run them freely. Conversion tools modify the design and support undo via <code>undo_last_conversion</code>.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span style="color: var(--blue); font-weight: 800;">NiCE</span> Designer
+      </div>
+      <p class="footer-tagline">Built by the UX Platform team at NICE</p>
+      <nav class="footer-links">
+        <a href="./resources.html" class="footer-link">Overview</a>
+        <a href="./install-guide.html" class="footer-link">Install Guide</a>
+        <a href="./claude-skills.html" class="footer-link">Claude Skills</a>
+        <a href="./use-cases.html" class="footer-link">Use Cases</a>
+        <a href="./how-scores.html" class="footer-link">Scoring</a>
+        <a href="./index.html" class="footer-link">Dashboard</a>
+        <a href="./roadmap.html" class="footer-link">Roadmap</a>
+      </nav>
+      <p class="footer-copy">NiCE Designer - Design system compliance and conversion toolkit for SOL and Lyra.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const links = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => {
+      links.classList.toggle('open');
+    });
+
+    // Close mobile nav on link click
+    links.querySelectorAll('.nav-link').forEach(function(link) {
+      link.addEventListener('click', function() {
+        links.classList.remove('open');
+      });
+    });
+
+    // Scroll reveal via IntersectionObserver
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealEls.forEach(function(el) {
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>
