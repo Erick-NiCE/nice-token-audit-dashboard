@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NiCE Designer - Product Roadmap</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #21212B;
+      --bg-surface: #2a2a36;
+      --bg-card:    #2f2f3d;
+      --border:     rgba(255,255,255,0.08);
+      --border-glow:rgba(54,148,252,0.35);
+      --text:       #ffffff;
+      --text-sec:   rgba(255,255,255,0.6);
+      --text-muted: rgba(255,255,255,0.3);
+      --blue:       #3694FC;
+      --elblue:     #025AFB;
+      --indigo:     #6100FF;
+      --emerald:    #00E2A0;
+      --teal:       #36EAD0;
+      --coral:      #FF5B8A;
+      --radius:     16px;
+      --radius-sm:  8px;
+      --font:       'Be Vietnam Pro', -apple-system, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ========================================================
+       ANIMATED GRADIENT BACKGROUND
+    ======================================================== */
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes gradientShiftFast {
+      0%   { background-position: 0% 0%; }
+      33%  { background-position: 100% 50%; }
+      66%  { background-position: 0% 100%; }
+      100% { background-position: 0% 0%; }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 currentColor; opacity: 1; }
+      50%       { box-shadow: 0 0 0 6px transparent; opacity: 0.7; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-6px); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    @keyframes borderPulse {
+      0%, 100% { opacity: 0.4; }
+      50%       { opacity: 1; }
+    }
+    @keyframes orb {
+      0%   { transform: translate(0, 0) scale(1); }
+      33%  { transform: translate(60px, -40px) scale(1.1); }
+      66%  { transform: translate(-40px, 30px) scale(0.95); }
+      100% { transform: translate(0, 0) scale(1); }
+    }
+
+    /* ========================================================
+       HERO
+    ======================================================== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 40px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg,
+        #21212B 0%,
+        #1a1040 20%,
+        #0d1f6b 40%,
+        #3694FC 55%,
+        #6100FF 70%,
+        #00E2A0 85%,
+        #21212B 100%
+      );
+      background-size: 400% 400%;
+      animation: gradientShift 12s ease infinite;
+      opacity: 0.85;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 40%, #21212B 100%);
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(54,148,252,0.5), transparent 70%);
+      top: -100px; left: -100px;
+      animation: orb 15s ease-in-out infinite;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(97,0,255,0.4), transparent 70%);
+      bottom: -80px; right: -80px;
+      animation: orb 18s ease-in-out infinite reverse;
+    }
+    .orb-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(0,226,160,0.3), transparent 70%);
+      top: 40%; left: 60%;
+      animation: orb 20s ease-in-out infinite 5s;
+    }
+
+    .hero-content {
+      position: relative; z-index: 1;
+      animation: fadeUp 0.9s ease both;
+    }
+
+    .hero-eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--emerald);
+      margin-bottom: 20px;
+      opacity: 0.9;
+    }
+
+    .hero-title {
+      font-size: clamp(52px, 8vw, 100px);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+    }
+    .hero-title .nice {
+      display: block;
+      background: linear-gradient(90deg, #fff 0%, var(--blue) 40%, var(--teal) 70%, var(--emerald) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s linear infinite;
+    }
+    .hero-title .designer {
+      display: block;
+      color: white;
+      opacity: 0.92;
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.7);
+      max-width: 520px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+
+    .hero-pills {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+      color: rgba(255,255,255,0.8);
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 40px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center;
+      gap: 8px; z-index: 1;
+      color: rgba(255,255,255,0.4);
+      font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+      animation: float 2.5s ease-in-out infinite;
+    }
+    .scroll-hint::after {
+      content: '';
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+    }
+
+    /* ========================================================
+       SECTION WRAPPER
+    ======================================================== */
+    .section {
+      padding: 100px 60px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .section-header {
+      margin-bottom: 64px;
+    }
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.05;
+      color: white;
+    }
+    .section-title span {
+      background: linear-gradient(90deg, var(--blue), var(--indigo), var(--emerald));
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 5s linear infinite;
+    }
+    .section-desc {
+      font-size: 16px;
+      color: var(--text-sec);
+      max-width: 600px;
+      line-height: 1.7;
+      margin-top: 16px;
+    }
+
+    /* ========================================================
+       TOOL DETAIL CARDS
+    ======================================================== */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 20px;
+    }
+
+    .tool-card {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      animation: fadeUp 0.6s ease both;
+    }
+    .tool-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px var(--t-color, var(--blue));
+      border-color: var(--t-color, var(--blue));
+    }
+
+    .tool-card-glow {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--t-gradient, linear-gradient(90deg, var(--blue), var(--indigo)));
+    }
+
+    .tool-card-header {
+      padding: 28px 28px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .tool-icon-wrap {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      background: var(--t-gradient, linear-gradient(135deg, var(--blue), var(--indigo)));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .tool-name-wrap { flex: 1; }
+    .tool-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.3px;
+      margin-bottom: 4px;
+    }
+    .tool-tagline {
+      font-size: 13px;
+      color: var(--text-sec);
+      font-weight: 400;
+    }
+
+    .tool-card-body {
+      padding: 0 28px 28px;
+    }
+
+    .tool-handles-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--t-color, var(--blue));
+      margin-bottom: 12px;
+    }
+
+    .tool-handles {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .tool-handles li {
+      font-size: 13px;
+      color: var(--text-sec);
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .tool-handles li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 7px;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--t-color, var(--blue));
+    }
+
+    .tool-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tool-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tool-tag {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.06);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      letter-spacing: 0.3px;
+    }
+
+    .tool-status {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+    .tool-status.active   { background: rgba(54,148,252,0.15); color: #6ab4ff; }
+    .tool-status.next     { background: rgba(0,226,160,0.12);  color: #00E2A0; }
+    .tool-status.planned  { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.35); }
+    .tool-status.new      { background: rgba(97,0,255,0.2);    color: #b98fff; }
+
+    /* ========================================================
+       DIVIDER
+    ======================================================== */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(54,148,252,0.3), transparent);
+      margin: 0 60px;
+    }
+
+    /* ========================================================
+       ROADMAP SECTION
+    ======================================================== */
+    .roadmap-section {
+      padding: 100px 60px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 56px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .legend-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-right: 4px;
+    }
+    .legend-item {
+      display: flex; align-items: center;
+      gap: 7px; font-size: 12px;
+      color: var(--text-sec); font-weight: 500;
+    }
+    .legend-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 15px; top: 12px; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom,
+        rgba(54,148,252,0.5),
+        rgba(97,0,255,0.3) 50%,
+        transparent
+      );
+    }
+
+    /* Phase */
+    .phase { display: flex; gap: 36px; padding-bottom: 52px; position: relative; }
+    .phase:last-child { padding-bottom: 0; }
+
+    .phase-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+      flex-shrink: 0; margin-top: 8px;
+      position: relative; z-index: 1;
+    }
+    .phase-dot.active {
+      background: var(--blue);
+      box-shadow: 0 0 0 4px rgba(54,148,252,0.25);
+      animation: pulse 2s ease infinite;
+      color: var(--blue);
+    }
+    .phase-dot.next {
+      background: var(--emerald);
+      box-shadow: 0 0 0 4px rgba(0,226,160,0.2);
+      animation: pulse 2.5s ease infinite;
+      color: var(--emerald);
+    }
+    .phase-dot.future {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.1);
+    }
+
+    .phase-body { flex: 1; min-width: 0; }
+
+    .phase-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+    .phase-title  {
+      font-size: 18px; font-weight: 800;
+      color: white; letter-spacing: -0.3px;
+    }
+    .phase-period { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+
+    .phase-desc {
+      font-size: 13px; color: var(--text-sec);
+      margin-bottom: 16px; line-height: 1.65;
+      max-width: 700px; font-weight: 400;
+    }
+
+    .phase-dep {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; color: var(--text-muted); font-weight: 600;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px; padding: 3px 10px; margin-bottom: 18px;
+    }
+    .phase-dep::before {
+      content: 'Requires:';
+      color: rgba(255,255,255,0.2);
+    }
+
+    /* Cards grid */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 10px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius-sm);
+      padding: 16px 18px 0 22px;
+      position: relative;
+      display: flex; flex-direction: column;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .card:hover {
+      background: rgba(255,255,255,0.055);
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-1px);
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 8px; bottom: 8px;
+      width: 3px;
+      border-radius: 0 2px 2px 0;
+      background: var(--card-color, rgba(255,255,255,0.15));
+    }
+    .card.highlight {
+      border-color: rgba(54,148,252,0.3);
+      background: rgba(54,148,252,0.05);
+    }
+
+    .card-body { flex: 1; padding-bottom: 16px; }
+    .card-top {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: 8px;
+    }
+    .card-name {
+      font-size: 14px; font-weight: 700;
+      color: white; display: flex; align-items: center; gap: 8px;
+    }
+    .card-desc {
+      font-size: 12px; color: var(--text-sec);
+      line-height: 1.6; margin-bottom: 10px;
+    }
+
+    /* Badges */
+    .badge {
+      font-size: 9px; font-weight: 800;
+      letter-spacing: 0.6px; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 100px;
+    }
+    .badge.active  { background: rgba(54,148,252,0.2);   color: #6ab4ff; }
+    .badge.shipped { background: rgba(0,226,160,0.15);   color: #00E2A0; }
+    .badge.next    { background: rgba(0,226,160,0.12);   color: #00E2A0; }
+    .badge.planned { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
+    .badge.new     { background: rgba(97,0,255,0.2);     color: #b98fff; }
+
+    /* Callouts */
+    .callout {
+      border-radius: 6px; padding: 9px 11px;
+      font-size: 11px; line-height: 1.55; margin-bottom: 10px;
+    }
+    .callout strong { display: block; font-weight: 700; margin-bottom: 3px; }
+    .callout.blue   { background: rgba(54,148,252,0.08);  border: 1px solid rgba(54,148,252,0.2);  color: rgba(167,208,254,0.9); }
+    .callout.blue   strong { color: #6ab4ff; }
+    .callout.green  { background: rgba(0,226,160,0.07);   border: 1px solid rgba(0,226,160,0.2);   color: rgba(172,247,243,0.9); }
+    .callout.green  strong { color: #00E2A0; }
+    .callout.orange { background: rgba(255,91,138,0.07);  border: 1px solid rgba(255,91,138,0.2);  color: rgba(243,177,196,0.9); }
+    .callout.orange strong { color: #ff8ab0; }
+    .callout.purple { background: rgba(97,0,255,0.1);     border: 1px solid rgba(97,0,255,0.25);   color: rgba(185,143,255,0.9); }
+    .callout.purple strong { color: #b98fff; }
+    .callout.amber  { background: rgba(54,234,208,0.07);  border: 1px solid rgba(54,234,208,0.2);  color: rgba(172,247,243,0.9); }
+    .callout.amber  strong { color: #36EAD0; }
+
+    /* Card footer */
+    .card-footer {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      gap: 8px; flex-wrap: wrap; margin-bottom: 14px;
+    }
+    .card-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+    .tag {
+      font-size: 10px; padding: 2px 7px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.3);
+      border: 1px solid rgba(255,255,255,0.06);
+      font-weight: 500;
+    }
+
+    /* People */
+    .people { display: flex; gap: 4px; }
+    .avatar {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.5);
+    }
+
+    /* Gates */
+    .gates {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 10px 0 14px;
+    }
+    .gates-label {
+      font-size: 9px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      color: rgba(255,255,255,0.2); margin-bottom: 8px;
+    }
+    .gates-rows { display: flex; flex-direction: column; gap: 5px; }
+    .gates-row  { display: flex; gap: 5px; flex-wrap: wrap; }
+    .gate {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.03);
+      white-space: nowrap;
+    }
+    .gate-icon { font-size: 10px; }
+    .gate-avatars { display: flex; gap: 2px; margin-left: 2px; }
+    .gate-av {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 7px; font-weight: 700;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* Tool color vars for roadmap cards */
+    .audit   { --card-color: #3694FC; }
+    .convert { --card-color: #00E2A0; }
+    .handoff { --card-color: #B98FFF; }
+    .parity  { --card-color: #36EAD0; }
+    .qa      { --card-color: #FF5B8A; }
+    .tokens  { --card-color: #ACF7F3; }
+    .editor  { --card-color: #025AFB; }
+    .magic   { --card-color: #6100FF; }
+    .infra   { --card-color: rgba(255,255,255,0.2); }
+    .mcp     { --card-color: #00E2A0; }
+    .dash    { --card-color: #36EAD0; }
+    .exec    { --card-color: #B98FFF; }
+
+    /* ========================================================
+       STAKEHOLDERS KEY
+    ======================================================== */
+    .stakeholders {
+      padding: 60px 60px 80px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .stakeholders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 32px;
+    }
+    .person-entry {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      transition: background 0.2s;
+    }
+    .person-entry:hover { background: rgba(255,255,255,0.05); }
+    .person-name { font-size: 13px; font-weight: 600; color: white; margin-bottom: 2px; }
+    .person-role { font-size: 11px; color: var(--text-muted); }
+
+    .avatar-lg {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--indigo));
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; color: white;
+      flex-shrink: 0;
+    }
+
+    /* ========================================================
+       FOOTER NOTE
+    ======================================================== */
+    .footer-note {
+      margin: 0 60px 60px;
+      max-width: 1180px;
+      margin-left: auto; margin-right: auto;
+      padding: 20px 24px;
+      background: rgba(54,148,252,0.05);
+      border: 1px solid rgba(54,148,252,0.15);
+      border-radius: var(--radius-sm);
+      font-size: 12px; color: var(--text-sec); line-height: 1.7;
+    }
+    .footer-note strong { color: white; }
+    code {
+      font-size: 11px;
+      background: rgba(255,255,255,0.08);
+      padding: 2px 6px; border-radius: 4px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    /* ========================================================
+       SCROLL REVEAL
+    ======================================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================================================================
+       HERO
+  ================================================================ -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Product Roadmap &nbsp; 2026 &ndash; 2027</div>
+      <h1 class="hero-title">
+        <span class="nice">NiCE</span>
+        <span class="designer">Designer</span>
+      </h1>
+      <p class="hero-sub">
+        A suite of focused design-system tools. Each serves one goal. Together they cover the full design and code lifecycle for SOL and Lyra.
+      </p>
+      <div class="hero-pills">
+        <span class="hero-pill">8 Tools</span>
+        <span class="hero-pill">Figma + Chrome</span>
+        <span class="hero-pill">SOL &amp; Lyra</span>
+        <span class="hero-pill">MCP Powered</span>
+      </div>
+    </div>
+    <div class="scroll-hint">Scroll</div>
+  </section>
+
+  <!-- ================================================================
+       TOOLS OVERVIEW
+  ================================================================ -->
+  <section class="section">
+    <div class="section-header reveal">
+      <div class="section-label">The Suite</div>
+      <h2 class="section-title">Eight tools. <span>One system.</span></h2>
+      <p class="section-desc">Each tool is self-contained, focused on a single job, and designed to feel like its own product. They share a common MCP server and token layer underneath.</p>
+    </div>
+
+    <div class="tools-grid">
+
+      <!-- Audit -->
+      <div class="tool-card reveal" style="--t-color:#3694FC; --t-gradient: linear-gradient(135deg,#3694FC,#025AFB); animation-delay:0.05s">
+        <div class="tool-card-glow"></div>
+        <div class="tool-card-header">
+          <div class="tool-icon-wrap">🔍</div>
+          <div class="tool-name-wrap">
+            <div class="tool-name">Audit</div>
+            <div class="tool-tagline">Is this compliant?</div>
+          </div>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-handles-label">What it handles</div>
+          <ul class="tool-handles">
+            <li>Color token compliance across Figma frames and live pages</li>
+            <li>Typography style matching against SOL and Lyra specs</li>
+            <li>Spacing and border radius deviation detection</li>
+            <li>Code component usage correctness, not just token values</li>
+            <li>Accessibility issues ranked by severity and reach</li>
+            <li>Storybook live integration via MCP server</li>
+            <li>Severity-ranked reports with per-dimension breakdowns</li>
+          </ul>
+          <div class="tool-card-footer">
+            <div class="tool-tags">
+              <span class="tool-tag">Figma</span>
+              <span class="tool-tag">Chrome</span>
+              <span class="tool-tag">Storybook</span>
+              <span class="tool-tag">Read-only</span>
+            </div>
+            <span class="tool-status next">Up Next</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Convert -->
+      <div class="tool-card reveal" style="--t-color:#00E2A0; --t-gradient: linear-gradient(135deg,#00E2A0,#36EAD0); animation-delay:0.1s">
+        <div class="tool-card-glow"></div>
+        <div class="tool-card-header">
+          <div class="tool-icon-wrap">⚡</div>
+          <div class="tool-name-wrap">
+            <div class="tool-name">Convert</div>
+            <div class="tool-tagline">Fix it for me</div>
+          </div>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-handles-label">What it handles</div>
+          <ul class="tool-handles">
+            <li>Token swap migrations from SOL to Lyra and back</li>
+            <li>Full page and frame migration in one pass</li>
+            <li>Light and dark mode switching</li>
+            <li>Code component replacement with compliant alternatives</li>
+            <li>Surgical per-element fixes with dry-run preview</li>
+            <li>Full undo support for every conversion action</li>
+            <li>Batch and single-element operation modes</li>
+          </ul>
+          <div class="tool-card-footer">
+            <div class="tool-tags">
+              <span class="tool-tag">Figma</span>
+              <span class="tool-tag">Chrome</span>
+              <span class="tool-tag">Storybook</span>
+            </div>
+            <span class="tool-status planned">Planned</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Handoff -->
+      <div class="tool-card reveal" style="--t-color:#B98FFF; --t-gradient: linear-gradient(135deg,#6100FF,#B98FFF); animation-delay:0.15s">
+        <div class="tool-card-glow"></div>
+        <div class="tool-card-header">
+          <div class="tool-icon-wrap">📐</div>
+          <div class="tool-name-wrap">
+            <div class="tool-name">Handoff</div>
+            <div class="tool-tagline">Give me the code</div>
+          </div>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-handles-label">What it handles</div>
+          <ul class="tool-handles">
+            <li>Production CSS extraction with Lyra tokens substituted</li>
+            <li>Developer spec sheets for any selected Figma node</li>
+            <li>Spec sheets for any inspected browser element</li>
+            <li>Full token set export for SOL and Lyra</li>
+            <li>Spacing, typography, color, and radius values in one view</li>
+            <li>Copy-ready output formatted for dev use</li>
+          </ul>
+          <div class="tool-card-footer">
+            <div class="tool-tags">
+              <span class="tool-tag">Figma</span>
+              <span class="tool-tag">Chrome</span>
+              <span class="tool-tag">Dev-facing</span>
+            </div>
+            <span class="tool-status planned">Planned</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parity -->
+      <div class="tool-card reveal" style="--t-color:#36EAD0; --t-gradient: linear-gradient(135deg,#36EAD0,#3694FC); animation-delay:0.2s">
+        <div class="tool-card-glow"></div>
+        <div class="tool-card-header">
+          <div class="tool-icon-wrap">⚖️</div>
+          <div class="tool-name-wrap">
+            <div class="tool-name">Parity</div>
+            <div class="tool-tagline">Does the page match the design?</div>
+          </div>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-handles-label">What it handles</div>
+          <ul class="tool-handles">
+            <li>Side-by-side visual diff of Figma artboard vs live page</li>
+            <li>Spacing, color, and typography gap detection</li>
+            <li>CSS override push from artboard styles to live page</li>
+            <li>Per-element comparison drill-down</li>
+            <li>Requires both Figma plugin and Chrome extension connected</li>
+          </ul>
+          <div class="tool-card-footer">
+            <div class="tool-tags">
+              <span class="tool-tag">Figma + Chrome</span>
+              <span class="tool-tag">QA / Sync</span>
+            </div>
+            <span class="tool-status planned">Planned</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- QA -->
+      <div class="tool-card reveal" style="--t-color:#FF5B8A; --t-gradient: linear-gradient(135deg,#FF5B8A,#f59e0b); animation-delay:0.25s">
+        <div class="tool-card-glow"></div>
+        <div class="tool-card-header">
+          <div class="tool-icon-wrap">🧪</div>
+          <div class="tool-name-wrap">
+            <div class="tool-name">QA</div>
+            <div class="tool-tagline">Does this page work in edge cases?</div>
+          </div>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-handles-label">What it handles</div>
+          <ul class="tool-handles">
+            <li>Dark mode simulation and parity check</li>
+            <li>Colorblind mode simulation across multiple deficiency types</li>
+            <li>A11y overlay visualization with issue counts</li>
+            <li>Tap target size highlighting for mobile compliance</li>
+            <li>Scrollbar state and overflow testing</li>
+            <li>Hover and focus state overlays</li>
+          </ul>
+          <div class="tool-card-footer">
+            <div class="tool-tags">
+              <span class="tool-tag">Chrome only</span>
+              <span class="tool-tag">QA</span>
+            </div>
+            <span class="tool-status planned">Planned</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tokens -->
+      <div class="tool-card reveal" style="--t-color:#ACF7F3; --t-gradient: linear-gradient(135deg,#36EAD0,#00E2A0); animation-delay:0.3s">
+        <div class="tool-card-glow"></div>
+        <div class="tool-card-header">
+          <div class="tool-icon-wrap">🪙</div>
+          <div class="tool-name-wrap">
+            <div class="tool-name">Tokens</div>
+            <div class="tool-tagline">What should be tokenized?</div>
+          </div>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-handles-label">What it handles</div>
+          <ul class="tool-handles">
+            <li>Detection of recurring off-system values across a file or page</li>
+            <li>Candidate promotion suggestions with usage frequency</li>
+            <li>Post-fix checklist of items that still need a human</li>
+            <li>Token set export and diff between SOL and Lyra</li>
+            <li>Design system governance and maintenance reporting</li>
+          </ul>
+          <div class="tool-card-footer">
+            <div class="tool-tags">
+              <span class="tool-tag">Figma</span>
+              <span class="tool-tag">Chrome</span>
+              <span class="tool-tag">DS team</span>
+            </div>
+            <span class="tool-status planned">Planned</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Editor -->
+      <div class="tool-card reveal" style="--t-color:#025AFB; --t-gradient: linear-gradient(135deg,#025AFB,#6100FF); animation-delay:0.35s">
+        <div class="tool-card-glow"></div>
+        <div class="tool-card-header">
+          <div class="tool-icon-wrap">🎨</div>
+          <div class="tool-name-wrap">
+            <div class="tool-name">Editor</div>
+            <div class="tool-tagline">Design directly in the browser</div>
+          </div>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-handles-label">What it handles</div>
+          <ul class="tool-handles">
+            <li>Figma-like layer panel for any live page</li>
+            <li>Real-time style overrides without touching code</li>
+            <li>Full edit history with undo and redo</li>
+            <li>Draggable panel of insertable code components from the design system</li>
+            <li>Click any element to replace it with a compliant component</li>
+            <li>Export overrides as a CSS patch or pull request diff</li>
+          </ul>
+          <div class="tool-card-footer">
+            <div class="tool-tags">
+              <span class="tool-tag">Chrome only</span>
+              <span class="tool-tag">Layer panel</span>
+              <span class="tool-tag">History</span>
+            </div>
+            <span class="tool-status new">New</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Magic -->
+      <div class="tool-card reveal" style="--t-color:#B98FFF; --t-gradient: linear-gradient(135deg,#6100FF,#FF5B8A); animation-delay:0.4s">
+        <div class="tool-card-glow"></div>
+        <div class="tool-card-header">
+          <div class="tool-icon-wrap">✨</div>
+          <div class="tool-name-wrap">
+            <div class="tool-name">Magic</div>
+            <div class="tool-tagline">Instant results, no setup</div>
+          </div>
+        </div>
+        <div class="tool-card-body">
+          <div class="tool-handles-label">What it handles</div>
+          <ul class="tool-handles">
+            <li>One-click functions for fast tweaks and demo prep</li>
+            <li>Quick actions outside any longer workflow</li>
+            <li>Rapid visual adjustments directly in Figma or the browser</li>
+            <li>Demo-mode helpers that apply common patterns instantly</li>
+            <li>Shortcuts for the most-used Convert and Audit actions</li>
+          </ul>
+          <div class="tool-card-footer">
+            <div class="tool-tags">
+              <span class="tool-tag">Figma</span>
+              <span class="tool-tag">Chrome</span>
+              <span class="tool-tag">Demos</span>
+            </div>
+            <span class="tool-status new">New</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ================================================================
+       ROADMAP TIMELINE
+  ================================================================ -->
+  <section class="roadmap-section">
+
+    <div class="section-header reveal">
+      <div class="section-label">Development Roadmap</div>
+      <h2 class="section-title">Phases and <span>dependencies</span></h2>
+      <p class="section-desc">Each phase must complete before the next begins. Every tool ships with documentation, video, testing, and stakeholder review cleared.</p>
+    </div>
+
+    <div class="legend reveal">
+      <span class="legend-label">Status</span>
+      <div class="legend-item"><div class="legend-dot" style="background:#3694FC"></div> Active</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#00E2A0"></div> Up Next</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#B98FFF"></div> New</div>
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(255,255,255,0.2)"></div> Planned</div>
+    </div>
+
+    <div class="timeline">
+
+      <!-- Phase 0 -->
+      <div class="phase reveal">
+        <div class="phase-dot active"></div>
+        <div class="phase-body">
+          <div class="phase-header">
+            <div class="phase-title">Phase 0 &ndash; Foundation and Alignment</div>
+            <div class="phase-period">Now &nbsp; Q2 2026</div>
+          </div>
+          <p class="phase-desc">Establish architecture, priorities, and stakeholder alignment before any tool ships. Strategic reviews, executive briefing, and training planning all happen here.</p>
+          <div class="cards">
+
+            <div class="card infra reveal">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>🗺️</span> Roadmap Review</div>
+                  <span class="badge active">Active</span>
+                </div>
+                <div class="card-desc">Reid, Bill, and Simone review the roadmap. Validate scope, sequencing, and priorities before development commitments are made.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">Roadmap</span><span class="tag">Priorities</span></div>
+                  <div class="people">
+                    <div class="avatar">Re</div><div class="avatar">Bi</div><div class="avatar">Si</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card infra reveal">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>👥</span> Separation Review</div>
+                  <span class="badge active">Active</span>
+                </div>
+                <div class="card-desc">Simone and Bill review the code separation plan, validate tool boundaries, and confirm which tool gets priority resourcing first.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">Architecture</span></div>
+                  <div class="people"><div class="avatar">Si</div><div class="avatar">Bi</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card infra reveal">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>🔧</span> Code Separation</div>
+                  <span class="badge active">Active</span>
+                </div>
+                <div class="card-desc">Refactor all capabilities out of the monolithic <code>code.ts</code> into self-contained tool modules. Shared utilities and token definitions stay in a common layer.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">Self-contained</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card infra reveal">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>🗂️</span> New Menu System</div>
+                  <span class="badge active">Active</span>
+                </div>
+                <div class="card-desc">Replace the tab-based UI with a top-level tool selector. Each tool has its own entry point and feels like a distinct product inside the same plugin shell.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">UI / UX</span><span class="tag">Both platforms</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card reveal" style="--card-color:#B98FFF;">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>🎓</span> Training and Rollout Planning</div>
+                  <span class="badge active">Active</span>
+                </div>
+                <div class="card-desc">Megan, Rohit, and Simone establish the rollout plan for training UX teams on each tool, covering sequencing, format, and UX process integration.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">Training</span><span class="tag">Rollout</span></div>
+                  <div class="people"><div class="avatar">Me</div><div class="avatar">Rh</div><div class="avatar">Si</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card reveal" style="--card-color:#B98FFF;">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>📣</span> Executive Alignment</div>
+                  <span class="badge active">Active</span>
+                </div>
+                <div class="card-desc">Brief Mike on the full roadmap plan. Mike communicates to Itay how NiCE Designer fits their AI transformation strategy before public rollout begins.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">Executive</span><span class="tag">AI Transformation</span></div>
+                  <div class="people"><div class="avatar">Mi</div><div class="avatar">It</div></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 1 -->
+      <div class="phase reveal">
+        <div class="phase-dot next"></div>
+        <div class="phase-body">
+          <div class="phase-header">
+            <div class="phase-title">Phase 1 &ndash; Audit and Storybook</div>
+            <div class="phase-period">Q3 2026</div>
+          </div>
+          <div class="phase-dep">Phase 0 complete</div>
+          <p class="phase-desc">Ship Audit as the first standalone tool with an MCP server running live against Storybook. The Compliance Dashboard gains auto-submit so every audit result posts publicly without manual steps.</p>
+          <div class="cards">
+
+            <div class="card audit highlight reveal">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>🔍</span> Audit</div>
+                  <span class="badge next">Up Next</span>
+                </div>
+                <div class="card-desc">Scans a Figma frame or live page for compliance. Read-only, surfaces issues by dimension and severity.</div>
+                <div class="callout blue"><strong>🎯 Launch goal</strong>Compliance visible alongside component docs in Storybook. The definitive reference for how SOL and Lyra are applied.</div>
+                <div class="callout green"><strong>⚙️ Code component awareness</strong>Recognizes actual rendered components, not just token values. Flags wrong component usage for a pattern.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">Storybook</span></div>
+                  <div class="people"><div class="avatar">Yo</div><div class="avatar">Ro</div></div>
+                </div>
+              </div>
+              <div class="gates">
+                <div class="gates-label">Required before ship</div>
+                <div class="gates-rows">
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
+                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
+                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
+                  </div>
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">👁</span> UX Review<div class="gate-avatars"><div class="gate-av">Me</div><div class="gate-av">Rh</div></div></div>
+                    <div class="gate"><span class="gate-icon">🏗</span> DS Align<div class="gate-avatars"><div class="gate-av">Sc</div><div class="gate-av">Ra</div><div class="gate-av">As</div></div></div>
+                    <div class="gate"><span class="gate-icon">📊</span> Dashboard</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card mcp reveal">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>🔌</span> MCP Storybook</div>
+                  <span class="badge next">Up Next</span>
+                </div>
+                <div class="card-desc">Extends the MCP server to connect to a live Storybook instance. Runs compliance checks against rendered stories in real time.</div>
+                <div class="callout green"><strong>How it works</strong>Watches the Storybook dev server, instruments each story via content script, and streams audit results back to Audit and Convert.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">MCP server</span><span class="tag">Storybook</span></div>
+                  <div class="people"><div class="avatar">Yo</div><div class="avatar">Ro</div></div>
+                </div>
+              </div>
+              <div class="gates">
+                <div class="gates-label">Required before ship</div>
+                <div class="gates-rows">
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
+                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
+                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
+                  </div>
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">🔧</span> Dev Review<div class="gate-avatars"><div class="gate-av">Co</div><div class="gate-av">Ri</div></div></div>
+                    <div class="gate"><span class="gate-icon">🏗</span> DS Align<div class="gate-avatars"><div class="gate-av">Sc</div><div class="gate-av">Ra</div><div class="gate-av">As</div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card dash reveal">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>📊</span> Compliance Dashboard</div>
+                  <span class="badge next">Up Next</span>
+                </div>
+                <div class="card-desc">The existing dashboard that aggregates audit results and posts them live. This phase automates the pipeline end to end.</div>
+                <div class="callout purple"><strong>Auto-submit pipeline</strong>Audit results automatically submitted on every run. The GitHub HTML is updated and committed without any manual steps.</div>
+                <div class="callout amber"><strong>Blocked by</strong>Audit shipped and MCP Storybook integration live.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">Existing</span><span class="tag">Auto-submit</span><span class="tag">GitHub HTML</span></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase reveal">
+        <div class="phase-dot future"></div>
+        <div class="phase-body">
+          <div class="phase-header">
+            <div class="phase-title">Phase 2 &ndash; Core Tools</div>
+            <div class="phase-period">Q3 &ndash; Q4 2026</div>
+          </div>
+          <div class="phase-dep">Phase 1 shipped</div>
+          <p class="phase-desc">Ship Convert, Handoff, and Tokens. Dev-centric tools get a review with Colton and Richard. DS-touching tools are reviewed with Scott, Randy, and Ashadeepa before release.</p>
+          <div class="cards">
+
+            <div class="card convert reveal">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>⚡</span> Convert</div>
+                  <span class="badge planned">Planned</span>
+                </div>
+                <div class="card-desc">Converts non-compliant work to Lyra or SOL. Token swaps, full migrations, mode switches. Dry-run by default, fully undoable.</div>
+                <div class="callout green"><strong>Code component awareness</strong>Goes beyond token swaps. Suggests and swaps the wrong component for the correct compliant one using actual code components.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">Storybook</span></div>
+                </div>
+              </div>
+              <div class="gates">
+                <div class="gates-label">Required before ship</div>
+                <div class="gates-rows">
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
+                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
+                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
+                  </div>
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">👁</span> UX Review<div class="gate-avatars"><div class="gate-av">Me</div><div class="gate-av">Rh</div></div></div>
+                    <div class="gate"><span class="gate-icon">🔧</span> Dev Review<div class="gate-avatars"><div class="gate-av">Co</div><div class="gate-av">Ri</div></div></div>
+                    <div class="gate"><span class="gate-icon">🏗</span> DS Align<div class="gate-avatars"><div class="gate-av">Sc</div><div class="gate-av">Ra</div><div class="gate-av">As</div></div></div>
+                  </div>
+                  <div class="gates-row"><div class="gate"><span class="gate-icon">📊</span> Dashboard</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card handoff reveal">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>📐</span> Handoff</div>
+                  <span class="badge planned">Planned</span>
+                </div>
+                <div class="card-desc">Extracts production CSS, developer spec sheets, and full token exports from any selected Figma node or inspected browser element.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">Dev-facing</span></div>
+                </div>
+              </div>
+              <div class="gates">
+                <div class="gates-label">Required before ship</div>
+                <div class="gates-rows">
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
+                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
+                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
+                  </div>
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">👁</span> UX Review<div class="gate-avatars"><div class="gate-av">Me</div><div class="gate-av">Rh</div></div></div>
+                    <div class="gate"><span class="gate-icon">🔧</span> Dev Review<div class="gate-avatars"><div class="gate-av">Co</div><div class="gate-av">Ri</div></div></div>
+                    <div class="gate"><span class="gate-icon">🏗</span> DS Align<div class="gate-avatars"><div class="gate-av">Sc</div><div class="gate-av">Ra</div><div class="gate-av">As</div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card tokens reveal">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>🪙</span> Tokens</div>
+                  <span class="badge planned">Planned</span>
+                </div>
+                <div class="card-desc">Surfaces recurring off-system values worth promoting to tokens and tracks what needs manual attention after auto-fixers run.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">DS team</span></div>
+                </div>
+              </div>
+              <div class="gates">
+                <div class="gates-label">Required before ship</div>
+                <div class="gates-rows">
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
+                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
+                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
+                  </div>
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">👁</span> UX Review<div class="gate-avatars"><div class="gate-av">Me</div><div class="gate-av">Rh</div></div></div>
+                    <div class="gate"><span class="gate-icon">🏗</span> DS Align<div class="gate-avatars"><div class="gate-av">Sc</div><div class="gate-av">Ra</div><div class="gate-av">As</div></div></div>
+                    <div class="gate"><span class="gate-icon">📊</span> Dashboard</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="phase reveal">
+        <div class="phase-dot future"></div>
+        <div class="phase-body">
+          <div class="phase-header">
+            <div class="phase-title">Phase 3 &ndash; Advanced Tools</div>
+            <div class="phase-period">Q4 2026 &ndash; Q1 2027</div>
+          </div>
+          <div class="phase-dep">Phase 2 shipped</div>
+          <p class="phase-desc">Net-new capabilities requiring a stable Chrome extension foundation. Editor's component panel makes swapping to compliant components as easy as a click.</p>
+          <div class="cards">
+
+            <div class="card parity reveal">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>⚖️</span> Parity</div>
+                  <span class="badge planned">Planned</span>
+                </div>
+                <div class="card-desc">Diffs a Figma artboard against the live implementing page. Can push artboard styles onto the page as CSS overrides. Requires both clients connected.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">Figma + Chrome</span><span class="tag">QA / Sync</span></div>
+                </div>
+              </div>
+              <div class="gates">
+                <div class="gates-label">Required before ship</div>
+                <div class="gates-rows">
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
+                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
+                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
+                  </div>
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">👁</span> UX Review<div class="gate-avatars"><div class="gate-av">Me</div><div class="gate-av">Rh</div></div></div>
+                    <div class="gate"><span class="gate-icon">🔧</span> Dev Review<div class="gate-avatars"><div class="gate-av">Co</div><div class="gate-av">Ri</div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card qa reveal">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>🧪</span> QA</div>
+                  <span class="badge planned">Planned</span>
+                </div>
+                <div class="card-desc">Runs the live page through edge cases: dark mode, colorblind simulation, a11y overlays, tap-target highlighting, scrollbar states.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">Chrome only</span><span class="tag">QA</span></div>
+                </div>
+              </div>
+              <div class="gates">
+                <div class="gates-label">Required before ship</div>
+                <div class="gates-rows">
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
+                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
+                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
+                  </div>
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">👁</span> UX Review<div class="gate-avatars"><div class="gate-av">Me</div><div class="gate-av">Rh</div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card editor reveal">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>🎨</span> Editor</div>
+                  <span class="badge new">New</span>
+                </div>
+                <div class="card-desc">Visual editor for live pages in Chrome. Figma-like layer panel, edit history, and real-time style overrides.</div>
+                <div class="callout orange"><strong>Component panel</strong>Draggable panel of insertable code components from the design system. Click any element to replace it with a compliant one. Instant, visual, and reversible.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">Chrome only</span><span class="tag">Layer panel</span><span class="tag">History</span></div>
+                </div>
+              </div>
+              <div class="gates">
+                <div class="gates-label">Required before ship</div>
+                <div class="gates-rows">
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
+                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
+                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
+                  </div>
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">👁</span> UX Review<div class="gate-avatars"><div class="gate-av">Me</div><div class="gate-av">Rh</div></div></div>
+                    <div class="gate"><span class="gate-icon">🏗</span> DS Align<div class="gate-avatars"><div class="gate-av">Sc</div><div class="gate-av">Ra</div><div class="gate-av">As</div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card magic reveal">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>✨</span> Magic</div>
+                  <span class="badge new">New</span>
+                </div>
+                <div class="card-desc">One-click magic functions for fast tweaks and demos. Quick actions outside any longer workflow with instant results and no setup.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">Figma</span><span class="tag">Chrome</span><span class="tag">Demos</span></div>
+                </div>
+              </div>
+              <div class="gates">
+                <div class="gates-label">Required before ship</div>
+                <div class="gates-rows">
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">📄</span> Docs<div class="gate-avatars"><div class="gate-av">Li</div><div class="gate-av">Si</div></div></div>
+                    <div class="gate"><span class="gate-icon">🎬</span> Video<div class="gate-avatars"><div class="gate-av">An</div></div></div>
+                    <div class="gate"><span class="gate-icon">🧪</span> Testing</div>
+                  </div>
+                  <div class="gates-row">
+                    <div class="gate"><span class="gate-icon">👁</span> UX Review<div class="gate-avatars"><div class="gate-av">Me</div><div class="gate-av">Rh</div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="phase reveal">
+        <div class="phase-dot future"></div>
+        <div class="phase-body">
+          <div class="phase-header">
+            <div class="phase-title">Phase 4 &ndash; NiCE Designer Suite</div>
+            <div class="phase-period">Q1 2027</div>
+          </div>
+          <div class="phase-dep">All 8 tools shipped</div>
+          <p class="phase-desc">Package all tools under one install with a unified entry point, shared MCP server, and suite-level branding. Each tool remains independently usable.</p>
+          <div class="cards">
+            <div class="card reveal" style="--card-color: #3694FC; border-style: dashed; border-color: rgba(54,148,252,0.2);">
+              <div class="card-body">
+                <div class="card-top">
+                  <div class="card-name"><span>📦</span> NiCE Designer Bundle</div>
+                  <span class="badge planned">Planned</span>
+                </div>
+                <div class="card-desc">All 8 tools under one install. Shared MCP server on <code>127.0.0.1:7331</code>, unified branding, single plugin entry point. Install once, use any tool.</div>
+                <div class="card-footer">
+                  <div class="card-tags"><span class="tag">All tools</span><span class="tag">Shared MCP</span><span class="tag">One install</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ================================================================
+       STAKEHOLDERS
+  ================================================================ -->
+  <section class="stakeholders">
+    <div class="section-header reveal">
+      <div class="section-label">People</div>
+      <h2 class="section-title">Stakeholder <span>index</span></h2>
+    </div>
+    <div class="stakeholders-grid reveal">
+      <div class="person-entry"><div class="avatar-lg">Re</div><div><div class="person-name">Reid</div><div class="person-role">Roadmap review</div></div></div>
+      <div class="person-entry"><div class="avatar-lg">Bi</div><div><div class="person-name">Bill</div><div class="person-role">Roadmap and separation review</div></div></div>
+      <div class="person-entry"><div class="avatar-lg">Si</div><div><div class="person-name">Simone</div><div class="person-role">Roadmap, docs, training</div></div></div>
+      <div class="person-entry"><div class="avatar-lg">Li</div><div><div class="person-name">Lihi</div><div class="person-role">Documentation lead</div></div></div>
+      <div class="person-entry"><div class="avatar-lg">An</div><div><div class="person-name">Andrew</div><div class="person-role">Video recording per tool</div></div></div>
+      <div class="person-entry"><div class="avatar-lg">Me</div><div><div class="person-name">Megan</div><div class="person-role">UX review and training rollout</div></div></div>
+      <div class="person-entry"><div class="avatar-lg">Rh</div><div><div class="person-name">Rohit</div><div class="person-role">UX review and training rollout</div></div></div>
+      <div class="person-entry"><div class="avatar-lg">Yo</div><div><div class="person-name">Yoav</div><div class="person-role">Audit and MCP engineering</div></div></div>
+      <div class="person-entry"><div class="avatar-lg">Ro</div><div><div class="person-name">Ron</div><div class="person-role">Audit and MCP engineering</div></div></div>
+      <div class="person-entry"><div class="avatar-lg">Co</div><div><div class="person-name">Colton</div><div class="person-role">Dev review, dev-centric tools</div></div></div>
+      <div class="person-entry"><div class="avatar-lg">Ri</div><div><div class="person-name">Richard</div><div class="person-role">Dev review, dev-centric tools</div></div></div>
+      <div class="person-entry"><div class="avatar-lg">Sc</div><div><div class="person-name">Scott</div><div class="person-role">DS and frontend alignment</div></div></div>
+      <div class="person-entry"><div class="avatar-lg">Ra</div><div><div class="person-name">Randy</div><div class="person-role">DS and frontend alignment</div></div></div>
+      <div class="person-entry"><div class="avatar-lg">As</div><div><div class="person-name">Ashadeepa</div><div class="person-role">DS and frontend alignment</div></div></div>
+      <div class="person-entry"><div class="avatar-lg">Mi</div><div><div class="person-name">Mike</div><div class="person-role">Executive briefing</div></div></div>
+      <div class="person-entry"><div class="avatar-lg">It</div><div><div class="person-name">Itay</div><div class="person-role">AI transformation (via Mike)</div></div></div>
+    </div>
+  </section>
+
+  <div class="footer-note reveal">
+    <strong>Architecture note:</strong> All tools share the same MCP server and token definitions in <code>src/tokens.ts</code>. Each tool is self-contained but draws from a common layer. The MCP server doubles as the Storybook live checker from Phase 1 onward. Gate icons: 📄 Docs, 🎬 Video, 🧪 Testing, 👁 UX Review, 🔧 Dev Review, 🏗 DS Alignment, 📊 Dashboard. These appear only where applicable per tool.
+  </div>
+
+  <script>
+    // Intersection observer for scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(el => {
+        if (el.isIntersecting) {
+          el.target.classList.add('visible');
+          observer.unobserve(el.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach((el, i) => {
+      el.style.transitionDelay = (i % 6) * 0.04 + 's';
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>
