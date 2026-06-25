@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NiCE Designer — Resources</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #21212B;
+      --surface: #2a2a36;
+      --card:    #2f2f3d;
+      --border:  rgba(255,255,255,0.08);
+      --text:    #ffffff;
+      --text-sec:rgba(255,255,255,0.58);
+      --muted:   rgba(255,255,255,0.28);
+      --blue:    #3694FC;
+      --elblue:  #025AFB;
+      --indigo:  #6100FF;
+      --emerald: #00E2A0;
+      --teal:    #36EAD0;
+      --coral:   #FF5B8A;
+      --lyra:    #B98FFF;
+      --font:    'Be Vietnam Pro', -apple-system, sans-serif;
+    }
+
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes orb {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33%       { transform: translate(60px, -40px) scale(1.1); }
+      66%       { transform: translate(-30px, 20px) scale(0.95); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-6px); }
+    }
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 var(--c); opacity: 1; }
+      100% { box-shadow: 0 0 0 10px transparent; opacity: 0; }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 72vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 80px 40px 60px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg,
+        #21212B 0%, #170d40 18%, #0d1f6b 38%,
+        #3694FC 55%, #6100FF 72%, #00E2A0 87%, #21212B 100%
+      );
+      background-size: 400% 400%;
+      animation: gradientShift 13s ease infinite;
+      opacity: 0.78;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 35%, #21212B 100%);
+    }
+    .orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(80px); pointer-events: none;
+    }
+    .orb-1 { width: 480px; height: 480px; background: radial-gradient(circle, rgba(54,148,252,0.5), transparent 70%); top: -120px; left: -80px; animation: orb 15s ease-in-out infinite; }
+    .orb-2 { width: 360px; height: 360px; background: radial-gradient(circle, rgba(97,0,255,0.4), transparent 70%); bottom: -60px; right: -60px; animation: orb 19s ease-in-out infinite reverse; }
+    .orb-3 { width: 280px; height: 280px; background: radial-gradient(circle, rgba(0,226,160,0.3), transparent 70%); top: 40%; left: 60%; animation: orb 22s ease-in-out infinite 4s; }
+
+    .hero-content { position: relative; z-index: 1; animation: fadeUp 0.8s ease both; }
+
+    .hero-eyebrow {
+      font-size: 11px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--emerald); margin-bottom: 18px;
+    }
+    .hero-title {
+      font-size: clamp(52px, 8vw, 96px);
+      font-weight: 900; line-height: 0.93; letter-spacing: -2px;
+      margin-bottom: 22px;
+    }
+    .hero-title .nice {
+      display: block;
+      background: linear-gradient(90deg, #fff 0%, var(--blue) 40%, var(--teal) 70%, var(--emerald) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s linear infinite;
+    }
+    .hero-title .designer { display: block; color: rgba(255,255,255,0.92); }
+    .hero-sub {
+      font-size: 18px; color: rgba(255,255,255,0.65);
+      max-width: 500px; margin: 0 auto 36px; line-height: 1.65;
+    }
+    .hero-pills { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .hero-pill {
+      padding: 7px 18px; border-radius: 100px; font-size: 12px;
+      font-weight: 600; border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.75);
+    }
+
+    .scroll-hint {
+      position: absolute; bottom: 36px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center;
+      gap: 8px; z-index: 1;
+      color: rgba(255,255,255,0.3); font-size: 10px;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      animation: float 2.5s ease-in-out infinite;
+    }
+    .scroll-hint::after {
+      content: '';
+      width: 1px; height: 36px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.25), transparent);
+    }
+
+    /* ── RESOURCES SECTION ── */
+    .resources {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 48px 100px;
+    }
+
+    .sec-header { margin-bottom: 52px; }
+    .sec-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 12px;
+    }
+    .sec-title {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800; letter-spacing: -1px; line-height: 1.05;
+    }
+    .sec-title span {
+      background: linear-gradient(90deg, var(--blue), var(--indigo), var(--emerald));
+      background-size: 200% auto;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; animation: shimmer 5s linear infinite;
+    }
+
+    /* ── RESOURCE CARDS ── */
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
+      gap: 16px;
+    }
+
+    .resource-card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      text-decoration: none;
+      display: flex;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .resource-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 28px 64px rgba(0,0,0,0.45), 0 0 0 1px var(--rc);
+      border-color: var(--rc);
+    }
+    .resource-card:hover .card-arrow { transform: translateX(4px); opacity: 1; }
+    .resource-card:hover .card-icon-wrap { transform: scale(1.08); }
+
+    .card-accent {
+      width: 4px; flex-shrink: 0;
+      background: var(--rc-gradient);
+    }
+
+    .card-inner {
+      padding: 28px 28px 24px 24px;
+      display: flex; flex-direction: column;
+      gap: 0; flex: 1;
+    }
+
+    .card-top {
+      display: flex; align-items: flex-start;
+      gap: 16px; margin-bottom: 14px;
+    }
+
+    .card-icon-wrap {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: var(--rc-gradient);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .card-title-wrap { flex: 1; }
+    .card-category {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--rc);
+      margin-bottom: 5px;
+    }
+    .card-title {
+      font-size: 19px; font-weight: 800;
+      color: var(--text); letter-spacing: -0.3px;
+      line-height: 1.2;
+    }
+
+    .card-desc {
+      font-size: 13px; color: var(--text-sec);
+      line-height: 1.7; margin-bottom: 20px;
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .card-tag {
+      font-size: 10px; font-weight: 600; padding: 3px 9px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+      border: 1px solid rgba(255,255,255,0.06);
+      text-transform: uppercase; letter-spacing: 0.3px;
+    }
+
+    .card-arrow {
+      font-size: 18px; color: var(--rc);
+      opacity: 0.5; transition: transform 0.25s, opacity 0.25s;
+      flex-shrink: 0;
+    }
+
+    /* ── ALSO ON GITHUB ── */
+    .github-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 48px 80px;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(54,148,252,0.3), transparent);
+      margin-bottom: 56px;
+    }
+
+    .github-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 12px;
+    }
+
+    .github-card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 18px 20px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .github-card:hover {
+      background: rgba(255,255,255,0.055);
+      border-color: rgba(255,255,255,0.13);
+      transform: translateY(-2px);
+    }
+    .github-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .github-card-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .github-card-desc { font-size: 12px; color: var(--text-sec); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Documentation &nbsp;&middot;&nbsp; Guides &nbsp;&middot;&nbsp; Resources</div>
+      <h1 class="hero-title">
+        <span class="nice">NiCE</span>
+        <span class="designer">Designer</span>
+      </h1>
+      <p class="hero-sub">Everything you need to install, use, and get the most out of the NiCE Designer suite.</p>
+      <div class="hero-pills">
+        <span class="hero-pill">Figma Plugin</span>
+        <span class="hero-pill">Chrome Extension</span>
+        <span class="hero-pill">Claude Skills</span>
+        <span class="hero-pill">SOL &amp; Lyra</span>
+      </div>
+    </div>
+    <div class="scroll-hint">Docs</div>
+  </section>
+
+  <!-- RESOURCES -->
+  <section class="resources">
+    <div class="sec-header reveal">
+      <div class="sec-label">SharePoint Docs</div>
+      <h2 class="sec-title">The <span>full guide</span></h2>
+    </div>
+
+    <div class="resource-grid">
+
+      <!-- Install Guide -->
+      <a class="resource-card reveal"
+         href="https://niceonlinena.sharepoint.com/sites/UX-Global/SitePages/NiCE-Designer-Install-Guide.aspx"
+         target="_blank" rel="noopener"
+         style="--rc:#3694FC; --rc-gradient:linear-gradient(135deg,#3694FC,#025AFB);">
+        <div class="card-accent"></div>
+        <div class="card-inner">
+          <div class="card-top">
+            <div class="card-icon-wrap">🔌</div>
+            <div class="card-title-wrap">
+              <div class="card-category">Getting started</div>
+              <div class="card-title">Install Guide</div>
+            </div>
+          </div>
+          <p class="card-desc">Step-by-step setup for the Figma plugin, Chrome extension, and local MCP server. Everything you need to get NiCE Designer running in your environment from scratch.</p>
+          <div class="card-footer">
+            <div class="card-tags">
+              <span class="card-tag">Figma</span>
+              <span class="card-tag">Chrome</span>
+              <span class="card-tag">MCP server</span>
+            </div>
+            <span class="card-arrow">&rarr;</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Claude Skills -->
+      <a class="resource-card reveal"
+         href="https://niceonlinena.sharepoint.com/sites/UX-Global/SitePages/NiCE-Designer-Claude-Skills.aspx"
+         target="_blank" rel="noopener"
+         style="--rc:#B98FFF; --rc-gradient:linear-gradient(135deg,#6100FF,#B98FFF); animation-delay:0.07s">
+        <div class="card-accent"></div>
+        <div class="card-inner">
+          <div class="card-top">
+            <div class="card-icon-wrap">🤖</div>
+            <div class="card-title-wrap">
+              <div class="card-category">AI skills</div>
+              <div class="card-title">Claude Skills</div>
+            </div>
+          </div>
+          <p class="card-desc">Reference for all 9 Claude skills included with the suite. Learn which skill to load for each workflow, how to trigger them, and what MCP tools each one drives.</p>
+          <div class="card-footer">
+            <div class="card-tags">
+              <span class="card-tag">9 Skills</span>
+              <span class="card-tag">MCP tools</span>
+              <span class="card-tag">Claude</span>
+            </div>
+            <span class="card-arrow">&rarr;</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- How Scores Are Measured -->
+      <a class="resource-card reveal"
+         href="https://niceonlinena.sharepoint.com/sites/UX-Global/SitePages/NiCE-Designer--How-Scores-Are-Measured.aspx"
+         target="_blank" rel="noopener"
+         style="--rc:#00E2A0; --rc-gradient:linear-gradient(135deg,#00E2A0,#36EAD0); animation-delay:0.14s">
+        <div class="card-accent"></div>
+        <div class="card-inner">
+          <div class="card-top">
+            <div class="card-icon-wrap">📊</div>
+            <div class="card-title-wrap">
+              <div class="card-category">Scoring methodology</div>
+              <div class="card-title">How Scores Are Measured</div>
+            </div>
+          </div>
+          <p class="card-desc">Explains exactly how SOL, Lyra, and accessibility compliance scores are calculated. Covers what counts as an issue, how severity is weighted, and how to read audit results correctly.</p>
+          <div class="card-footer">
+            <div class="card-tags">
+              <span class="card-tag">SOL</span>
+              <span class="card-tag">Lyra</span>
+              <span class="card-tag">A11y scoring</span>
+            </div>
+            <span class="card-arrow">&rarr;</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Use Cases -->
+      <a class="resource-card reveal"
+         href="https://niceonlinena.sharepoint.com/sites/UX-Global/SitePages/NiCE-Designer-Use-cases.aspx"
+         target="_blank" rel="noopener"
+         style="--rc:#FF5B8A; --rc-gradient:linear-gradient(135deg,#FF5B8A,#f59e0b); animation-delay:0.21s">
+        <div class="card-accent"></div>
+        <div class="card-inner">
+          <div class="card-top">
+            <div class="card-icon-wrap">💡</div>
+            <div class="card-title-wrap">
+              <div class="card-category">Workflows</div>
+              <div class="card-title">Use Cases</div>
+            </div>
+          </div>
+          <p class="card-desc">Real-world scenarios showing what each tool is for and when to reach for it. From auditing a Figma frame to diffing a live page against design, organized by job to be done.</p>
+          <div class="card-footer">
+            <div class="card-tags">
+              <span class="card-tag">Audit</span>
+              <span class="card-tag">Convert</span>
+              <span class="card-tag">Parity</span>
+              <span class="card-tag">QA</span>
+            </div>
+            <span class="card-arrow">&rarr;</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ALSO ON GITHUB -->
+  <section class="github-section">
+    <div class="divider"></div>
+    <div class="sec-header reveal">
+      <div class="sec-label">Also available</div>
+      <h2 class="sec-title">More <span>from this repo</span></h2>
+    </div>
+    <div class="github-grid">
+
+      <a class="github-card reveal"
+         href="./index.html">
+        <div class="github-icon" style="background:rgba(54,148,252,0.12)">📊</div>
+        <div>
+          <div class="github-card-name">Compliance Dashboard</div>
+          <div class="github-card-desc">Live audit scores across 144 CXone pages — SOL, Lyra, and A11y.</div>
+        </div>
+      </a>
+
+      <a class="github-card reveal"
+         href="./roadmap.html" style="transition-delay:0.06s">
+        <div class="github-icon" style="background:rgba(97,0,255,0.12)">🗺️</div>
+        <div>
+          <div class="github-card-name">Product Roadmap</div>
+          <div class="github-card-desc">8-tool suite roadmap with phases, stakeholders, and ship gates.</div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <script>
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.reveal').forEach((el, i) => {
+      el.style.transitionDelay = (i % 4) * 0.06 + 's';
+      obs.observe(el);
+    });
+  </script>
+
+</body>
+</html>
