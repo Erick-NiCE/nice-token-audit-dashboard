@@ -373,6 +373,66 @@
       border-color: rgba(185,143,255,0.15);
     }
 
+    /* ---- MCP TOOL DETAIL CARDS ---- */
+    .mcp-group { margin-bottom: 48px; }
+    .mcp-group-header {
+      display: flex; align-items: baseline; gap: 14px;
+      margin-bottom: 18px; padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .mcp-group-name {
+      font-size: 13px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .mcp-group-name.audit       { color: var(--blue); }
+    .mcp-group-name.conversion  { color: var(--emerald); }
+    .mcp-group-name.handoff     { color: var(--teal); }
+    .mcp-group-name.introspect  { color: var(--lyra); }
+    .mcp-group-name.polish      { color: var(--coral); }
+    .mcp-group-name.escape      { color: rgba(255,255,255,0.4); }
+    .mcp-group-note {
+      font-size: 12px; color: rgba(255,255,255,0.35); font-style: italic;
+    }
+    .mcp-tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 12px;
+    }
+    .mcp-tool-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px; padding: 16px 18px;
+    }
+    .mcp-tool-card:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.12);
+    }
+    .mcp-tool-top {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 8px;
+      margin-bottom: 8px; flex-wrap: wrap;
+    }
+    .mcp-tool-name {
+      font-family: 'SF Mono','Fira Code',monospace;
+      font-size: 12.5px; font-weight: 600;
+      color: #fff; letter-spacing: 0.3px;
+    }
+    .mcp-target-badge {
+      font-size: 10px; font-weight: 700; padding: 2px 8px;
+      border-radius: 100px; white-space: nowrap; flex-shrink: 0;
+    }
+    .mcp-target-badge.figma   { background: rgba(54,148,252,0.15); color: #3694FC; border: 1px solid rgba(54,148,252,0.2); }
+    .mcp-target-badge.chrome  { background: rgba(0,226,160,0.12); color: #00E2A0; border: 1px solid rgba(0,226,160,0.2); }
+    .mcp-target-badge.both    { background: rgba(54,226,208,0.12); color: #36EAD0; border: 1px solid rgba(54,226,208,0.2); }
+    .mcp-tool-desc {
+      font-size: 12.5px; color: rgba(255,255,255,0.55); line-height: 1.65;
+    }
+    .mcp-returns {
+      margin-top: 8px; font-size: 11px; color: rgba(255,255,255,0.3);
+    }
+    .mcp-returns strong { color: rgba(255,255,255,0.45); font-weight: 600; }
+    @media (max-width: 640px) { .mcp-tool-grid { grid-template-columns: 1fr; } }
+
     /* ---- MCP TOOLS TABLE SECTION ---- */
     .tools-section {
       background: rgba(0,0,0,0.2);
@@ -900,82 +960,221 @@
   <div class="tools-section">
     <div class="section reveal">
       <p class="section-label">MCP server</p>
-      <h2 class="section-title">35 MCP tools by group</h2>
-      <p class="section-body">NiCE Designer exposes 35 MCP tools via the local WebSocket server running at <code style="font-family: 'SF Mono','Fira Code',monospace; font-size: 0.82rem; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">127.0.0.1:7331</code>. All tools accept <code style="font-family: 'SF Mono','Fira Code',monospace; font-size: 0.82rem; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">target: "figma" | "chrome" | "auto"</code>.</p>
+      <h2 class="section-title">35 tools, 6 groups</h2>
+      <p class="section-body">NiCE Designer exposes 35 MCP tools via the local WebSocket server at <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">127.0.0.1:7331</code>. All tools accept <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">target: "figma" | "chrome" | "auto"</code>. Audit tools are read-only and safe to run any time. Conversion tools are undoable via <code style="font-family:'SF Mono','Fira Code',monospace;font-size:.82rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:2px 6px;border-radius:4px">undo_last_conversion</code>.</p>
 
-      <div class="tools-groups">
-
-        <div class="tools-group-card reveal">
-          <div class="tools-group-name audit">Audit (read-only)</div>
-          <div class="tools-group-list">
-            <span class="mcp-tool-tag audit">run_full_audit</span>
-            <span class="mcp-tool-tag audit">audit_colors</span>
-            <span class="mcp-tool-tag audit">audit_text_styles</span>
-            <span class="mcp-tool-tag audit">audit_spacing</span>
-            <span class="mcp-tool-tag audit">audit_radius</span>
-            <span class="mcp-tool-tag audit">audit_components</span>
-            <span class="mcp-tool-tag audit">audit_accessibility</span>
-            <span class="mcp-tool-tag audit">lyra_compliance_report</span>
+      <!-- AUDIT -->
+      <div class="mcp-group">
+        <div class="mcp-group-header">
+          <span class="mcp-group-name audit">Audit</span>
+          <span class="mcp-group-note">Read-only — safe to run any time, on either client</span>
+        </div>
+        <div class="mcp-tool-grid">
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">run_full_audit</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Runs all audit checks at once and returns a combined compliance score with a full issue list across colors, text styles, spacing, radius, components, and accessibility.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> overall score, per-category scores, issue count by severity</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">audit_colors</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Checks every color value in the selection against Lyra and SOL token palettes. Flags hardcoded hex and rgba values, and suggests the nearest token for each.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> list of non-token colors with suggested replacements</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">audit_text_styles</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Identifies text nodes that don't use a named text style, and verifies that existing styles map to Lyra typography tokens rather than custom values.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> unlinked text nodes, mismatched styles, token suggestions</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">audit_spacing</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Audits padding, gap, and margin values against the 4pt spacing scale. Flags any values that don't land on a defined token and shows the nearest valid step.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> off-grid spacing values with nearest token options</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">audit_radius</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Checks border-radius values across the selection against the Lyra radius token set. Flags any custom radius and suggests the closest token (none / sm / md / lg / full).</p>
+            <p class="mcp-returns"><strong>Returns:</strong> non-token radius values with suggested replacements</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">audit_components</code><span class="mcp-target-badge figma">Figma only</span></div>
+            <p class="mcp-tool-desc">Finds component instances and variants that don't match the linked Lyra component library. Shows version drift and detached overrides that break component fidelity.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> mismatched components, detached instances, version diff</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">audit_accessibility</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Runs WCAG 2.1 AA checks: color contrast ratios, touch target minimums (44x44px), missing ARIA labels, focus order, and alt text coverage.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> a11y issues grouped by type with WCAG criterion references</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">lyra_compliance_report</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Combines all audit results into the single Lyra compliance percentage score shown on the dashboard, with a per-category breakdown and a prioritized list of top fixes.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> overall % score, category breakdown, priority fix list</p>
           </div>
         </div>
+      </div>
 
-        <div class="tools-group-card reveal">
-          <div class="tools-group-name conversion">Conversion</div>
-          <div class="tools-group-list">
-            <span class="mcp-tool-tag conversion">convert_colors</span>
-            <span class="mcp-tool-tag conversion">convert_text_styles</span>
-            <span class="mcp-tool-tag conversion">fix_spacing</span>
-            <span class="mcp-tool-tag conversion">fix_radius</span>
-            <span class="mcp-tool-tag conversion">convert_component</span>
-            <span class="mcp-tool-tag conversion">fix_accessibility</span>
-            <span class="mcp-tool-tag conversion">convert_mode</span>
-            <span class="mcp-tool-tag conversion">convert_page_to_lyra</span>
-            <span class="mcp-tool-tag conversion">migrate_to_lyra</span>
-            <span class="mcp-tool-tag conversion">generate_multi_system</span>
-            <span class="mcp-tool-tag conversion">undo_last_conversion</span>
+      <!-- CONVERSION -->
+      <div class="mcp-group">
+        <div class="mcp-group-header">
+          <span class="mcp-group-name conversion">Conversion</span>
+          <span class="mcp-group-note">Undoable — use undo_last_conversion to revert</span>
+        </div>
+        <div class="mcp-tool-grid">
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">convert_colors</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Replaces hardcoded color values with the nearest Lyra token. Dry-run by default — pass <code style="font-size:11px;background:rgba(255,255,255,.07);padding:1px 4px;border-radius:3px">dryRun: false</code> to apply.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> preview of changes, count converted, unchanged values</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">convert_text_styles</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Applies the matching Lyra text style to every unlinked or mismatched text node. Matches on font size + weight + line-height to find the best token.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> nodes updated, styles applied, nodes skipped (no match)</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">fix_spacing</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Snaps padding and gap values to the nearest step on the 4pt spacing scale. Accepts a rounding mode: nearest, floor, or ceil.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> values changed, new token value for each, unchanged count</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">fix_radius</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Replaces custom border-radius values with the nearest Lyra radius token. Preserves zero-radius (sharp) corners intentionally.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> radius values updated, token applied to each, skipped count</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">convert_component</code><span class="mcp-target-badge figma">Figma only</span></div>
+            <p class="mcp-tool-desc">Swaps a selected component instance to its Lyra library equivalent, preserving text and image overrides where the API allows.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> old component name, new component name, overrides preserved / lost</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">fix_accessibility</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Auto-fixes common a11y issues: adds missing ARIA labels to icon-only buttons, adjusts text color for failing contrast where possible, and sets focus ring visibility.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> fixes applied, issues that require manual intervention</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">convert_mode</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Switches a frame or page between Lyra light and dark mode. In Figma, sets the variable mode. In Chrome, injects the appropriate token override stylesheet.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> previous mode, new mode, variables or classes updated</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">convert_page_to_lyra</code><span class="mcp-target-badge chrome">Chrome only</span></div>
+            <p class="mcp-tool-desc">Applies Lyra CSS token overrides to the live web page. Non-destructive — injects a stylesheet that can be toggled off without touching the source.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> properties overridden, before/after snapshot</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">migrate_to_lyra</code><span class="mcp-target-badge figma">Figma only</span></div>
+            <p class="mcp-tool-desc">Full SOL-to-Lyra migration on a selected frame: converts colors, text styles, spacing, radius, and component instances in a single pass. Large frames may take 10-30 seconds.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> per-category change counts, items that couldn't be auto-migrated</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">generate_multi_system</code><span class="mcp-target-badge figma">Figma only</span></div>
+            <p class="mcp-tool-desc">Duplicates the selected frame and generates two side-by-side versions: one styled in SOL and one in Lyra. Useful for compliance reviews or stakeholder comparisons.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> node IDs of both generated frames, differences summary</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">undo_last_conversion</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Reverts the most recent conversion operation. Only one undo level is stored — run immediately after a conversion if the result isn't right.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> operation reverted, properties restored</p>
           </div>
         </div>
+      </div>
 
-        <div class="tools-group-card reveal">
-          <div class="tools-group-name handoff">Dev handoff</div>
-          <div class="tools-group-list">
-            <span class="mcp-tool-tag handoff">extract_dev_details</span>
-            <span class="mcp-tool-tag handoff">extract_all_css</span>
-            <span class="mcp-tool-tag handoff">extract_token_css</span>
+      <!-- DEV HANDOFF -->
+      <div class="mcp-group">
+        <div class="mcp-group-header">
+          <span class="mcp-group-name handoff">Dev Handoff</span>
+          <span class="mcp-group-note">Read-only — extract specs and token CSS for engineering</span>
+        </div>
+        <div class="mcp-tool-grid">
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">extract_dev_details</code><span class="mcp-target-badge figma">Figma only</span></div>
+            <p class="mcp-tool-desc">Returns a full developer spec for the selected Figma node: dimensions, color fills, applied text styles, auto-layout properties, component props, and spacing values — formatted for handoff.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> structured spec with all properties, token names where matched</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">extract_all_css</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Generates production CSS for the selected node. Hardcoded values are replaced with Lyra CSS custom property references where a token match exists.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> CSS block with token variables, unresolved properties flagged</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">extract_token_css</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Exports the full Lyra or SOL token set as CSS custom properties in a <code style="font-size:11px;background:rgba(255,255,255,.07);padding:1px 4px;border-radius:3px">:root {}</code> block, ready to drop into a stylesheet or design token pipeline.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> complete CSS variables file for the specified design system</p>
           </div>
         </div>
+      </div>
 
-        <div class="tools-group-card reveal">
-          <div class="tools-group-name introspection">Introspection</div>
-          <div class="tools-group-list">
-            <span class="mcp-tool-tag introspection">list_targets</span>
-            <span class="mcp-tool-tag introspection">get_selection_info</span>
-            <span class="mcp-tool-tag introspection">check_libraries</span>
-            <span class="mcp-tool-tag introspection">export_design_tokens</span>
-            <span class="mcp-tool-tag introspection">get_diagnostics</span>
+      <!-- INTROSPECTION -->
+      <div class="mcp-group">
+        <div class="mcp-group-header">
+          <span class="mcp-group-name introspect">Introspection</span>
+          <span class="mcp-group-note">Status and metadata — always call list_targets first</span>
+        </div>
+        <div class="mcp-tool-grid">
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">list_targets</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Shows which clients are currently connected to the MCP server. Run this first to confirm both the Figma plugin and Chrome extension are live before using multi-client tools.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> connected clients list with version and status</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">get_selection_info</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Returns metadata about the current Figma selection or inspected Chrome element: node type, name, bounding box, applied styles, and component membership.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> node/element metadata, current style values, component info</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">check_libraries</code><span class="mcp-target-badge figma">Figma only</span></div>
+            <p class="mcp-tool-desc">Verifies that the correct Lyra and SOL Figma libraries are linked in the current file and checks for outdated library versions that could cause component mismatches.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> linked libraries, version status, missing or outdated flags</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">export_design_tokens</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Exports all design tokens from the current Figma file, or the bundled Lyra / SOL token set, as a JSON object following the W3C design token format.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> token JSON with name, value, type, and group for each token</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">get_diagnostics</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Returns connection health, plugin and extension versions, the current token hash (to verify token freshness), and any runtime errors logged by either client.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> connection status, version strings, token hash, error log</p>
           </div>
         </div>
+      </div>
 
-        <div class="tools-group-card reveal">
-          <div class="tools-group-name polish">Chrome polish</div>
-          <div class="tools-group-list">
-            <span class="mcp-tool-tag polish">polish_page</span>
-            <span class="mcp-tool-tag polish">a11y_overlay</span>
+      <!-- CHROME POLISH -->
+      <div class="mcp-group">
+        <div class="mcp-group-header">
+          <span class="mcp-group-name polish">Chrome Polish</span>
+          <span class="mcp-group-note">Live page QA overlays and token injection</span>
+        </div>
+        <div class="mcp-tool-grid">
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">polish_page</code><span class="mcp-target-badge chrome">Chrome only</span></div>
+            <p class="mcp-tool-desc">Applies Lyra token overrides to the live page: correct color variables, Be Vietnam Pro font, and spacing tokens injected as a non-destructive CSS layer. Toggle off to restore originals.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> properties overridden, overlay toggle state</p>
+          </div>
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">a11y_overlay</code><span class="mcp-target-badge chrome">Chrome only</span></div>
+            <p class="mcp-tool-desc">Draws visual indicators on top of the live page: contrast ratios on text nodes, touch target outlines, focus ring visibility, and ARIA role labels. Useful during QA walkthroughs.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> overlay toggled on/off, element count annotated</p>
           </div>
         </div>
+      </div>
 
-        <div class="tools-group-card reveal">
-          <div class="tools-group-name escape">Escape hatch</div>
-          <div class="tools-group-list">
-            <span class="mcp-tool-tag escape">call_plugin</span>
-          </div>
-          <p style="font-size: 0.78rem; color: var(--secondary); margin-top: 12px; line-height: 1.6;">Sends any raw UIMessage directly to the plugin. Use when no higher-level tool fits the job.</p>
+      <!-- ESCAPE HATCH -->
+      <div class="mcp-group">
+        <div class="mcp-group-header">
+          <span class="mcp-group-name escape">Escape Hatch</span>
+          <span class="mcp-group-note">Direct message pass-through — for advanced use only</span>
         </div>
-
+        <div class="mcp-tool-grid">
+          <div class="mcp-tool-card reveal">
+            <div class="mcp-tool-top"><code class="mcp-tool-name">call_plugin</code><span class="mcp-target-badge both">Figma + Chrome</span></div>
+            <p class="mcp-tool-desc">Sends any raw <code style="font-size:11px;background:rgba(255,255,255,.07);padding:1px 4px;border-radius:3px">UIMessage</code> directly to the plugin or extension, bypassing the higher-level tool wrappers. Use when a workflow requires a message type that no existing tool exposes.</p>
+            <p class="mcp-returns"><strong>Returns:</strong> raw response from the plugin as-is</p>
+          </div>
+        </div>
       </div>
 
       <div class="tools-note">
-        Start the MCP server with: <code>cd packages/mcp-server &amp;&amp; node src/index.js</code> &mdash; or override the port with the <code>NICE_MCP_WS_PORT</code> environment variable (default: 7331).
+        Start the MCP server: <code>cd packages/mcp-server &amp;&amp; node src/index.js</code> — override the port with <code>NICE_MCP_WS_PORT</code> (default: 7331).
       </div>
     </div>
   </div>
