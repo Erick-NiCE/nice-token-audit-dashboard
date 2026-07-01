@@ -244,63 +244,130 @@
   .issues-hidden .col-issues { display: none; }
   .issues-hidden .th-issues  { display: none; }
 
-  /* ── SITE NAV ── */
+  /* ========== NAV ========== */
   .site-nav {
-    position: sticky; top: 0; z-index: 200;
     height: 60px;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 32px;
-    background: rgba(33,33,43,0.92);
+    background: rgba(33, 33, 43, 0.92);
     backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
   }
+
   .nav-logo {
-    text-decoration: none; font-weight: 700; font-size: 16px; letter-spacing: -0.3px;
-    display: flex; align-items: center; font-family: 'Be Vietnam Pro', sans-serif;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    height: 60px;
   }
-  .logo-nice { color: #3694FC; }
-  .logo-designer { color: #fff; }
-  .nav-links { display: flex; align-items: center; gap: 4px; }
+
+  .logo-nice { color: var(--blue); }
+  .logo-designer { color: var(--text); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
   .nav-link {
-    text-decoration: none; color: rgba(255,255,255,0.6); font-size: 13px;
-    font-weight: 500; padding: 6px 12px; border-radius: 8px;
-    border-bottom: 2px solid transparent;
+    text-decoration: none;
+    color: var(--text-sec);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
     transition: color 0.2s, background 0.2s;
-    font-family: 'Be Vietnam Pro', sans-serif;
+    border-bottom: 2px solid transparent;
   }
-  .nav-link:hover { color: #fff; background: rgba(255,255,255,0.06); }
-  .nav-link.active { color: #fff; border-bottom-color: #3694FC; }
+
+  .nav-link:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .nav-link.active {
+    color: var(--text);
+    border-bottom: 2px solid var(--blue);
+  }
+
   .nav-toggle {
-    display: none; background: none; border: none; color: #fff;
-    font-size: 20px; cursor: pointer; padding: 4px 8px;
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
   }
+
   @media (max-width: 768px) {
-    .site-nav { padding: 0 16px; }
-    .nav-links { display: none; position: absolute; top: 60px; left: 0; right: 0;
-      flex-direction: column; align-items: flex-start; padding: 12px 16px;
-      background: rgba(33,33,43,0.98); border-bottom: 1px solid rgba(255,255,255,0.08);
-      gap: 2px; }
-    .nav-links.open { display: flex; }
-    .nav-toggle { display: block; }
+    .site-nav {
+      flex-wrap: wrap;
+      height: auto;
+      padding: 0 20px;
+    }
+
+    .nav-toggle {
+      display: flex;
+      align-items: center;
+      height: 60px;
+    }
+
+    .nav-links {
+      display: none;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+      padding-bottom: 12px;
+      gap: 2px;
+    }
+
+    .site-nav.open .nav-links {
+      display: flex;
+    }
+
+    .nav-link {
+      width: 100%;
+      padding: 10px 4px;
+      border-radius: 4px;
+      border-bottom: 2px solid transparent;
+    }
+
+    .nav-link.active {
+      border-bottom: 2px solid var(--blue);
+    }
   }
 </style>
 </head>
 <body>
 
-<nav class="site-nav">
-  <a href="./resources.html" class="nav-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></a>
-  <div class="nav-links" id="navLinks">
-    <a href="./resources.html" class="nav-link">Overview</a>
-    <a href="./install-guide.html" class="nav-link">Install Guide</a>
-    <a href="./claude-skills.html" class="nav-link">Claude Skills</a>
-    <a href="./the-suite.html" class="nav-link">The Suite</a>
-    <a href="./use-cases.html" class="nav-link">Use Cases</a>
-    <a href="./how-scores.html" class="nav-link">Scoring</a>
-    <a href="./index.html" class="nav-link active">Dashboard</a>
-    <a href="./roadmap.html" class="nav-link">Roadmap</a>
-  </div>
-  <button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('navLinks').classList.toggle('open')">&#9776;</button>
-</nav>
+  <!-- NAV -->
+  <nav class="site-nav" id="site-nav">
+    <a href="./resources.html" class="nav-logo">
+      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
+    </a>
+    <div class="nav-links">
+      <a href="./resources.html" class="nav-link">Overview</a>
+      <a href="./install-guide.html" class="nav-link">Install Guide</a>
+      <a href="./claude-skills.html" class="nav-link">Claude Skills</a>
+      <a href="./the-suite.html" class="nav-link">The Suite</a>
+      <a href="./use-cases.html" class="nav-link">Use Cases</a>
+      <a href="./how-scores.html" class="nav-link">Scoring</a>
+      <a href="./index.html" class="nav-link active">Dashboard</a>
+      <a href="./roadmap.html" class="nav-link">Roadmap</a>
+    </div>
+    <button class="nav-toggle" aria-label="Menu" id="nav-toggle">&#9776;</button>
+  </nav>
 
 <div class="header">
   <div class="header-bg"></div>
@@ -676,6 +743,22 @@ DB.sections.forEach((sec, i) => {
       ro.observe(el);
     });
   })();
+  </script>
+
+  <script>
+    // Mobile nav toggle
+    var navToggle = document.getElementById('nav-toggle');
+    var siteNav = document.getElementById('site-nav');
+    navToggle.addEventListener('click', function() {
+      siteNav.classList.toggle('open');
+    });
+
+    // Close nav on link click (mobile)
+    document.querySelectorAll('.nav-link').forEach(function(link) {
+      link.addEventListener('click', function() {
+        siteNav.classList.remove('open');
+      });
+    });
   </script>
 
 </body>
