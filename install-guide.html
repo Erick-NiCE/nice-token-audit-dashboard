@@ -401,40 +401,6 @@
       line-height: 1.65;
     }
 
-    /* ---- FOOTER ---- */
-    .site-footer {
-      background: rgba(0,0,0,0.3);
-      border-top: 1px solid var(--border);
-      padding: 40px 24px;
-      text-align: center;
-    }
-
-    .footer-brand {
-      font-size: 0.875rem;
-      color: var(--muted);
-      margin-bottom: 20px;
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .footer-link {
-      text-decoration: none;
-      color: var(--muted);
-      font-size: 0.8125rem;
-      padding: 4px 10px;
-      border-radius: 6px;
-      transition: color 0.2s;
-    }
-
-    .footer-link:hover {
-      color: var(--text);
-    }
-
     /* ---- REVEAL ANIMATION ---- */
     .reveal {
       opacity: 0;
@@ -768,17 +734,27 @@
   </main>
 
   <!-- FOOTER -->
+  <!-- FOOTER -->
   <footer class="site-footer">
-    <div class="footer-brand">NiCE Designer</div>
-    <nav class="footer-links">
-      <a href="./index.html" class="footer-link">Overview</a>
-      <a href="./install-guide.html" class="footer-link">Install Guide</a>
-      <a href="./claude-skills.html" class="footer-link">Claude Skills</a>
-      <a href="./use-cases.html" class="footer-link">Use Cases</a>
-      <a href="./scoring.html" class="footer-link">Scoring</a>
-      <a href="./dashboard.html" class="footer-link">Dashboard</a>
-      <a href="./roadmap.html" class="footer-link">Roadmap</a>
-    </nav>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
+      </div>
+      <nav class="footer-nav">
+        <div class="footer-nav-col">
+          <a href="./index.html">Overview</a>
+          <a href="./install-guide.html" class="active">Install Guide</a>
+          <a href="./claude-skills.html">Claude Skills</a>
+          <a href="./the-suite.html">The Suite</a>
+        </div>
+        <div class="footer-nav-col">
+          <a href="./use-cases.html">Use Cases</a>
+          <a href="./scoring.html">Scoring</a>
+          <a href="./dashboard.html">Dashboard</a>
+          <a href="./roadmap.html">Roadmap</a>
+        </div>
+      </nav>
+    </div>
   </footer>
 
   <script>

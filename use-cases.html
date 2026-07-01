@@ -387,48 +387,6 @@
       border-top: 1px solid var(--border);
     }
 
-    /* FOOTER */
-    .site-footer {
-      border-top: 1px solid var(--border);
-      padding: 48px 32px;
-      text-align: center;
-    }
-
-    .footer-brand {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .footer-tagline {
-      font-size: 0.84rem;
-      color: var(--secondary);
-      margin-bottom: 24px;
-    }
-
-    .footer-links {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-
-    .footer-link {
-      color: var(--secondary);
-      text-decoration: none;
-      font-size: 0.82rem;
-      padding: 5px 10px;
-      border-radius: 5px;
-      transition: color 0.2s, background 0.2s;
-    }
-    .footer-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
-
-    .footer-sep {
-      color: rgba(255,255,255,0.15);
-      font-size: 0.75rem;
-    }
-
     /* SCROLL REVEAL */
     .reveal {
       opacity: 0;
@@ -470,7 +428,6 @@
       .scenarios-grid { grid-template-columns: 1fr; }
       .category-header { flex-wrap: wrap; }
       .category-rule { display: none; }
-      .site-footer { padding: 40px 20px; }
     }
   </style>
 </head>
@@ -1063,24 +1020,27 @@
 </section>
 
 <!-- FOOTER -->
+<!-- FOOTER -->
 <footer class="site-footer">
-  <p class="footer-brand"><span style="color: var(--blue); font-weight: 800;">NiCE</span> Designer</p>
-  <p class="footer-tagline"></p>
-  <nav class="footer-links" aria-label="Footer navigation">
-    <a href="./index.html" class="footer-link">Overview</a>
-    <span class="footer-sep" aria-hidden="true">&#183;</span>
-    <a href="./install-guide.html" class="footer-link">Install Guide</a>
-    <span class="footer-sep" aria-hidden="true">&#183;</span>
-    <a href="./claude-skills.html" class="footer-link">Claude Skills</a>
-    <span class="footer-sep" aria-hidden="true">&#183;</span>
-    <a href="./use-cases.html" class="footer-link">Use Cases</a>
-    <span class="footer-sep" aria-hidden="true">&#183;</span>
-    <a href="./scoring.html" class="footer-link">Scoring</a>
-    <span class="footer-sep" aria-hidden="true">&#183;</span>
-    <a href="./dashboard.html" class="footer-link">Dashboard</a>
-    <span class="footer-sep" aria-hidden="true">&#183;</span>
-    <a href="./roadmap.html" class="footer-link">Roadmap</a>
-  </nav>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
+    </div>
+    <nav class="footer-nav">
+      <div class="footer-nav-col">
+        <a href="./index.html">Overview</a>
+        <a href="./install-guide.html">Install Guide</a>
+        <a href="./claude-skills.html">Claude Skills</a>
+        <a href="./the-suite.html">The Suite</a>
+      </div>
+      <div class="footer-nav-col">
+        <a href="./use-cases.html" class="active">Use Cases</a>
+        <a href="./scoring.html">Scoring</a>
+        <a href="./dashboard.html">Dashboard</a>
+        <a href="./roadmap.html">Roadmap</a>
+      </div>
+    </nav>
+  </div>
 </footer>
 
 <script>

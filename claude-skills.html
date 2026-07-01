@@ -491,50 +491,6 @@
       margin: 0;
     }
 
-    /* ---- FOOTER ---- */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 48px 32px;
-      text-align: center;
-    }
-
-    .footer-inner { max-width: 1100px; margin: 0 auto; }
-
-    .footer-brand {
-      font-weight: 800;
-      font-size: 1rem;
-      margin-bottom: 8px;
-    }
-
-    .footer-tagline {
-      font-size: 0.85rem;
-      color: var(--secondary);
-      margin-bottom: 28px;
-    }
-
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 32px;
-    }
-
-    .footer-link {
-      color: var(--secondary);
-      text-decoration: none;
-      font-size: 0.82rem;
-      padding: 5px 12px;
-      border-radius: 6px;
-      transition: color 0.2s, background 0.2s;
-    }
-    .footer-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
-
-    .footer-copy {
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.25);
-    }
-
     /* ---- SCROLL REVEAL ---- */
     .reveal {
       opacity: 0;
@@ -1136,22 +1092,26 @@
   </div>
 
   <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-top">
       <div class="footer-brand">
-        <span style="color: var(--blue); font-weight: 800;">NiCE</span> Designer
+        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
       </div>
-      <p class="footer-tagline"></p>
-      <nav class="footer-links">
-        <a href="./index.html" class="footer-link">Overview</a>
-        <a href="./install-guide.html" class="footer-link">Install Guide</a>
-        <a href="./claude-skills.html" class="footer-link">Claude Skills</a>
-        <a href="./use-cases.html" class="footer-link">Use Cases</a>
-        <a href="./scoring.html" class="footer-link">Scoring</a>
-        <a href="./dashboard.html" class="footer-link">Dashboard</a>
-        <a href="./roadmap.html" class="footer-link">Roadmap</a>
+      <nav class="footer-nav">
+        <div class="footer-nav-col">
+          <a href="./index.html">Overview</a>
+          <a href="./install-guide.html">Install Guide</a>
+          <a href="./claude-skills.html" class="active">Claude Skills</a>
+          <a href="./the-suite.html">The Suite</a>
+        </div>
+        <div class="footer-nav-col">
+          <a href="./use-cases.html">Use Cases</a>
+          <a href="./scoring.html">Scoring</a>
+          <a href="./dashboard.html">Dashboard</a>
+          <a href="./roadmap.html">Roadmap</a>
+        </div>
       </nav>
-      <p class="footer-copy">NiCE Designer - Design system compliance and conversion toolkit for SOL and Lyra.</p>
     </div>
   </footer>
 

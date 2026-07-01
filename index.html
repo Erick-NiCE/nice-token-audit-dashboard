@@ -633,12 +633,6 @@
       display: block;
     }
 
-    /* ========== FOOTER ========== */
-    .site-footer-wrap {
-      border-top: 1px solid var(--border);
-      padding: 32px;
-    }
-
     /* ── FAQ ── */
     .faq-section { max-width: 860px; margin: 0 auto; padding: 80px 48px; }
     .faq-inner { }
@@ -674,55 +668,9 @@
     .faq-a a:hover { text-decoration: underline; }
     @media (max-width: 600px) { .faq-section { padding: 48px 24px; } }
 
-    .site-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .footer-copy {
-      font-size: 13px;
-      color: var(--text-secondary);
-      text-align: center;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .footer-link {
-      font-size: 13px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .footer-link:hover {
-      color: var(--text);
-    }
-
     @media (max-width: 768px) {
       .page-section {
         padding: 60px 20px;
-      }
-
-      .site-footer-wrap {
-        padding: 24px 20px;
-      }
-
-      .site-footer {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .footer-copy {
-        text-align: left;
       }
 
       .download-card {
@@ -1058,24 +1006,25 @@
   </section>
 
   <!-- FOOTER -->
-  <footer>
-    <div class="site-footer-wrap">
-      <div class="site-footer">
-        <a href="./index.html" class="nav-logo footer-logo">
-          <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
-        </a>
-        <p class="footer-copy"></p>
-        <div class="footer-links">
-          <a href="./index.html" class="footer-link">Overview</a>
-          <a href="./install-guide.html" class="footer-link">Install Guide</a>
-          <a href="./claude-skills.html" class="footer-link">Claude Skills</a>
-          <a href="./the-suite.html" class="footer-link">The Suite</a>
-          <a href="./use-cases.html" class="footer-link">Use Cases</a>
-          <a href="./scoring.html" class="footer-link">Scoring</a>
-          <a href="./dashboard.html" class="footer-link">Dashboard</a>
-          <a href="./roadmap.html" class="footer-link">Roadmap</a>
-        </div>
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
       </div>
+      <nav class="footer-nav">
+        <div class="footer-nav-col">
+          <a href="./index.html" class="active">Overview</a>
+          <a href="./install-guide.html">Install Guide</a>
+          <a href="./claude-skills.html">Claude Skills</a>
+          <a href="./the-suite.html">The Suite</a>
+        </div>
+        <div class="footer-nav-col">
+          <a href="./use-cases.html">Use Cases</a>
+          <a href="./scoring.html">Scoring</a>
+          <a href="./dashboard.html">Dashboard</a>
+          <a href="./roadmap.html">Roadmap</a>
+        </div>
+      </nav>
     </div>
   </footer>
 

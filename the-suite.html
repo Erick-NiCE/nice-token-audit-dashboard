@@ -77,20 +77,6 @@
       max-width: 780px;
     }
 
-    .hero-eyebrow {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--emerald);
-      margin-bottom: 20px;
-      padding: 6px 14px;
-      border-radius: 100px;
-      background: rgba(0,226,160,0.1);
-      border: 1px solid rgba(0,226,160,0.2);
-    }
-
     .hero-title {
       font-size: clamp(52px, 8vw, 96px);
       font-weight: 900;
@@ -456,50 +442,6 @@
       transform: translateY(0);
     }
 
-    /* ---- FOOTER ---- */
-    .site-footer {
-      border-top: 1px solid var(--border);
-      padding: 48px 24px 32px;
-      max-width: 1240px;
-      margin: 0 auto;
-    }
-
-    .footer-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 32px;
-      flex-wrap: wrap;
-    }
-
-    .footer-brand .footer-logo {
-      font-size: 20px;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-    .footer-brand .footer-tagline {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .footer-nav {
-      display: flex;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-
-    .footer-nav-col { display: flex; flex-direction: column; gap: 10px; }
-    .footer-nav-col a {
-      color: var(--text-sec);
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-    .footer-nav-col a:hover { color: #fff; }
-    .footer-nav-col a.active { color: var(--blue); }
-
   </style>
 </head>
 <body>
@@ -530,7 +472,6 @@
     <div class="hero-orb hero-orb-2"></div>
     <div class="hero-orb hero-orb-3"></div>
     <div class="hero-content">
-      <div class="hero-eyebrow">The Suite</div>
       <h1 class="hero-title">
         <span class="hero-title-white">Eight tools.</span>
         <span class="hero-title-shimmer">One system.</span>
@@ -870,30 +811,26 @@
   </section>
 
   <!-- FOOTER -->
-  <footer style="border-top: 1px solid var(--border); margin-top: 40px;">
-    <div class="site-footer">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <div class="footer-logo">
-            <span style="color:#3694FC; font-weight:800;">NiCE</span><span style="color:#fff; font-weight:800;"> Designer</span>
-          </div>
-          <div class="footer-tagline"></div>
-        </div>
-        <nav class="footer-nav">
-          <div class="footer-nav-col">
-            <a href="./index.html">Overview</a>
-            <a href="./install-guide.html">Install Guide</a>
-            <a href="./claude-skills.html">Claude Skills</a>
-            <a href="./the-suite.html" class="active">The Suite</a>
-          </div>
-          <div class="footer-nav-col">
-            <a href="./use-cases.html">Use Cases</a>
-            <a href="./scoring.html">Scoring</a>
-            <a href="./dashboard.html">Dashboard</a>
-            <a href="./roadmap.html">Roadmap</a>
-          </div>
-        </nav>
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo"><span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span></div>
       </div>
+      <nav class="footer-nav">
+        <div class="footer-nav-col">
+          <a href="./index.html">Overview</a>
+          <a href="./install-guide.html">Install Guide</a>
+          <a href="./claude-skills.html">Claude Skills</a>
+          <a href="./the-suite.html" class="active">The Suite</a>
+        </div>
+        <div class="footer-nav-col">
+          <a href="./use-cases.html">Use Cases</a>
+          <a href="./scoring.html">Scoring</a>
+          <a href="./dashboard.html">Dashboard</a>
+          <a href="./roadmap.html">Roadmap</a>
+        </div>
+      </nav>
     </div>
   </footer>
 
