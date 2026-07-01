@@ -1,0 +1,116 @@
+/*!
+ * NiCE Designer — effect layer styles (pairs with nice-effects.js)
+ * Applied automatically by the JS; you normally don't touch these.
+ */
+
+/* Liquid fill */
+.nice-liquid-fx {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  opacity: 0;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.nice-liquid-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: url(#nice-goo);
+}
+
+/* Lightning / plasma ball */
+.nice-plasma-canvas,
+.nice-motes-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* =========================================================
+   Reusable brand gradients
+   - .nice-gradient-animated       slow diagonal drift
+   - .nice-gradient-animated-fast  quicker, multi-axis drift
+   - .nice-gradient-static         same palette, no motion
+   ========================================================= */
+@keyframes nice-gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes nice-gradient-shift-fast {
+  0%   { background-position: 0% 0%; }
+  33%  { background-position: 100% 50%; }
+  66%  { background-position: 0% 100%; }
+  100% { background-position: 0% 0%; }
+}
+.nice-gradient-animated {
+  background: linear-gradient(135deg, #21212B 0%, #170d40 18%, #0d1f6b 38%, #3694FC 55%, #6100FF 72%, #00E2A0 87%, #21212B 100%);
+  background-size: 400% 400%;
+  animation: nice-gradient-shift 13s ease infinite;
+}
+.nice-gradient-animated-fast {
+  background: linear-gradient(120deg, #21212B 0%, #6100FF 30%, #3694FC 52%, #00E2A0 74%, #21212B 100%);
+  background-size: 300% 300%;
+  animation: nice-gradient-shift-fast 8s ease infinite;
+}
+.nice-gradient-static {
+  background: linear-gradient(135deg, #21212B 0%, #170d40 18%, #0d1f6b 38%, #3694FC 55%, #6100FF 72%, #00E2A0 87%, #21212B 100%);
+}
+
+/* =========================================================
+   Micro-animations
+   ========================================================= */
+
+/* Page transition: fade in on load, fade out before navigating */
+@keyframes nice-page-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+body {
+  animation: nice-page-in 0.35s ease both;
+}
+body.nice-leaving {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Tab (nav link) micro-interaction */
+.nav-link {
+  transition: color 0.2s, background 0.2s, transform 0.15s ease;
+}
+.nav-link:hover { transform: translateY(-1px); }
+.nav-link:active { transform: translateY(0) scale(0.96); }
+
+/* Animated mobile nav open/close (theme.css toggles the .open class) */
+@media (max-width: 768px) {
+  .site-nav .nav-links {
+    display: flex;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding-bottom: 0;
+    transition: max-height 0.32s ease, opacity 0.26s ease, padding-bottom 0.32s ease;
+  }
+  .site-nav.open .nav-links {
+    max-height: 400px;
+    opacity: 1;
+    padding-bottom: 12px;
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  body { animation: none; }
+  body.nice-leaving { opacity: 1; }
+  .nice-gradient-animated,
+  .nice-gradient-animated-fast { animation: none; }
+  .nav-link:hover,
+  .nav-link:active { transform: none; }
+  .site-nav .nav-links { transition: none; }
+}

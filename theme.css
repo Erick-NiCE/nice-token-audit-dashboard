@@ -1,0 +1,155 @@
+/*!
+ * NiCE Designer — shared theme
+ * -------------------------------------------------------------
+ * Single source of truth for the site's design tokens, base
+ * styles, and the top navigation. Every page links this file, so
+ * changing a color or the nav here updates the whole site.
+ *
+ * Page-specific structural tokens (e.g. sidebar width, per-page
+ * card shades) stay in that page's own <style> block.
+ */
+
+:root {
+  /* Surfaces */
+  --bg:            #21212B;
+  --surface:       #2f2f3d;
+  --card:          #2f2f3d;
+
+  /* Lines & text */
+  --border:            rgba(255, 255, 255, 0.08);
+  --text:              #ffffff;
+  --text-secondary:    rgba(255, 255, 255, 0.58);
+  --text-sec:          rgba(255, 255, 255, 0.58); /* alias */
+  --secondary:         rgba(255, 255, 255, 0.58); /* alias */
+  --sec:               rgba(255, 255, 255, 0.58); /* alias */
+  --muted:             rgba(255, 255, 255, 0.30);
+  --text-muted:        rgba(255, 255, 255, 0.30); /* alias */
+
+  /* Brand palette */
+  --blue:          #3694FC;
+  --electric:      #025AFB;
+  --electric-blue: #025AFB; /* alias */
+  --elblue:        #025AFB; /* alias */
+  --indigo:        #6100FF;
+  --emerald:       #00E2A0;
+  --teal:          #36EAD0;
+  --coral:         #FF5B8A;
+  --lyra:          #B98FFF;
+  --amber:         #f59e0b;
+
+  /* Shape & layout */
+  --radius:        16px;
+  --radius-sm:     8px;
+  --nav-h:         60px;
+
+  /* Type */
+  --font: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ========== BASE ========== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ========== NAV ========== */
+.site-nav {
+  height: 60px;
+  background: rgba(33, 33, 43, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+}
+.nav-logo {
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  height: 60px;
+}
+.logo-nice { color: var(--blue); }
+.logo-designer { color: var(--text); }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.nav-link {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+  border-bottom: 2px solid transparent;
+}
+.nav-link:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+.nav-link.active {
+  color: var(--text);
+  border-bottom: 2px solid var(--blue);
+}
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+}
+@media (max-width: 768px) {
+  .site-nav {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 0 20px;
+  }
+  .nav-toggle {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    order: 2; /* stay on the top row, right of the logo */
+  }
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding-bottom: 12px;
+    gap: 2px;
+    order: 3; /* drop below the top row when opened */
+  }
+  .site-nav.open .nav-links {
+    display: flex;
+  }
+  .nav-link {
+    width: 100%;
+    padding: 10px 4px;
+    border-radius: 4px;
+    border-bottom: 2px solid transparent;
+  }
+  .nav-link.active {
+    border-bottom: 2px solid var(--blue);
+  }
+}

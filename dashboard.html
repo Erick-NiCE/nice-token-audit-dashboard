@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NiCE CXone Accessibility Audit Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="nice-effects.css" />
+  <script src="nice-effects.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --surface: #2a2a36; /* page-specific: slightly darker section-nav */
+  }
+
+  @keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position:  200% center; }
+  }
+  @keyframes orb {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50%      { transform: translate(50px,-30px) scale(1.08); }
+  }
+
+  /* HEADER */
+  .header {
+    position: relative;
+    padding: 28px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg,
+      #21212B 0%, #1a1040 20%, #0d1f6b 40%,
+      #3694FC 58%, #6100FF 75%, #00E2A0 90%, #21212B 100%
+    );
+    background-size: 400% 400%;
+    animation: gradientShift 12s ease infinite;
+    opacity: 0.75;
+  }
+  .header-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 20% 50%, transparent 40%, #21212B 100%);
+  }
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(60px); pointer-events: none;
+  }
+  .orb-h1 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(54,148,252,0.5), transparent 70%);
+    top: -80px; right: 5%;
+    animation: orb 14s ease-in-out infinite;
+  }
+  .orb-h2 {
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(97,0,255,0.4), transparent 70%);
+    bottom: -60px; right: 20%;
+    animation: orb 18s ease-in-out infinite reverse;
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; position: relative; z-index: 1; min-width: 0; flex: 1; }
+  .header-title-wrap { min-width: 0; }
+  .header-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--emerald); margin-bottom: 4px; }
+  .header-title {
+    font-size: 22px; font-weight: 900; letter-spacing: -0.5px;
+    background: linear-gradient(90deg, #fff 0%, var(--blue) 40%, var(--teal) 70%, var(--emerald) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 4s linear infinite;
+  }
+  .header-sub { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 3px; }
+  .header-stat { text-align: right; position: relative; z-index: 1; flex-shrink: 0; }
+  .header-stat .big { font-size: 36px; font-weight: 900; color: var(--emerald); line-height: 1; letter-spacing: -1px; }
+  .header-stat .label { font-size: 10px; color: rgba(255,255,255,0.4); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+
+  @media (max-width: 640px) {
+    .header { flex-wrap: wrap; padding: 20px; gap: 12px; }
+    .header-left { flex: 1 1 100%; flex-wrap: wrap; gap: 12px; }
+    .header-title-wrap { flex: 1 1 100%; }
+    .header-title { font-size: 18px; }
+    .header-stat { text-align: left; flex-basis: 100%; }
+    .header-stat .big { font-size: 30px; }
+  }
+
+  /* KPI CARDS */
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; padding: 14px 20px; }
+  .kpi-card {
+    background: var(--card); border-radius: 12px; padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--border);
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .kpi-card:hover { transform: translateY(-2px); }
+  .kpi-card.sol  { border-top-color: var(--blue); }
+  .kpi-card.lyra { border-top-color: var(--lyra); }
+  .kpi-card.acc  { border-top-color: #f59e0b; }
+  .kpi-card.full-acc { border-top-color: var(--coral); }
+  .kpi-card.sections { border-top-color: var(--emerald); }
+  .kpi-card.issues   { border-top-color: rgba(255,255,255,0.2); }
+  .kpi-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+  .kpi-value { font-size: 26px; font-weight: 900; margin: 6px 0 3px; line-height: 1; letter-spacing: -0.5px; }
+  .kpi-card.sol .kpi-value       { color: var(--blue); }
+  .kpi-card.lyra .kpi-value      { color: var(--lyra); }
+  .kpi-card.acc .kpi-value       { color: #f59e0b; }
+  .kpi-card.full-acc .kpi-value  { color: var(--coral); }
+  .kpi-card.sections .kpi-value  { color: var(--emerald); }
+  .kpi-sub { font-size: 10px; color: var(--muted); font-weight: 500; }
+
+  /* A11Y NOTE */
+  .a11y-note {
+    margin: 0 20px 8px;
+    background: rgba(245,158,11,0.07);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 10px; padding: 10px 16px;
+    font-size: 12px; color: rgba(255,255,255,0.55);
+    display: flex; gap: 24px;
+  }
+  .a11y-note-item { display: flex; gap: 8px; align-items: flex-start; }
+  .a11y-badge { font-size: 9px; font-weight: 700; text-transform: uppercase; border-radius: 4px; padding: 2px 6px; white-space: nowrap; flex-shrink: 0; margin-top: 1px; }
+  .badge-min  { background: rgba(245,158,11,0.2); color: #f59e0b; }
+  .badge-full { background: rgba(255,91,138,0.2); color: var(--coral); }
+
+  /* TOGGLE */
+  .toggle-bar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 20px;
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid var(--border);
+    font-size: 12px; color: var(--text-sec);
+  }
+  .toggle-label { font-weight: 600; }
+  .toggle-switch { position: relative; display: inline-block; width: 36px; height: 20px; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.1); border-radius: 20px; transition: .2s; }
+  .toggle-slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background: rgba(255,255,255,0.5); border-radius: 50%; transition: .2s; }
+  input:checked + .toggle-slider { background: var(--blue); }
+  input:checked + .toggle-slider:before { transform: translateX(16px); background: white; }
+
+  /* NAV */
+  .section-nav {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    padding: 10px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    padding: 6px 14px; border-radius: 100px;
+    cursor: pointer; font-size: 12px; font-weight: 600;
+    color: var(--text-sec);
+    transition: all .15s;
+    font-family: var(--font);
+  }
+  .nav-btn:hover { background: rgba(255,255,255,0.09); color: var(--text); border-color: rgba(255,255,255,0.15); }
+  .nav-btn.active { background: rgba(54,148,252,0.15); color: var(--blue); border-color: rgba(54,148,252,0.35); }
+
+  /* SECTION PANEL */
+  .section-panel { display: none; padding: 16px 20px 32px; }
+  .section-panel.active { display: block; }
+  .section-header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .section-header h2 { font-size: 20px; font-weight: 800; letter-spacing: -0.3px; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 100px; font-size: 10px; font-weight: 700; }
+
+  /* GAUGES */
+  .gauges-row { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .gauge-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 20px;
+    text-align: center; flex: 1; min-width: 150px;
+    transition: border-color 0.2s;
+  }
+  .gauge-card:hover { border-color: rgba(255,255,255,0.14); }
+  .gauge-card h4 { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .gauge-wrap { position: relative; width: 100%; max-width: 240px; height: 120px; margin: 0 auto; }
+  .gauge-wrap canvas { width: 100% !important; height: 100% !important; }
+  .gauge-center { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); font-size: 18px; font-weight: 800; white-space: nowrap; }
+
+  /* SEARCH */
+  .search-bar { margin-bottom: 10px; }
+  .search-bar input {
+    width: 100%; max-width: 300px;
+    padding: 8px 14px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; font-size: 13px;
+    color: var(--text); font-family: var(--font);
+    transition: border-color 0.2s;
+  }
+  .search-bar input::placeholder { color: var(--muted); }
+  .search-bar input:focus { outline: none; border-color: rgba(54,148,252,0.4); }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; background: var(--card); border-radius: 12px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    background: rgba(255,255,255,0.03);
+    padding: 10px 12px; text-align: left;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .5px; color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer; user-select: none; white-space: nowrap;
+    transition: color 0.15s;
+  }
+  th:hover { color: var(--text); }
+  th .sort-icon { display: inline-block; margin-left: 4px; opacity: 0.4; font-size: 10px; }
+  th.sort-asc .sort-icon::after  { content: " \25B2"; opacity: 1; }
+  th.sort-desc .sort-icon::after { content: " \25BC"; opacity: 1; }
+  th:not(.sort-asc):not(.sort-desc) .sort-icon::after { content: " \21C5"; }
+  td { padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text-sec); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.025); color: var(--text); }
+  .score-pill { display: inline-block; padding: 2px 9px; border-radius: 100px; font-size: 11px; font-weight: 700; }
+  .pill-good { background: rgba(0,226,160,0.15); color: #00E2A0; }
+  .pill-ok   { background: rgba(245,158,11,0.15); color: #f59e0b; }
+  .pill-bad  { background: rgba(255,91,138,0.15); color: var(--coral); }
+  .issues    { color: var(--muted); font-size: 12px; }
+  .col-page  { min-width: 160px; font-weight: 600; color: var(--text); }
+  .col-score { min-width: 80px; }
+  .col-issues{ min-width: 80px; }
+  .th-min    { border-left: 2px solid rgba(245,158,11,0.3); }
+  .th-full   { border-left: 2px solid rgba(255,91,138,0.3); }
+  .td-min    { border-left: 2px solid rgba(245,158,11,0.1); }
+  .td-full   { border-left: 2px solid rgba(255,91,138,0.1); }
+
+  .issues-hidden .col-issues { display: none; }
+  .issues-hidden .th-issues  { display: none; }
+
+</style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="site-nav" id="site-nav">
+    <a href="./index.html" class="nav-logo">
+      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
+    </a>
+    <div class="nav-links">
+      <a href="./index.html" class="nav-link">Overview</a>
+      <a href="./install-guide.html" class="nav-link">Install Guide</a>
+      <a href="./claude-skills.html" class="nav-link">Claude Skills</a>
+      <a href="./the-suite.html" class="nav-link">The Suite</a>
+      <a href="./use-cases.html" class="nav-link">Use Cases</a>
+      <a href="./scoring.html" class="nav-link">Scoring</a>
+      <a href="./dashboard.html" class="nav-link active">Dashboard</a>
+      <a href="./roadmap.html" class="nav-link">Roadmap</a>
+    </div>
+    <button class="nav-toggle" aria-label="Menu" id="nav-toggle">&#9776;</button>
+  </nav>
+
+<div class="header">
+  <div class="header-bg"></div>
+  <div class="orb orb-h1"></div>
+  <div class="orb orb-h2"></div>
+  <div class="header-left">
+    <img src="data:image/png;base64,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" alt="NiCE" style="height:40px; display:block; opacity:0.9;">
+    <div class="header-title-wrap">
+      <div class="header-eyebrow">Compliance Report</div>
+      <div class="header-title">CXone Accessibility Audit Dashboard</div>
+      <div class="header-sub">Audited: 2026-06-20 &nbsp;&middot;&nbsp; Design Systems: SOL / LYRA</div>
+    </div>
+  </div>
+  <div class="header-stat">
+    <div class="big">144</div>
+    <div class="label">Pages Audited</div>
+  </div>
+</div>
+
+<div class="kpi-row">
+  <div class="kpi-card sol">
+    <div class="kpi-label">Overall SOL Score</div>
+    <div class="kpi-value">89%</div>
+    <div class="kpi-sub">Token Compliance</div>
+  </div>
+  <div class="kpi-card lyra">
+    <div class="kpi-label">Overall LYRA Score</div>
+    <div class="kpi-value">96%</div>
+    <div class="kpi-sub">Token Compliance</div>
+  </div>
+  <div class="kpi-card acc">
+    <div class="kpi-label">Min A11y Score</div>
+    <div class="kpi-value">61%</div>
+    <div class="kpi-sub">Excl. contrast &amp; touch</div>
+  </div>
+  <div class="kpi-card full-acc">
+    <div class="kpi-label">Full A11y Score</div>
+    <div class="kpi-value">0%</div>
+    <div class="kpi-sub">Incl. all checks</div>
+  </div>
+  <div class="kpi-card sections">
+    <div class="kpi-label">Sections</div>
+    <div class="kpi-value">12</div>
+    <div class="kpi-sub">Product areas</div>
+  </div>
+  <div class="kpi-card issues">
+    <div class="kpi-label">SOL / LYRA Issues</div>
+    <div class="kpi-value" style="font-size:18px; color:var(--coral)">241,887</div>
+    <div class="kpi-sub">103,279 LYRA issues</div>
+  </div>
+</div>
+
+<div class="a11y-note">
+  <div class="a11y-note-item">
+    <span class="a11y-badge badge-min">Min A11y</span>
+    <span>Accessibility score that <strong>excludes</strong> color contrast ratios and mobile/touch target size issues. Reflects semantic HTML, keyboard navigation, ARIA labels, and focus management.</span>
+  </div>
+  <div class="a11y-note-item">
+    <span class="a11y-badge badge-full">Full A11y</span>
+    <span>Complete WCAG 2.1 AA score <strong>including</strong> contrast ratios and touch target sizes. This is our long-term compliance goal and the benchmark for production readiness.</span>
+  </div>
+</div>
+
+<div class="toggle-bar">
+  <span class="toggle-label">Show issue counts</span>
+  <label class="toggle-switch">
+    <input type="checkbox" id="issueToggle" onchange="toggleIssues(this)">
+    <span class="toggle-slider"></span>
+  </label>
+  <span id="toggleHint" style="color:var(--muted); font-size:11px;">Off &mdash; showing scores only</span>
+</div>
+<div class="section-nav" id="sectionNav"></div>
+<div id="panels"></div>
+
+<script>
+function toggleIssues(cb) {
+  document.body.classList.toggle('issues-hidden', !cb.checked);
+  document.getElementById('toggleHint').textContent = cb.checked ? 'On — showing scores + issue counts' : 'Off — showing scores only';
+}
+document.addEventListener('DOMContentLoaded', function() {
+  document.body.classList.add('issues-hidden');
+});
+
+const DB = {"sections": ["Admin", "Supervisor", "Agent Integrations", "Workforce Intelligence", "ACD", "Studio", "WFM", "Quality Management", "Coaching", "Interactions Hub", "MyZone", "Actions"], "data": {"Admin": [{"page": "Employees", "sol": 93, "sol_issues": 1305, "lyra": 93, "lyra_issues": 1262, "acc": 34, "acc_issues": 14, "full_acc": 0, "full_acc_issues": 501}, {"page": "WEM Skills", "sol": 96, "sol_issues": 1142, "lyra": 98, "lyra_issues": 622, "acc": 21, "acc_issues": 19, "full_acc": 0, "full_acc_issues": 192}, {"page": "Groups", "sol": 98, "sol_issues": 263, "lyra": 99, "lyra_issues": 191, "acc": 69, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 98}, {"page": "Employee Templatyes", "sol": 98, "sol_issues": 231, "lyra": 99, "lyra_issues": 203, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 136}, {"page": "Teams", "sol": 75, "sol_issues": 5661, "lyra": 75, "lyra_issues": 5731, "acc": 59, "acc_issues": 9, "full_acc": 0, "full_acc_issues": 162}, {"page": "Scheduling Unit", "sol": 95, "sol_issues": 792, "lyra": 97, "lyra_issues": 428, "acc": 41, "acc_issues": 15, "full_acc": 0, "full_acc_issues": 143}, {"page": "Location Definitions", "sol": 98, "sol_issues": 331, "lyra": 98, "lyra_issues": 328, "acc": 59, "acc_issues": 9, "full_acc": 0, "full_acc_issues": 146}, {"page": "Business Data", "sol": 98, "sol_issues": 334, "lyra": 98, "lyra_issues": 335, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 119}, {"page": "Account Settings", "sol": 98, "sol_issues": 356, "lyra": 98, "lyra_issues": 347, "acc": 36, "acc_issues": 14, "full_acc": 0, "full_acc_issues": 231}, {"page": "Business Data", "sol": 98, "sol_issues": 334, "lyra": 98, "lyra_issues": 335, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 176}, {"page": "Bulk Upload Portal", "sol": 98, "sol_issues": 347, "lyra": 98, "lyra_issues": 347, "acc": 36, "acc_issues": 14, "full_acc": 0, "full_acc_issues": 176}, {"page": "Recording Policies", "sol": 98, "sol_issues": 356, "lyra": 98, "lyra_issues": 347, "acc": 36, "acc_issues": 14, "full_acc": 0, "full_acc_issues": 176}, {"page": "Hierachies", "sol": 98, "sol_issues": 282, "lyra": 98, "lyra_issues": 281, "acc": 63, "acc_issues": 9, "full_acc": 0, "full_acc_issues": 83}, {"page": "Access Key Manager", "sol": 99, "sol_issues": 151, "lyra": 99, "lyra_issues": 151, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 120}, {"page": "Role and Permissions", "sol": 84, "sol_issues": 5577, "lyra": 84, "lyra_issues": 5564, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 47}, {"page": "Login Authenticator", "sol": 84, "sol_issues": 5535, "lyra": 74, "lyra_issues": 5533, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 96}, {"page": "Views", "sol": 99, "sol_issues": 241, "lyra": 99, "lyra_issues": 238, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 154}, {"page": "Privacy", "sol": 100, "sol_issues": 95, "lyra": 100, "lyra_issues": 94, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 104}, {"page": "Locked Employees", "sol": 99, "sol_issues": 154, "lyra": 99, "lyra_issues": 175, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 116}, {"page": "Search", "sol": 99, "sol_issues": 100, "lyra": 99, "lyra_issues": 100, "acc": 63, "acc_issues": 9, "full_acc": 0, "full_acc_issues": 36}, {"page": "Life Cycle Management", "sol": 99, "sol_issues": 117, "lyra": 99, "lyra_issues": 114, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 38}, {"page": "Long-term File Retrieval", "sol": 98, "sol_issues": 259, "lyra": 98, "lyra_issues": 93, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 35}, {"page": "Storage Settings", "sol": 99, "sol_issues": 116, "lyra": 99, "lyra_issues": 116, "acc": 79, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 49}, {"page": "File Activity", "sol": 99, "sol_issues": 191, "lyra": 95, "lyra_issues": 975, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 113}, {"page": "Multi Region Storage", "sol": 99, "sol_issues": 164, "lyra": 99, "lyra_issues": 164, "acc": 76, "acc_issues": 6, "full_acc": 0, "full_acc_issues": 53}], "Supervisor": [{"page": "Live Monitoring", "sol": 96, "sol_issues": 738, "lyra": 97, "lyra_issues": 427, "acc": 3, "acc_issues": 21, "full_acc": 0, "full_acc_issues": 283}, {"page": "Evaluation Tasks", "sol": 98, "sol_issues": 285, "lyra": 99, "lyra_issues": 76, "acc": 68, "acc_issues": 8, "full_acc": 0, "full_acc_issues": 48}, {"page": "Quality Performance", "sol": 99, "sol_issues": 112, "lyra": 99, "lyra_issues": 112, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 30}, {"page": "Dashboards", "sol": null, "sol_issues": null, "lyra": null, "lyra_issues": null, "acc": null, "acc_issues": null, "full_acc": 0, "full_acc_issues": 25}, {"page": "Reporting", "sol": 97, "sol_issues": 464, "lyra": 97, "lyra_issues": 451, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 138}, {"page": "Interactions Search", "sol": 99, "sol_issues": 187, "lyra": 99, "lyra_issues": 184, "acc": 74, "acc_issues": 6, "full_acc": 0, "full_acc_issues": 50}, {"page": "Settings", "sol": 99, "sol_issues": 113, "lyra": 99, "lyra_issues": 113, "acc": 78, "acc_issues": 6, "full_acc": 0, "full_acc_issues": 55}], "Agent Integrations": [{"page": "Configurations", "sol": 95, "sol_issues": 674, "lyra": 97, "lyra_issues": 421, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 116}], "Workforce Intelligence": [{"page": "Notification Settings", "sol": 99, "sol_issues": 249, "lyra": 98, "lyra_issues": 341, "acc": 42, "acc_issues": 12, "full_acc": 0, "full_acc_issues": 42}, {"page": "Data Points", "sol": 99, "sol_issues": 249, "lyra": 99, "lyra_issues": 147, "acc": 55, "acc_issues": 9, "full_acc": 0, "full_acc_issues": 19}, {"page": "Rules", "sol": 99, "sol_issues": 263, "lyra": 99, "lyra_issues": 263, "acc": 55, "acc_issues": 9, "full_acc": 0, "full_acc_issues": 25}, {"page": "Pending Rule Actions", "sol": 99, "sol_issues": 148, "lyra": 99, "lyra_issues": 108, "acc": 75, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 19}], "ACD": [{"page": "ACD Users", "sol": 94, "sol_issues": 1273, "lyra": 94, "lyra_issues": 1312, "acc": 40, "acc_issues": 12, "full_acc": 0, "full_acc_issues": 56}, {"page": "ACD Skills", "sol": 95, "sol_issues": 1184, "lyra": 87, "lyra_issues": 3446, "acc": 0, "acc_issues": 165, "full_acc": 0, "full_acc_issues": 46}, {"page": "Routing Attributes", "sol": 99, "sol_issues": 265, "lyra": 99, "lyra_issues": 265, "acc": 55, "acc_issues": 9, "full_acc": 0, "full_acc_issues": 25}, {"page": "Campaign", "sol": 97, "sol_issues": 686, "lyra": 98, "lyra_issues": 442, "acc": 85, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 187}, {"page": "Dispositions", "sol": 97, "sol_issues": 605, "lyra": 98, "lyra_issues": 406, "acc": 85, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 187}, {"page": "Points of Contact", "sol": 99, "sol_issues": 289, "lyra": 96, "lyra_issues": 945, "acc": 55, "acc_issues": 9, "full_acc": 0, "full_acc_issues": 32}, {"page": "SMS Branding", "sol": 96, "sol_issues": 822, "lyra": 99, "lyra_issues": 202, "acc": 60, "acc_issues": 8, "full_acc": 0, "full_acc_issues": 17}, {"page": "SMS Registrations", "sol": 99, "sol_issues": 118, "lyra": 96, "lyra_issues": 756, "acc": 70, "acc_issues": 8, "full_acc": 0, "full_acc_issues": 17}, {"page": "Scripts", "sol": 98, "sol_issues": 407, "lyra": 98, "lyra_issues": 407, "acc": 0, "acc_issues": 39, "full_acc": 0, "full_acc_issues": 103}, {"page": "Scripts Schedules", "sol": 99, "sol_issues": 121, "lyra": 96, "lyra_issues": 771, "acc": 65, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 23}, {"page": "Hours of Operation", "sol": 96, "sol_issues": 855, "lyra": 96, "lyra_issues": 855, "acc": 60, "acc_issues": 8, "full_acc": 0, "full_acc_issues": 20}, {"page": "Workflow Data", "sol": 96, "sol_issues": 128, "lyra": 96, "lyra_issues": 771, "acc": 65, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 23}, {"page": "Chat Profiles", "sol": 99, "sol_issues": 128, "lyra": 96, "lyra_issues": 771, "acc": 65, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 25}, {"page": "Tags", "sol": 97, "sol_issues": 618, "lyra": 98, "lyra_issues": 412, "acc": 85, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 186}, {"page": "Email Domains", "sol": 95, "sol_issues": 1007, "lyra": 95, "lyra_issues": 1040, "acc": 14, "acc_issues": 18, "full_acc": 0, "full_acc_issues": 33}, {"page": "Skill Control", "sol": 93, "sol_issues": 1686, "lyra": 95, "lyra_issues": 1251, "acc": 85, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 426}, {"page": "Calling", "sol": 96, "sol_issues": 838, "lyra": 99, "lyra_issues": 196, "acc": 50, "acc_issues": 10, "full_acc": 0, "full_acc_issues": 23}, {"page": "Call Suppression", "sol": 96, "sol_issues": 838, "lyra": 99, "lyra_issues": 196, "acc": 50, "acc_issues": 10, "full_acc": 0, "full_acc_issues": 34}, {"page": "DNC", "sol": 99, "sol_issues": 235, "lyra": 96, "lyra_issues": 895, "acc": 50, "acc_issues": 10, "full_acc": 0, "full_acc_issues": 22}, {"page": "Custom Data Definitions", "sol": 96, "sol_issues": 873, "lyra": 99, "lyra_issues": 277, "acc": 22, "acc_issues": 16, "full_acc": 0, "full_acc_issues": 36}, {"page": "Process Queue", "sol": 96, "sol_issues": 838, "lyra": 99, "lyra_issues": 196, "acc": 50, "acc_issues": 10, "full_acc": 0, "full_acc_issues": 18}, {"page": "Unavailable Codes", "sol": 97, "sol_issues": 691, "lyra": 98, "lyra_issues": 466, "acc": 85, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 201}, {"page": "Stations", "sol": 96, "sol_issues": 758, "lyra": 97, "lyra_issues": 542, "acc": 85, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 226}, {"page": "Station Profiles", "sol": 96, "sol_issues": 758, "lyra": 98, "lyra_issues": 339, "acc": 85, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 171}, {"page": "Address Books", "sol": 99, "sol_issues": 247, "lyra": 99, "lyra_issues": 247, "acc": 60, "acc_issues": 8, "full_acc": 0, "full_acc_issues": 33}, {"page": "Quick Replies", "sol": 99, "sol_issues": 272, "lyra": 96, "lyra_issues": 920, "acc": 45, "acc_issues": 11, "full_acc": 0, "full_acc_issues": 56}, {"page": "Agent Patterns", "sol": 96, "sol_issues": 898, "lyra": 96, "lyra_issues": 932, "acc": 17, "acc_issues": 17, "full_acc": 0, "full_acc_issues": 39}, {"page": "Locations", "sol": 97, "sol_issues": 526, "lyra": 98, "lyra_issues": 350, "acc": 85, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 173}, {"page": "Business Units", "sol": 92, "sol_issues": 1980, "lyra": 89, "lyra_issues": 2859, "acc": 0, "acc_issues": 65, "full_acc": 0, "full_acc_issues": 227}, {"page": "DB Connectors", "sol": 100, "sol_issues": 80, "lyra": 96, "lyra_issues": 721, "acc": 90, "acc_issues": 2, "full_acc": 30, "full_acc_issues": 14}, {"page": "Agent Messaging", "sol": 97, "sol_issues": 507, "lyra": 98, "lyra_issues": 431, "acc": 85, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 195}, {"page": "Agent Issues", "sol": 95, "sol_issues": 969, "lyra": 98, "lyra_issues": 447, "acc": 10, "acc_issues": 18, "full_acc": 0, "full_acc_issues": 163}, {"page": "Browser ACD Files", "sol": 98, "sol_issues": 475, "lyra": 95, "lyra_issues": 1164, "acc": 0, "acc_issues": 26, "full_acc": 0, "full_acc_issues": 62}, {"page": "SLA", "sol": 38, "sol_issues": 9101, "lyra": 98, "lyra_issues": 226, "acc": 40, "acc_issues": 12, "full_acc": 0, "full_acc_issues": 23}, {"page": "Hours of Operation", "sol": 39, "sol_issues": 10890, "lyra": 84, "lyra_issues": 2888, "acc": 35, "acc_issues": 13, "full_acc": 0, "full_acc_issues": 139}, {"page": "Customer Fields", "sol": 35, "sol_issues": 9566, "lyra": 98, "lyra_issues": 226, "acc": 65, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 120}, {"page": "Routing Attributes", "sol": 35, "sol_issues": 9630, "lyra": 35, "lyra_issues": 9630, "acc": 45, "acc_issues": 11, "full_acc": 0, "full_acc_issues": 133}, {"page": "Routing Queues", "sol": 35, "sol_issues": 9722, "lyra": 98, "lyra_issues": 301, "acc": 55, "acc_issues": 9, "full_acc": 0, "full_acc_issues": 130}, {"page": "Points of Contact Digital ", "sol": 34, "sol_issues": 10106, "lyra": 96, "lyra_issues": 627, "acc": 35, "acc_issues": 13, "full_acc": 0, "full_acc_issues": 159}, {"page": "Bring Your Own Channel", "sol": 35, "sol_issues": 9483, "lyra": 99, "lyra_issues": 169, "acc": 5, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 121}, {"page": "Roles", "sol": 38, "sol_issues": 9131, "lyra": 98, "lyra_issues": 256, "acc": 65, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 141}, {"page": "Tags", "sol": 35, "sol_issues": 9727, "lyra": 98, "lyra_issues": 368, "acc": 65, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 125}, {"page": "Quick Responses", "sol": 35, "sol_issues": 9487, "lyra": 99, "lyra_issues": 176, "acc": 65, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 122}, {"page": "Forms", "sol": 35, "sol_issues": 9553, "lyra": 98, "lyra_issues": 232, "acc": 65, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 123}, {"page": "Satisfaction Surveys", "sol": 35, "sol_issues": 9947, "lyra": 98, "lyra_issues": 488, "acc": 0, "acc_issues": 37, "full_acc": 0, "full_acc_issues": 151}, {"page": "Automation Triggers", "sol": 35, "sol_issues": 9447, "lyra": 99, "lyra_issues": 148, "acc": 65, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 120}, {"page": "Automation Schedulers", "sol": 35, "sol_issues": 9447, "lyra": 99, "lyra_issues": 148, "acc": 65, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 120}, {"page": "Automation Jobs", "sol": 35, "sol_issues": 9447, "lyra": 99, "lyra_issues": 148, "acc": 65, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 119}, {"page": "Engagement Rules", "sol": 35, "sol_issues": 9487, "lyra": 99, "lyra_issues": 172, "acc": 65, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 122}, {"page": "Engagement Actions", "sol": 35, "sol_issues": 9487, "lyra": 99, "lyra_issues": 172, "acc": 65, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 122}], "Studio": [{"page": "Scripts", "sol": 45, "sol_issues": 3750, "lyra": 43, "lyra_issues": 3732, "acc": 65, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 145}, {"page": "Development Workflows", "sol": 91, "sol_issues": 127, "lyra": 88, "lyra_issues": 167, "acc": 87, "acc_issues": 3, "full_acc": 0, "full_acc_issues": 90}, {"page": "Prompts", "sol": 85, "sol_issues": 257, "lyra": 85, "lyra_issues": 256, "acc": 65, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 145}, {"page": "Grammars", "sol": 87, "sol_issues": 171, "lyra": 88, "lyra_issues": 173, "acc": 65, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 111}], "WFM": [{"page": "Schedule Manager", "sol": 89, "sol_issues": 2061, "lyra": 88, "lyra_issues": 2146, "acc": 42, "acc_issues": 14, "full_acc": 0, "full_acc_issues": 65}, {"page": "Real Time Adherence", "sol": 97, "sol_issues": 524, "lyra": 97, "lyra_issues": 469, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 154}, {"page": "Intraday Manager", "sol": 98, "sol_issues": 253, "lyra": 84, "lyra_issues": 5832, "acc": 79, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 3797}, {"page": "Generate Forecast", "sol": 98, "sol_issues": 324, "lyra": 97, "lyra_issues": 400, "acc": 68, "acc_issues": 8, "full_acc": 0, "full_acc_issues": 142}, {"page": "Skill Allocation Rules", "sol": 98, "sol_issues": 285, "lyra": 98, "lyra_issues": 374, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 127}, {"page": "Forecasting Profiles", "sol": 98, "sol_issues": 255, "lyra": 98, "lyra_issues": 344, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 111}, {"page": "ACD Historical Data", "sol": 98, "sol_issues": 272, "lyra": 98, "lyra_issues": 362, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 98}, {"page": "Special Days", "sol": 94, "sol_issues": 884, "lyra": 94, "lyra_issues": 960, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 123}, {"page": "Generate Schedule", "sol": 94, "sol_issues": 856, "lyra": 95, "lyra_issues": 711, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 166}, {"page": "Import Schedule", "sol": 96, "sol_issues": 637, "lyra": 96, "lyra_issues": 530, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 117}, {"page": "Bidding Manager", "sol": 94, "sol_issues": 846, "lyra": 95, "lyra_issues": 703, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 163}, {"page": "Import Staffing Plan", "sol": 95, "sol_issues": 800, "lyra": 96, "lyra_issues": 666, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 154}, {"page": "Rules", "sol": 98, "sol_issues": 290, "lyra": 98, "lyra_issues": 377, "acc": 69, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 130}, {"page": "Plans", "sol": 98, "sol_issues": 332, "lyra": 97, "lyra_issues": 419, "acc": 74, "acc_issues": 6, "full_acc": 0, "full_acc_issues": 167}, {"page": "Manage Requests", "sol": 98, "sol_issues": 320, "lyra": 98, "lyra_issues": 293, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 39}, {"page": "Approval Rules", "sol": 96, "sol_issues": 600, "lyra": 96, "lyra_issues": 670, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 201}, {"page": "Rules", "sol": 96, "sol_issues": 596, "lyra": 96, "lyra_issues": 679, "acc": 79, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 147}, {"page": "Summary", "sol": 95, "sol_issues": 737, "lyra": 95, "lyra_issues": 819, "acc": 79, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 172}, {"page": "Activity Codes", "sol": 95, "sol_issues": 802, "lyra": 95, "lyra_issues": 802, "acc": 0, "acc_issues": 57, "full_acc": 0, "full_acc_issues": 279}, {"page": "Adherence Category", "sol": 97, "sol_issues": 472, "lyra": 96, "lyra_issues": 561, "acc": 28, "acc_issues": 18, "full_acc": 0, "full_acc_issues": 119}, {"page": "ACD Mapping", "sol": 94, "sol_issues": 1145, "lyra": 93, "lyra_issues": 1227, "acc": 0, "acc_issues": 89, "full_acc": 0, "full_acc_issues": 351}, {"page": "ESP Staffing Profile", "sol": null, "sol_issues": null, "lyra": null, "lyra_issues": null, "acc": null, "acc_issues": null, "full_acc": 0, "full_acc_issues": 31}, {"page": "Distribution Rules", "sol": 98, "sol_issues": 314, "lyra": 97, "lyra_issues": 399, "acc": 71, "acc_issues": 7, "full_acc": 0, "full_acc_issues": 129}, {"page": "Daily Rules", "sol": 98, "sol_issues": 334, "lyra": 97, "lyra_issues": 417, "acc": 58, "acc_issues": 10, "full_acc": 0, "full_acc_issues": 144}, {"page": "Weekly Rules", "sol": 97, "sol_issues": 443, "lyra": 97, "lyra_issues": 526, "acc": 18, "acc_issues": 20, "full_acc": 0, "full_acc_issues": 223}, {"page": "Agent Configuration", "sol": 92, "sol_issues": 1640, "lyra": 92, "lyra_issues": 1726, "acc": 0, "acc_issues": 67, "full_acc": 0, "full_acc_issues": 547}, {"page": "Rotation Rules", "sol": 98, "sol_issues": 296, "lyra": 98, "lyra_issues": 378, "acc": 0, "acc_issues": 66, "full_acc": 0, "full_acc_issues": 126}, {"page": "Bidding Templates", "sol": 98, "sol_issues": 296, "lyra": 97, "lyra_issues": 378, "acc": 79, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 126}, {"page": "Shift Trading", "sol": 99, "sol_issues": 192, "lyra": 98, "lyra_issues": 263, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 32}, {"page": "Seat Limits", "sol": 99, "sol_issues": 163, "lyra": 98, "lyra_issues": 255, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 32}], "Quality Management": [{"page": "Manage Forms", "sol": 94, "sol_issues": 901, "lyra": 96, "lyra_issues": 522, "acc": 31, "acc_issues": 17, "full_acc": 0, "full_acc_issues": 166}, {"page": "Quality Planner", "sol": 99, "sol_issues": 71, "lyra": 99, "lyra_issues": 66, "acc": 79, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 21}, {"page": "Category Manager", "sol": 99, "sol_issues": 92, "lyra": 99, "lyra_issues": 90, "acc": 79, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 23}, {"page": "QM Score Metric", "sol": 99, "sol_issues": 87, "lyra": 99, "lyra_issues": 81, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 25}], "Coaching": [{"page": "Coaching Manager", "sol": 95, "sol_issues": 937, "lyra": 95, "lyra_issues": 981, "acc": 0, "acc_issues": 25, "full_acc": 0, "full_acc_issues": 280}, {"page": "Focus Area", "sol": 98, "sol_issues": 318, "lyra": 98, "lyra_issues": 319, "acc": 76, "acc_issues": 6, "full_acc": 0, "full_acc_issues": 119}, {"page": "Behavior", "sol": 97, "sol_issues": 425, "lyra": 97, "lyra_issues": 425, "acc": 44, "acc_issues": 12, "full_acc": 0, "full_acc_issues": 181}], "Interactions Hub": [{"page": "Interactions Search", "sol": 99, "sol_issues": 176, "lyra": 99, "lyra_issues": 177, "acc": 74, "acc_issues": 6, "full_acc": 0, "full_acc_issues": 39}], "MyZone": [{"page": "My Profile", "sol": 99, "sol_issues": 146, "lyra": 99, "lyra_issues": 172, "acc": 68, "acc_issues": 8, "full_acc": 0, "full_acc_issues": 88}, {"page": "My Schedule", "sol": 99, "sol_issues": 172, "lyra": 99, "lyra_issues": 264, "acc": 81, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 56}, {"page": "Schedule Requests", "sol": 99, "sol_issues": 152, "lyra": 99, "lyra_issues": 417, "acc": 48, "acc_issues": 12, "full_acc": 0, "full_acc_issues": 70}, {"page": "Evaluation Tasks", "sol": 99, "sol_issues": 396, "lyra": 100, "lyra_issues": 124, "acc": 68, "acc_issues": 8, "full_acc": 0, "full_acc_issues": 210}, {"page": "Evaluations", "sol": 100, "sol_issues": 101, "lyra": 100, "lyra_issues": 115, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 42}, {"page": "Evaluator Assignments", "sol": 100, "sol_issues": 107, "lyra": 99, "lyra_issues": 135, "acc": 68, "acc_issues": 8, "full_acc": 0, "full_acc_issues": 56}, {"page": "Quality Performance", "sol": 99, "sol_issues": 134, "lyra": 99, "lyra_issues": 159, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 69}, {"page": "Shift Bidding", "sol": 96, "sol_issues": 553, "lyra": 97, "lyra_issues": 382, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 123}, {"page": "Calibrations", "sol": 99, "sol_issues": 91, "lyra": 99, "lyra_issues": 115, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 35}, {"page": "Recent Interactions", "sol": 98, "sol_issues": 231, "lyra": 98, "lyra_issues": 254, "acc": 84, "acc_issues": 4, "full_acc": 0, "full_acc_issues": 154}, {"page": "Self Assessments", "sol": 95, "sol_issues": 894, "lyra": 95, "lyra_issues": 950, "acc": 79, "acc_issues": 5, "full_acc": 0, "full_acc_issues": 466}, {"page": "Coaching Sessions", "sol": 96, "sol_issues": 691, "lyra": 95, "lyra_issues": 801, "acc": 68, "acc_issues": 8, "full_acc": 0, "full_acc_issues": 282}], "Actions": [{"page": "Actions", "sol": 99, "sol_issues": 127, "lyra": 99, "lyra_issues": 131, "acc": 48, "acc_issues": 12, "full_acc": 0, "full_acc_issues": 62}, {"page": "Observability Dashboard", "sol": 99, "sol_issues": 112, "lyra": 99, "lyra_issues": 113, "acc": 33, "acc_issues": 15, "full_acc": 0, "full_acc_issues": 62}, {"page": "Settings", "sol": 99, "sol_issues": 150, "lyra": 99, "lyra_issues": 150, "acc": 33, "acc_issues": 15, "full_acc": 0, "full_acc_issues": 70}]}, "avgs": {"Admin": {"sol": 96, "lyra": 96, "acc": 67, "full_acc": 0, "pages": 25}, "Supervisor": {"sol": 98, "lyra": 98, "acc": 65, "full_acc": 0, "pages": 7}, "Agent Integrations": {"sol": 95, "lyra": 97, "acc": 84, "full_acc": 0, "pages": 1}, "Workforce Intelligence": {"sol": 99, "lyra": 99, "acc": 57, "full_acc": 0, "pages": 4}, "ACD": {"sol": 76, "lyra": 96, "acc": 52, "full_acc": 1, "pages": 50}, "Studio": {"sol": 77, "lyra": 76, "acc": 70, "full_acc": 0, "pages": 4}, "WFM": {"sol": 96, "lyra": 96, "acc": 63, "full_acc": 0, "pages": 30}, "Quality Management": {"sol": 98, "lyra": 98, "acc": 68, "full_acc": 0, "pages": 4}, "Coaching": {"sol": 97, "lyra": 97, "acc": 40, "full_acc": 0, "pages": 3}, "Interactions Hub": {"sol": 99, "lyra": 99, "acc": 74, "full_acc": 0, "pages": 1}, "MyZone": {"sol": 98, "lyra": 98, "acc": 75, "full_acc": 0, "pages": 12}, "Actions": {"sol": 99, "lyra": 99, "acc": 38, "full_acc": 0, "pages": 3}}};
+
+function scoreClass(v) {
+  if (v === null || v === undefined) return '';
+  if (v >= 85) return 'pill-good';
+  if (v >= 70) return 'pill-ok';
+  return 'pill-bad';
+}
+function scorePill(v) {
+  if (v === null || v === undefined) return '<span style="color:var(--muted)">—</span>';
+  return `<span class="score-pill ${scoreClass(v)}">${v}%</span>`;
+}
+function buildGauge(canvasId, value, color) {
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  const pct = (value || 0) / 100;
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: { datasets: [{ data: [pct, 1-pct], backgroundColor: [color, 'rgba(255,255,255,0.06)'], borderWidth: 0, circumference: 180, rotation: 270 }] },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { display: false }, tooltip: { enabled: false } }, animation: { duration: 600 } }
+  });
+}
+
+const sortState = {};
+function sortTable(sectionIdx, colKey, th) {
+  const state = sortState[sectionIdx] || { key: null, dir: 1 };
+  const newDir = (state.key === colKey) ? -state.dir : 1;
+  sortState[sectionIdx] = { key: colKey, dir: newDir };
+  const table = document.querySelector(`#panel_${sectionIdx} table`);
+  table.querySelectorAll('th').forEach(t => { t.classList.remove('sort-asc','sort-desc'); });
+  th.classList.add(newDir === 1 ? 'sort-asc' : 'sort-desc');
+  const sec = DB.sections[sectionIdx];
+  const pages = [...DB.data[sec]].sort((a, b) => {
+    const av = a[colKey], bv = b[colKey];
+    if (av === null || av === undefined) return 1;
+    if (bv === null || bv === undefined) return -1;
+    if (typeof av === 'string') return newDir * av.localeCompare(bv);
+    return newDir * (av - bv);
+  });
+  const tbody = table.querySelector('tbody');
+  tbody.innerHTML = pages.map(p => rowHTML(p)).join('');
+}
+
+function rowHTML(p) {
+  return `<tr class="page-row">
+    <td class="col-page">${p.page}</td>
+    <td class="col-score">${scorePill(p.sol)}</td>
+    <td class="col-issues issues">${p.sol_issues ? p.sol_issues.toLocaleString() : '—'}</td>
+    <td class="col-score">${scorePill(p.lyra)}</td>
+    <td class="col-issues issues">${p.lyra_issues ? p.lyra_issues.toLocaleString() : '—'}</td>
+    <td class="col-score td-min">${scorePill(p.acc)}</td>
+    <td class="col-issues issues td-min">${p.acc_issues !== null ? p.acc_issues.toLocaleString() : '—'}</td>
+    <td class="col-score td-full">${scorePill(p.full_acc)}</td>
+    <td class="col-issues issues td-full">${p.full_acc_issues !== null ? p.full_acc_issues.toLocaleString() : '—'}</td>
+  </tr>`;
+}
+
+function buildSection(sec, idx) {
+  const pages = DB.data[sec];
+  const avg = DB.avgs[sec];
+  const gId = `g_${idx}`, lId = `l_${idx}`, aId = `a_${idx}`, fId = `f_${idx}`;
+  const panel = document.createElement('div');
+  panel.className = 'section-panel' + (idx === 0 ? ' active' : '');
+  panel.id = `panel_${idx}`;
+  panel.innerHTML = `
+    <div class="section-header">
+      <h2>${sec}</h2>
+      <span class="badge" style="background:rgba(54,148,252,0.12);color:var(--blue)">${pages.length} pages</span>
+      ${avg.sol !== null ? `<span class="badge" style="background:rgba(54,148,252,0.1);color:var(--blue)">SOL ${avg.sol}%</span>` : ''}
+      ${avg.lyra !== null ? `<span class="badge" style="background:rgba(185,143,255,0.12);color:var(--lyra)">LYRA ${avg.lyra}%</span>` : ''}
+      ${avg.acc !== null ? `<span class="badge" style="background:rgba(245,158,11,0.12);color:#f59e0b">Min A11y ${avg.acc}%</span>` : ''}
+      ${avg.full_acc !== null ? `<span class="badge" style="background:rgba(255,91,138,0.12);color:var(--coral)">Full A11y ${avg.full_acc}%</span>` : ''}
+    </div>
+    <div class="gauges-row">
+      <div class="gauge-card">
+        <h4 style="color:var(--blue)">SOL Score</h4>
+        <div class="gauge-wrap"><canvas id="${gId}" width="180" height="110"></canvas>
+        <div class="gauge-center" style="color:var(--blue)">${avg.sol !== null ? avg.sol+'%' : '—'}</div></div>
+      </div>
+      <div class="gauge-card">
+        <h4 style="color:var(--lyra)">LYRA Score</h4>
+        <div class="gauge-wrap"><canvas id="${lId}" width="180" height="110"></canvas>
+        <div class="gauge-center" style="color:var(--lyra)">${avg.lyra !== null ? avg.lyra+'%' : '—'}</div></div>
+      </div>
+      <div class="gauge-card">
+        <h4 style="color:#f59e0b">Min A11y</h4>
+        <div class="gauge-wrap"><canvas id="${aId}" width="180" height="110"></canvas>
+        <div class="gauge-center" style="color:#f59e0b">${avg.acc !== null ? avg.acc+'%' : '—'}</div></div>
+      </div>
+      <div class="gauge-card">
+        <h4 style="color:var(--coral)">Full A11y</h4>
+        <div class="gauge-wrap"><canvas id="${fId}" width="180" height="110"></canvas>
+        <div class="gauge-center" style="color:var(--coral)">${avg.full_acc !== null ? avg.full_acc+'%' : '—'}</div></div>
+      </div>
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Search pages..." oninput="filterRows(this, ${idx})">
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th onclick="sortTable(${idx},'page',this)">Page<span class="sort-icon"></span></th>
+            <th onclick="sortTable(${idx},'sol',this)">SOL Score<span class="sort-icon"></span></th>
+            <th class="th-issues" onclick="sortTable(${idx},'sol_issues',this)">SOL Issues<span class="sort-icon"></span></th>
+            <th onclick="sortTable(${idx},'lyra',this)">LYRA Score<span class="sort-icon"></span></th>
+            <th class="th-issues" onclick="sortTable(${idx},'lyra_issues',this)">LYRA Issues<span class="sort-icon"></span></th>
+            <th class="th-min" onclick="sortTable(${idx},'acc',this)" title="Excludes contrast &amp; mobile/touch">Min A11y ⓘ<span class="sort-icon"></span></th>
+            <th class="th-min th-issues" onclick="sortTable(${idx},'acc_issues',this)">Min Issues<span class="sort-icon"></span></th>
+            <th class="th-full" onclick="sortTable(${idx},'full_acc',this)" title="Full WCAG 2.1 AA including contrast &amp; touch">Full A11y ⓘ<span class="sort-icon"></span></th>
+            <th class="th-full th-issues" onclick="sortTable(${idx},'full_acc_issues',this)">Full Issues<span class="sort-icon"></span></th>
+          </tr>
+        </thead>
+        <tbody>${pages.map(p => rowHTML(p)).join('')}</tbody>
+      </table>
+    </div>`;
+  document.getElementById('panels').appendChild(panel);
+  setTimeout(() => {
+    if (avg.sol !== null) buildGauge(gId, avg.sol, '#3694FC');
+    if (avg.lyra !== null) buildGauge(lId, avg.lyra, '#B98FFF');
+    if (avg.acc !== null) buildGauge(aId, avg.acc, '#f59e0b');
+    if (avg.full_acc !== null) buildGauge(fId, avg.full_acc, '#FF5B8A');
+  }, 50);
+}
+
+function filterRows(input, idx) {
+  const q = input.value.toLowerCase();
+  document.querySelectorAll(`#panel_${idx} .page-row`).forEach(tr => {
+    tr.style.display = tr.cells[0].textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+DB.sections.forEach((sec, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'nav-btn' + (i === 0 ? ' active' : '');
+  btn.textContent = sec;
+  btn.onclick = () => {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(`panel_${i}`).classList.add('active');
+  };
+  document.getElementById('sectionNav').appendChild(btn);
+  buildSection(sec, i);
+});
+</script>
+
+  <!-- NICE POLISH EFFECTS -->
+  <style>
+    /* Positional hover: tilt + spotlight on interactive cards */
+    .tilt-ready {
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s ease;
+    }
+    .tilt-ready::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(255,255,255,0.09) 0%, transparent 70%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      z-index: 1;
+    }
+    .tilt-ready:hover::after { opacity: 1; }
+
+    /* Magnetic buttons */
+    .nav-cta, .btn-primary, .cta-btn, .roadmap-link {
+      transition: transform 0.15s ease, background 0.25s ease, box-shadow 0.25s ease !important;
+    }
+
+    /* Cursor ambient glow */
+    #nice-cursor-glow {
+      position: fixed;
+      pointer-events: none;
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        rgba(54,148,252,0.055) 0%,
+        rgba(97,0,255,0.025) 40%,
+        transparent 70%);
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      transition: left 0.08s linear, top 0.08s linear, opacity 0.5s ease;
+      opacity: 0;
+      mix-blend-mode: screen;
+    }
+
+    /* Improved reveal: slide up instead of just fade */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.55s cubic-bezier(0.23,1,0.32,1),
+                  transform 0.55s cubic-bezier(0.23,1,0.32,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+
+  <script>
+  (function() {
+    // Cursor ambient glow
+    var glow = document.createElement('div');
+    glow.id = 'nice-cursor-glow';
+    document.body.appendChild(glow);
+    var glowX = window.innerWidth / 2, glowY = window.innerHeight / 2;
+    document.addEventListener('mousemove', function(e) {
+      glowX = e.clientX; glowY = e.clientY;
+      glow.style.left = glowX + 'px';
+      glow.style.top = glowY + 'px';
+      glow.style.opacity = '1';
+    });
+    document.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
+
+    // Apply tilt + spotlight to cards
+    var SELECTORS = [
+      '.tool-card', '.skill-card', '.phase-block', '.case-card',
+      '.pillar', '.step-card', '.score-card', '.sp-card',
+      '.sp-callout-card', '.stat-card', '.doc-card', '.dl-card',
+      '.faq-item', '.checklist-item', '.tool-mini', '.gate-card',
+      '.score-band', '.audit-cat', '.workflow-card', '.case-scenario'
+    ].join(', ');
+
+    document.querySelectorAll(SELECTORS).forEach(function(card) {
+      card.classList.add('tilt-ready');
+
+      card.addEventListener('mousemove', function(e) {
+        var r = card.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width;
+        var y = (e.clientY - r.top) / r.height;
+        // Spotlight CSS vars
+        card.style.setProperty('--mx', (x * 100) + '%');
+        card.style.setProperty('--my', (y * 100) + '%');
+        // 3D tilt (gentle, max 7deg)
+        var tx = (y - 0.5) * -8;
+        var ty = (x - 0.5) * 8;
+        card.style.transform = 'perspective(900px) rotateX(' + tx + 'deg) rotateY(' + ty + 'deg) translateZ(3px)';
+        card.style.transition = 'transform 0.07s ease';
+        // Glow border hint
+        card.style.boxShadow = '0 8px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(54,148,252,0.18)';
+      });
+
+      card.addEventListener('mouseleave', function() {
+        card.style.transform = '';
+        card.style.transition = 'transform 0.45s cubic-bezier(0.23,1,0.32,1)';
+        card.style.boxShadow = '';
+        card.style.setProperty('--mx', '50%');
+        card.style.setProperty('--my', '50%');
+      });
+    });
+
+    // Magnetic effect on primary action buttons
+    document.querySelectorAll('.nav-cta, .btn-primary, .cta-btn').forEach(function(btn) {
+      btn.addEventListener('mousemove', function(e) {
+        var r = btn.getBoundingClientRect();
+        var dx = (e.clientX - r.left - r.width / 2) * 0.28;
+        var dy = (e.clientY - r.top - r.height / 2) * 0.28;
+        btn.style.transform = 'translate(' + dx + 'px, ' + dy + 'px) scale(1.04)';
+        btn.style.transition = 'transform 0.12s ease';
+      });
+      btn.addEventListener('mouseleave', function() {
+        btn.style.transform = '';
+        btn.style.transition = 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)';
+      });
+    });
+
+    // Improved scroll reveal - re-run after any existing observers
+    var ro = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var delay = parseInt(entry.target.dataset.polishDelay || 0);
+          setTimeout(function() {
+            entry.target.classList.add('visible');
+          }, delay);
+          ro.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -24px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(function(el, i) {
+      // Stagger siblings in same parent
+      el.dataset.polishDelay = (i % 6) * 55;
+      ro.observe(el);
+    });
+  })();
+  </script>
+
+  <script>
+    // Mobile nav toggle
+    var navToggle = document.getElementById('nav-toggle');
+    var siteNav = document.getElementById('site-nav');
+    navToggle.addEventListener('click', function() {
+      siteNav.classList.toggle('open');
+    });
+
+    // Close nav on link click (mobile)
+    document.querySelectorAll('.nav-link').forEach(function(link) {
+      link.addEventListener('click', function() {
+        siteNav.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

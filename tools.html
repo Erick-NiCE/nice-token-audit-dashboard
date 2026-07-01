@@ -5,139 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NiCE Designer — Tool Catalog</title>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="nice-effects.css" />
+  <script src="nice-effects.js" defer></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:        #21212B;
+      /* page-specific tokens */
       --bg-card:   #2a2a36;
       --bg-card2:  #2f2f3d;
-      --border:    rgba(255,255,255,0.07);
-      --text:      #ffffff;
-      --sec:       rgba(255,255,255,0.55);
-      --muted:     rgba(255,255,255,0.3);
-      --blue:      #3694FC;
-      --indigo:    #6100FF;
-      --emerald:   #00E2A0;
-      --teal:      #36EAD0;
-      --coral:     #FF5B8A;
-      --lyra:      #B98FFF;
-      --font:      'Be Vietnam Pro', -apple-system, sans-serif;
       --sidebar-w: 240px;
-      --nav-h:     60px;
-    }
-
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* ========== NAV ========== */
-    .site-nav {
-      height: 60px;
-      background: rgba(33, 33, 43, 0.92);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 32px;
-    }
-
-    .nav-logo {
-      text-decoration: none;
-      font-weight: 800;
-      font-size: 18px;
-      letter-spacing: -0.3px;
-      display: flex;
-      align-items: center;
-      height: 60px;
-    }
-
-    .logo-nice { color: var(--blue); }
-    .logo-designer { color: var(--text); }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .nav-link {
-      text-decoration: none;
-      color: var(--sec);
-      font-size: 14px;
-      font-weight: 500;
-      padding: 6px 12px;
-      border-radius: 6px;
-      transition: color 0.2s, background 0.2s;
-      border-bottom: 2px solid transparent;
-    }
-
-    .nav-link:hover {
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    .nav-link.active {
-      color: var(--text);
-      border-bottom: 2px solid var(--blue);
-    }
-
-    .nav-toggle {
-      display: none;
-      background: none;
-      border: none;
-      color: var(--text);
-      font-size: 20px;
-      cursor: pointer;
-      padding: 8px;
-    }
-
-    @media (max-width: 768px) {
-      .site-nav {
-        flex-wrap: wrap;
-        height: auto;
-        padding: 0 20px;
-      }
-
-      .nav-toggle {
-        display: flex;
-        align-items: center;
-        height: 60px;
-      }
-
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-        padding-bottom: 12px;
-        gap: 2px;
-      }
-
-      .site-nav.open .nav-links {
-        display: flex;
-      }
-
-      .nav-link {
-        width: 100%;
-        padding: 10px 4px;
-        border-radius: 4px;
-        border-bottom: 2px solid transparent;
-      }
-
-      .nav-link.active {
-        border-bottom: 2px solid var(--blue);
-      }
     }
 
     /* ---- TOOL SEARCH BAR ---- */
@@ -403,17 +279,17 @@
 
   <!-- NAV -->
   <nav class="site-nav" id="site-nav">
-    <a href="./resources.html" class="nav-logo">
+    <a href="./index.html" class="nav-logo">
       <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
     </a>
     <div class="nav-links">
-      <a href="./resources.html" class="nav-link">Overview</a>
+      <a href="./index.html" class="nav-link">Overview</a>
       <a href="./install-guide.html" class="nav-link">Install Guide</a>
       <a href="./claude-skills.html" class="nav-link">Claude Skills</a>
       <a href="./the-suite.html" class="nav-link">The Suite</a>
       <a href="./use-cases.html" class="nav-link">Use Cases</a>
-      <a href="./how-scores.html" class="nav-link">Scoring</a>
-      <a href="./index.html" class="nav-link">Dashboard</a>
+      <a href="./scoring.html" class="nav-link">Scoring</a>
+      <a href="./dashboard.html" class="nav-link">Dashboard</a>
       <a href="./roadmap.html" class="nav-link">Roadmap</a>
     </div>
     <button class="nav-toggle" aria-label="Menu" id="nav-toggle">&#9776;</button>

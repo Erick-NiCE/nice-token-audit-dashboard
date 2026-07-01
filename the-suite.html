@@ -7,138 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="nice-effects.css" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #21212B;
-      --bg-card: #2f2f3d;
-      --border: rgba(255,255,255,0.08);
-      --text: #ffffff;
-      --text-sec: rgba(255,255,255,0.6);
-      --text-muted: rgba(255,255,255,0.3);
-      --blue: #3694FC;
-      --electric: #025AFB;
-      --indigo: #6100FF;
-      --emerald: #00E2A0;
-      --teal: #36EAD0;
-      --coral: #FF5B8A;
-      --lyra: #B98FFF;
-      --radius: 16px;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Be Vietnam Pro', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* ========== NAV ========== */
-    .site-nav {
-      height: 60px;
-      background: rgba(33, 33, 43, 0.92);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 32px;
-    }
-
-    .nav-logo {
-      text-decoration: none;
-      font-weight: 800;
-      font-size: 18px;
-      letter-spacing: -0.3px;
-      display: flex;
-      align-items: center;
-      height: 60px;
-    }
-
-    .logo-nice { color: var(--blue); }
-    .logo-designer { color: var(--text); }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .nav-link {
-      text-decoration: none;
-      color: var(--text-sec);
-      font-size: 14px;
-      font-weight: 500;
-      padding: 6px 12px;
-      border-radius: 6px;
-      transition: color 0.2s, background 0.2s;
-      border-bottom: 2px solid transparent;
-    }
-
-    .nav-link:hover {
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    .nav-link.active {
-      color: var(--text);
-      border-bottom: 2px solid var(--blue);
-    }
-
-    .nav-toggle {
-      display: none;
-      background: none;
-      border: none;
-      color: var(--text);
-      font-size: 20px;
-      cursor: pointer;
-      padding: 8px;
-    }
-
-    @media (max-width: 768px) {
-      .site-nav {
-        flex-wrap: wrap;
-        height: auto;
-        padding: 0 20px;
-      }
-
-      .nav-toggle {
-        display: flex;
-        align-items: center;
-        height: 60px;
-      }
-
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-        padding-bottom: 12px;
-        gap: 2px;
-      }
-
-      .site-nav.open .nav-links {
-        display: flex;
-      }
-
-      .nav-link {
-        width: 100%;
-        padding: 10px 4px;
-        border-radius: 4px;
-        border-bottom: 2px solid transparent;
-      }
-
-      .nav-link.active {
-        border-bottom: 2px solid var(--blue);
-      }
+      --bg-card: #2f2f3d; /* page-specific card shade */
     }
 
     /* ---- HERO ---- */
@@ -494,20 +367,46 @@
       max-width: 1100px; margin: 60px auto 0; padding: 0 48px 80px;
     }
     .sp-inner {
+      position: relative;
+      overflow: hidden;
       background: linear-gradient(135deg, rgba(97,0,255,0.12), rgba(54,148,252,0.08));
       border: 1px solid rgba(97,0,255,0.25);
       border-radius: 24px; padding: 52px 48px;
     }
-    .sp-badge {
-      display: inline-block; font-size: 11px; font-weight: 700;
-      letter-spacing: 2px; text-transform: uppercase;
-      color: #B98FFF; background: rgba(97,0,255,0.15);
-      border: 1px solid rgba(185,143,255,0.3);
-      padding: 5px 14px; border-radius: 100px; margin-bottom: 20px;
+    /* Plasma lightning + edge motes are applied by nice-effects.js
+       (NiceEffects.lightning) — its canvases and child stacking are
+       handled by nice-effects.css and the module itself. */
+
+    /* Header matches the tool cards: icon square + name + tagline */
+    .sp-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
     }
-    .sp-title {
-      font-size: clamp(28px, 4vw, 40px); font-weight: 800;
-      letter-spacing: -0.5px; color: #fff; margin-bottom: 16px;
+    .sp-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #6100FF, #B98FFF);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    .sp-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.3px;
+      margin-bottom: 4px;
+    }
+    .sp-tagline {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      font-weight: 400;
     }
     .sp-sub {
       font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.7;
@@ -571,7 +470,6 @@
       justify-content: space-between;
       gap: 32px;
       flex-wrap: wrap;
-      margin-bottom: 36px;
     }
 
     .footer-brand .footer-logo {
@@ -602,20 +500,6 @@
     .footer-nav-col a:hover { color: #fff; }
     .footer-nav-col a.active { color: var(--blue); }
 
-    .footer-bottom {
-      border-top: 1px solid var(--border);
-      padding-top: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .footer-copy {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
   </style>
 </head>
 <body>
@@ -623,17 +507,17 @@
   <!-- NAV -->
   <!-- NAV -->
   <nav class="site-nav" id="site-nav">
-    <a href="./resources.html" class="nav-logo">
+    <a href="./index.html" class="nav-logo">
       <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
     </a>
     <div class="nav-links">
-      <a href="./resources.html" class="nav-link">Overview</a>
+      <a href="./index.html" class="nav-link">Overview</a>
       <a href="./install-guide.html" class="nav-link">Install Guide</a>
       <a href="./claude-skills.html" class="nav-link">Claude Skills</a>
       <a href="./the-suite.html" class="nav-link active">The Suite</a>
       <a href="./use-cases.html" class="nav-link">Use Cases</a>
-      <a href="./how-scores.html" class="nav-link">Scoring</a>
-      <a href="./index.html" class="nav-link">Dashboard</a>
+      <a href="./scoring.html" class="nav-link">Scoring</a>
+      <a href="./dashboard.html" class="nav-link">Dashboard</a>
       <a href="./roadmap.html" class="nav-link">Roadmap</a>
     </div>
     <button class="nav-toggle" aria-label="Menu" id="nav-toggle">&#9776;</button>
@@ -942,8 +826,13 @@
   <!-- SUPERPOWERS -->
   <section class="superpowers-section reveal">
     <div class="sp-inner">
-      <div class="sp-badge">⚡ Superpowers</div>
-      <h2 class="sp-title">Some features need a little more</h2>
+      <div class="sp-header">
+        <div class="sp-icon">⚡</div>
+        <div class="sp-name-wrap">
+          <div class="sp-name">Superpowers</div>
+          <div class="sp-tagline">Some features need a little more</div>
+        </div>
+      </div>
       <p class="sp-sub">The Figma plugin and Chrome extension work great on their own. But certain features unlock only when you connect to Claude via the local MCP server. We call these <strong>Superpowers</strong> - Claude acting as the brain while the plugin and extension act as the hands.</p>
       <div class="sp-grid">
         <div class="sp-card">
@@ -992,21 +881,18 @@
         </div>
         <nav class="footer-nav">
           <div class="footer-nav-col">
-            <a href="./resources.html">Overview</a>
+            <a href="./index.html">Overview</a>
             <a href="./install-guide.html">Install Guide</a>
             <a href="./claude-skills.html">Claude Skills</a>
             <a href="./the-suite.html" class="active">The Suite</a>
           </div>
           <div class="footer-nav-col">
             <a href="./use-cases.html">Use Cases</a>
-            <a href="./how-scores.html">Scoring</a>
-            <a href="./index.html">Dashboard</a>
+            <a href="./scoring.html">Scoring</a>
+            <a href="./dashboard.html">Dashboard</a>
             <a href="./roadmap.html">Roadmap</a>
           </div>
         </nav>
-      </div>
-      <div class="footer-bottom">
-        <span class="footer-copy">NiCE Designer</span>
       </div>
     </div>
   </footer>
@@ -1052,6 +938,9 @@
       z-index: 1;
     }
     .tilt-ready:hover::after { opacity: 1; }
+
+    /* Liquid fill is applied by nice-effects.js (NiceEffects.liquidFill);
+       its canvas + child stacking come from nice-effects.css / the module. */
 
     /* Magnetic buttons */
     .nav-cta, .btn-primary, .cta-btn, .roadmap-link {
@@ -1175,6 +1064,23 @@
       ro.observe(el);
     });
   })();
+  </script>
+
+  <!-- Reusable canvas effects (Matter.js is the physics engine for the liquid) -->
+  <script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js"></script>
+  <script src="nice-effects.js"></script>
+  <script>
+    // Liquid fill on each tool card, tinted with the card's accent color.
+    document.querySelectorAll('.tool-card').forEach(function (card) {
+      var color = getComputedStyle(card).getPropertyValue('--t-color').trim() || '#3694FC';
+      NiceEffects.liquidFill(card, { color: color });
+    });
+
+    // Plasma-ball lightning + floating edge motes on the Superpowers panel.
+    var sp = document.querySelector('.superpowers-section .sp-inner');
+    if (sp) {
+      NiceEffects.lightning(sp, { color: '#B98FFF', glow: '#6100FF', opacity: 0.5, motes: 54 });
+    }
   </script>
 
   <script>
