@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page Not Found - NiCE Designer</title>
+  <!-- Redirect links from pages that were renamed, before anything renders. -->
+  <script>
+    (function () {
+      var p = location.pathname;
+      var moved = { 'resources.html': 'index.html', 'how-scores.html': 'scoring.html' };
+      for (var oldName in moved) {
+        if (p.slice(-oldName.length) === oldName) {
+          location.replace(p.slice(0, -oldName.length) + moved[oldName] + location.search + location.hash);
+          break;
+        }
+      }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="nice-effects.css" />
+  <script src="nice-effects.js" defer></script>
+  <style>
+    .nf {
+      position: relative;
+      min-height: calc(100vh - 60px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px;
+      overflow: hidden;
+    }
+    .nf-bg {
+      position: absolute;
+      inset: 0;
+      opacity: 0.28;
+      z-index: 0;
+    }
+    .nf-inner { position: relative; z-index: 1; max-width: 560px; }
+    .nf-code {
+      font-size: clamp(88px, 20vw, 160px);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -3px;
+      background: linear-gradient(90deg, var(--blue), var(--indigo) 45%, var(--lyra) 75%, var(--emerald));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nf-title {
+      font-size: clamp(22px, 4vw, 30px);
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      margin: 8px 0 12px;
+    }
+    .nf-sub {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+    .nf-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .nf-btn {
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 11px 22px;
+      border-radius: 100px;
+      transition: transform 0.15s ease, background 0.2s, border-color 0.2s;
+    }
+    .nf-btn.primary {
+      background: linear-gradient(135deg, var(--blue), var(--indigo));
+      color: #fff;
+    }
+    .nf-btn.ghost {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .nf-btn:hover { transform: translateY(-2px); }
+    .nf-btn.ghost:hover { border-color: rgba(255, 255, 255, 0.2); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="site-nav" id="site-nav">
+    <a href="./index.html" class="nav-logo">
+      <span class="logo-nice">NiCE</span><span class="logo-designer"> Designer</span>
+    </a>
+    <div class="nav-links">
+      <a href="./index.html" class="nav-link">Overview</a>
+      <a href="./install-guide.html" class="nav-link">Install Guide</a>
+      <a href="./claude-skills.html" class="nav-link">Claude Skills</a>
+      <a href="./the-suite.html" class="nav-link">The Suite</a>
+      <a href="./use-cases.html" class="nav-link">Use Cases</a>
+      <a href="./scoring.html" class="nav-link">Scoring</a>
+      <a href="./dashboard.html" class="nav-link">Dashboard</a>
+      <a href="./roadmap.html" class="nav-link">Roadmap</a>
+    </div>
+    <button class="nav-toggle" aria-label="Menu" id="nav-toggle">&#9776;</button>
+  </nav>
+
+  <section class="nf">
+    <div class="nf-bg nice-gradient-animated"></div>
+    <div class="nf-inner">
+      <div class="nf-code">404</div>
+      <h1 class="nf-title">This page wandered off</h1>
+      <p class="nf-sub">The page you're looking for doesn't exist or may have moved. Head back to the overview or jump straight to a section.</p>
+      <div class="nf-actions">
+        <a href="./index.html" class="nf-btn primary">Back to Overview</a>
+        <a href="./the-suite.html" class="nf-btn ghost">Explore the Suite</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Mobile nav toggle
+    var navToggle = document.getElementById('nav-toggle');
+    var siteNav = document.getElementById('site-nav');
+    navToggle.addEventListener('click', function () {
+      siteNav.classList.toggle('open');
+    });
+    document.querySelectorAll('.nav-link').forEach(function (link) {
+      link.addEventListener('click', function () {
+        siteNav.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>
